@@ -86,5 +86,5 @@ def downsample_to_timepoints(timepoints:np.ndarray, data:np.ndarray,
     smooth_data = np.convolve(data, [1/distance]*distance, mode="same")
     new_data = np.interp(ref_timepoints[start_idx:stop_idx], timepoints, smooth_data)
 
-    idx = ref_timepoints.idx + init_idx
+    idx = ref_timepoints.idx + start_idx
     return DataChunk(data=new_data, idx = idx, group=group)
