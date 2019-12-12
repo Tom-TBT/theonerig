@@ -16,11 +16,17 @@ index = {"DataChunk": "00_core.ipynb",
          "parse_stim_args": "01_utils.ipynb",
          "eyetrack_stim_inten": "02_processing.ipynb",
          "process_sta_batch": "02_processing.ipynb",
-         "cross_correlation": "02_processing.ipynb"}
+         "cross_correlation": "02_processing.ipynb",
+         "sigmoid": "03_modelling.ipynb",
+         "gaussian": "03_modelling.ipynb",
+         "gaussian_2D": "03_modelling.ipynb",
+         "sum_of_gaussian": "03_modelling.ipynb",
+         "sum_of_2D_gaussian": "03_modelling.ipynb"}
 
 modules = ["core.py",
            "utils.py",
-           "processing.py"]
+           "processing.py",
+           "modelling.py"]
 
 git_url = "https://github.com/Tom-TBT/theonerig/tree/master/"
 
