@@ -15,7 +15,8 @@ index = {"DataChunk": "00_core.ipynb",
          "spike_to_dataChunk": "01_utils.ipynb",
          "parse_stim_args": "01_utils.ipynb",
          "eyetrack_stim_inten": "02_processing.ipynb",
-         "process_sta_batch": "02_processing.ipynb"}
+         "process_sta_batch": "02_processing.ipynb",
+         "cross_correlation": "02_processing.ipynb"}
 
 modules = ["core.py",
            "utils.py",
