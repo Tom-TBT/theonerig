@@ -21,7 +21,9 @@ index = {"DataChunk": "00_core.ipynb",
          "gaussian": "03_modelling.ipynb",
          "gaussian_2D": "03_modelling.ipynb",
          "sum_of_gaussian": "03_modelling.ipynb",
-         "sum_of_2D_gaussian": "03_modelling.ipynb"}
+         "sum_of_2D_gaussian": "03_modelling.ipynb",
+         "fit_nonlinearity": "03_modelling.ipynb",
+         "fit_spatial_sta": "03_modelling.ipynb"}
 
 modules = ["core.py",
            "utils.py",
