@@ -6,6 +6,7 @@ __all__ = ['extend_sync_timepoints', 'align_sync_timepoints', 'downsample_to_tim
 import numpy as np
 from typing import Dict, Tuple, Sequence, Union, Callable
 import scipy.interpolate as interpolate
+from scipy.ndimage import convolve1d
 
 #Cell
 def extend_sync_timepoints(timepoints:np.ndarray, signals:np.ndarray,
@@ -83,8 +84,9 @@ def downsample_to_timepoints(timepoints:np.ndarray, data:np.ndarray,
 
     #Use numpy convolution to smooth. Could be generalized to higher dimension data
     # with scipy.ndimage.convolve1d
-    smooth_data = np.convolve(data, [1/distance]*distance, mode="same")
-    new_data = np.interp(ref_timepoints[start_idx:stop_idx], timepoints, smooth_data)
+    kernel = np.ones(distance)/distance
+    smooth_data = convolve1d(data, kernel, axis=0) #Smooting to avoid weird sampling
+    new_data = interpolate.interp1d(timepoints, smooth_data, axis=0)(ref_timepoints[start_idx:stop_idx])
 
     idx = ref_timepoints.idx + start_idx
     return DataChunk(data=new_data, idx = idx, group=group)
