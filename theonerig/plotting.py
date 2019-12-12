@@ -5,9 +5,13 @@ __all__ = ['plot_2d_sta']
 #Cell
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
+import numpy as np
 
 #Cell
 def plot_2d_sta(sta):
+    sta = np.array(sta)
+    if len(sta.shape) == 2:
+        sta = [sta]
     fig = plt.figure(figsize=(20,10))
     gs = gridspec.GridSpec(len(sta)//8 + 1, 8)
     for i, frame in enumerate(sta):
