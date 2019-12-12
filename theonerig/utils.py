@@ -9,6 +9,8 @@ from typing import Dict, Tuple, Sequence, Union, Callable
 import scipy.interpolate as interpolate
 from scipy.ndimage import convolve1d
 
+from .core import *
+
 #Cell
 def extend_sync_timepoints(timepoints:np.ndarray, signals:np.ndarray,
                            up_bound, low_bound=0) -> Tuple[DataChunk, DataChunk]:

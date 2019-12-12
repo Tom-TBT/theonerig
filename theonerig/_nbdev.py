@@ -5,6 +5,7 @@ __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 index = {"DataChunk": "00_core.ipynb",
          "ContiguousRecord": "00_core.ipynb",
          "RecordMaster": "00_core.ipynb",
+         "Data_Pipe": "00_core.ipynb",
          "extend_sync_timepoints": "01_utils.ipynb",
          "align_sync_timepoints": "01_utils.ipynb",
          "resample_to_timepoints": "01_utils.ipynb",
