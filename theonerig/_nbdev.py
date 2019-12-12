@@ -7,7 +7,7 @@ index = {"DataChunk": "00_core.ipynb",
          "RecordMaster": "00_core.ipynb",
          "extend_sync_timepoints": "01_utils.ipynb",
          "align_sync_timepoints": "01_utils.ipynb",
-         "downsample_to_timepoints": "01_utils.ipynb"}
+         "resample_to_timepoints": "01_utils.ipynb"}
 
 modules = ["core.py",
            "utils.py"]
