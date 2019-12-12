@@ -13,10 +13,13 @@ index = {"DataChunk": "00_core.ipynb",
          "resample_to_timepoints": "01_utils.ipynb",
          "stim_to_dataChunk": "01_utils.ipynb",
          "spike_to_dataChunk": "01_utils.ipynb",
-         "parse_stim_args": "01_utils.ipynb"}
+         "parse_stim_args": "01_utils.ipynb",
+         "eyetrack_stim_inten": "02_processing.ipynb",
+         "process_sta_batch": "02_processing.ipynb"}
 
 modules = ["core.py",
-           "utils.py"]
+           "utils.py",
+           "processing.py"]
 
 git_url = "https://github.com/Tom-TBT/theonerig/tree/master/"
 
