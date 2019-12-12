@@ -76,7 +76,7 @@ def fit_nonlinearity(x, nonlin):
     return res
 
 def fit_spatial_sta(sta):
-    shape_t, shape_y, shape_x = sta.shape
+    shape_y, shape_x = sta.shape
     eps = 0.000001
     argmax = np.unravel_index(sta.argmax(), sta.shape)
     argmin = np.unravel_index(sta.argmin(), sta.shape)
@@ -92,8 +92,8 @@ def fit_spatial_sta(sta):
     z    = np.arange(shape_y)
     x, z = np.meshgrid(x, z)
     #                   sigma_x sigma_z  amp        theta      x0        z0       y0
-    init_fit_center   = (  1,     1,    sta[argmax],  0,   argmax[2],  argmax[1], 0)
-    data_tofit          = sta[argmax[0]].reshape(-1)
+    init_fit_center   = (  1,     1,    sta[argmax],  0,   argmax[1],  argmax[0], 0)
+    data_tofit          = sta.reshape(-1)
     if np.isnan(sp.sum(sta)): #We check that the sta exists, otherwise return default zero model
         res  = {"sigma_x_1": 1, "sigma_z_1":1, "amp_1":0, "theta_1":0, "x0_1":0, "z0_1":0,
                 "sigma_x_2": 1, "sigma_z_2":1, "amp_2":0, "theta_2":0, "x0_2":0, "z0_2":0, "y0":0}
@@ -123,4 +123,4 @@ def fit_spatial_sta(sta):
             res  = {"sigma_x_1": 1, "sigma_z_1":1, "amp_1":0, "theta_1":0, "x0_1":0, "z0_1":0,
                     "sigma_x_2": 1, "sigma_z_2":1, "amp_2":0, "theta_2":0, "x0_2":0, "z0_2":0, "y0":0}
 
-    return res, argmax[0]
+    return res
