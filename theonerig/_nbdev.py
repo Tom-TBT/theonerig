@@ -25,6 +25,7 @@ index = {"DataChunk": "00_core.ipynb",
          "sum_of_2D_gaussian": "03_modelling.ipynb",
          "fit_nonlinearity": "03_modelling.ipynb",
          "fit_spatial_sta": "03_modelling.ipynb",
+         "fit_temporal_sta": "03_modelling.ipynb",
          "plot_2d_sta": "04_plotting.ipynb",
          "plot_cross_correlation": "04_plotting.ipynb"}
 
