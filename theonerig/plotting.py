@@ -12,7 +12,7 @@ def plot_2d_sta(sta):
     sta = np.array(sta)
     if len(sta.shape) == 2:
         sta = [sta]
-    fig = plt.figure(figsize=(20,10))
+    fig = plt.figure(figsize=(20,4+len(sta)//8*2))
     gs = gridspec.GridSpec(len(sta)//8 + 1, 8)
     for i, frame in enumerate(sta):
         ax1 = plt.subplot(gs[i//8, i%8])
