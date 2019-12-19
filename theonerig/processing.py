@@ -8,6 +8,9 @@ from functools import partial
 import numpy as np
 from sklearn.decomposition import PCA
 
+from .core import *
+from .utils import *
+
 #Cell
 def eyetrack_stim_inten(stim_inten, eye_track,
                         upsampling=2,
