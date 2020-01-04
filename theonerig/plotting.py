@@ -19,7 +19,9 @@ def plot_2d_sta(sta):
         ax1.imshow(frame, cmap='gray',vmin=-1, vmax=1)
 
 #Cell
-def plot_cross_correlation(correlation_array, threshold=.1  ,two_sided=True, figsize=(30,30)):
+def plot_cross_correlation(correlation_array, threshold=.1  ,two_sided=True, figsize=None):
+    if figsize is None:
+        figsize = (len(correlation_array), len(correlation_array))
     n_cell = correlation_array.shape[0]
     _min,_max = np.min(correlation_array), np.max(correlation_array)
     thresh = (_max-_min) * threshold
