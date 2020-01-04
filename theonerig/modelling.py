@@ -132,7 +132,7 @@ def fit_temporal_sta(sta):
     argmin = sta.argmin()
     if sta[argmax] < abs(sta[argmin]):
         argmax, argmin = argmin, argmax
-    t = np.linspace(0, len(sta)-1, num=len(sta))
+    t = range(len(sta))
     init_fit = (2,      sta[argmin],argmin,    2,    sta[argmax],argmax,     0)
 
                 #sigma_1,   amp_1,  x0_1,    sigma_2,    amp_2,  x0_2,       y0
@@ -154,4 +154,11 @@ def fit_temporal_sta(sta):
     return res
 
 #Cell
-def fit_sigmoid(sigmoid)
+def fit_sigmoid(nonlin):
+    t = range(len(nonlin))
+    try:
+        fit, _ = sp.optimize.curve_fit(sigmoid, t, nonlin)
+        res  = {"sigma":fit[0],"amp":fit[1],"x0":fit[2],"y0":fit[3]}
+    except RuntimeError:
+        res = {"sigma":1,"amp":0,"x0":0,"y0":0}
+    return res
