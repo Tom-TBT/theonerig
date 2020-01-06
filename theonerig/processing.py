@@ -44,14 +44,17 @@ def eyetrack_stim_inten(stim_inten, eye_track,
 
     xpos_avg = np.mean(eye_x)
     ypos_avg = np.mean(eye_y)
-
+    mean_stim_inten = int((np.max(stim_inten)+np.min(stim_inten))/2)
     #After getting the shift of the matrix to apply, we roll the matrix instead of extending it to the shifts
     #This seems strange, but from the cell point of view, that is potentially looking at no stimulus,
     # the response it gives are uncorrelated with the stimulus, and so shouldn't impact further analysis
     # Advantage is that it keeps the data small enough, without loosing regions of the stimulus.
     for i in range(len(stim_inten)):
-        stim_shift_x, stim_shift_y = eye_transfo_f(x_eyeShift=eye_x[i]-xpos_avg,
-                                                   y_eyeShift=eye_y[i]-ypos_avg)
+        x_eyeShift = eye_x[i]-xpos_avg
+        y_eyeShift = eye_y[i]-ypos_avg
+
+        stim_shift_x, stim_shift_y = eye_transfo_f(x_eyeShift=x_eyeShift,
+                                                   y_eyeShift=y_eyeShift)
         if shape_y>1 and shape_x>1:
             rolled_stim = np.roll(stim_inten[i],stim_shift_y,axis=0)
             rolled_stim = np.roll(rolled_stim  ,stim_shift_x,axis=1)
