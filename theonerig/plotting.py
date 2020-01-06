@@ -7,6 +7,11 @@ import matplotlib.pyplot as plt
 from matplotlib import gridspec
 import numpy as np
 
+from .core import *
+from .processing import *
+from .utils import *
+from .modelling import *
+
 #Cell
 def plot_2d_sta(sta):
     sta = np.array(sta)
