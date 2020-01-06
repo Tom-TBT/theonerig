@@ -157,7 +157,7 @@ def stim_inten_norm(stim_inten):
 #     stim_inten[(stim_inten==127) | (stim_inten==128)] = 0 #In case
 
 #Cell
-def twoP_dataChunks(ref_timepoints:DataChunk, frame_timepoints, C_matrix, S_matrix, len_epochs):
+def twoP_dataChunks(ref_timepoints:DataChunk, frame_timepoints, len_epochs, C_matrix, S_matrix):
     C_datachunk_l = []
     S_datachunk_l = []
     cursor = 0
