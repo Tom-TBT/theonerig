@@ -58,6 +58,5 @@ def plot_2d_fit(sta, param_d, figsize=None):
     plt.subplot(1,2,1)
     plt.imshow(sta, vmin=-1,vmax=1, cmap="gray")
     plt.subplot(1,2,2)
-    y_, x_ = sta.shape
-    xy = np.meshgrid(range(x_), range(y_))
-    plt.imshow(sum_of_2D_gaussian(xy, **param_d).reshape(y_,x_), vmin=-1,vmax=1, cmap="gray")
+
+    plt.imshow(img_2d_fit(sta.shape, param_d, f=sum_of_2D_gaussian), vmin=-1,vmax=1, cmap="gray")
