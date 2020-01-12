@@ -39,13 +39,15 @@ index = {"DataChunk": "00_core.ipynb",
          "fit_sigmoid": "03_modelling.ipynb",
          "plot_2d_sta": "04_plotting.ipynb",
          "plot_cross_correlation": "04_plotting.ipynb",
-         "plot_2d_fit": "04_plotting.ipynb"}
+         "plot_2d_fit": "04_plotting.ipynb",
+         "load_vivo_2p": "99_testdata.ipynb"}
 
 modules = ["core.py",
            "utils.py",
            "processing.py",
            "modelling.py",
-           "plotting.py"]
+           "plotting.py",
+           "testdata.py"]
 
 git_url = "https://github.com/Tom-TBT/theonerig/tree/master/"
 
