@@ -206,7 +206,7 @@ def process_nonlinearity(stim_ensemble, spike_bins):
             n += 1
         nonlin[idx_nan] = mean/n
 
-    return nonlin/np.max(nonlin)
+    return nonlin#/np.max(nonlin)
 
 
 #Cell
