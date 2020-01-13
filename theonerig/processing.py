@@ -194,19 +194,9 @@ def process_nonlinearity(stim_ensemble, spike_bins):
 
     nonlin = hist_trigg/hist_all
 
-    #Nan handling by taking the mean around it
-    idx_nans = np.where(np.isnan(nonlin))[0]
-    for idx_nan in idx_nans:
-        mean, n = 0,0
-        if idx_nan == 0 and (idx_nan-1) not in idx_nans:
-            mean += nonlin[idx_nan-1]
-            n += 1
-        if idx_nan != len(nonlin) and (idx_nan+1) not in idx_nans:
-            mean += nonlin[idx_nan+1]
-            n += 1
-        nonlin[idx_nan] = mean/n
+    nonlin = fill_nan(nonlin)
 
-    return nonlin#/np.max(nonlin)
+    return nonlin
 
 
 #Cell

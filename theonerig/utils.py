@@ -2,7 +2,7 @@
 
 __all__ = ['extend_sync_timepoints', 'align_sync_timepoints', 'resample_to_timepoints', 'stim_to_dataChunk',
            'spike_to_dataChunk', 'parse_stim_args', 'peak_sta_frame', 'stim_inten_norm', 'twoP_dataChunks',
-           'img_2d_fit']
+           'img_2d_fit', 'fill_nan']
 
 #Cell
 import numpy as np
@@ -182,3 +182,14 @@ def img_2d_fit(shape, param_d, f):
     y_, x_ = shape
     xy = np.meshgrid(range(x_), range(y_))
     return f(xy, **param_d).reshape(y_,x_)
+
+#Cell
+def fill_nan(A):
+    '''
+    interpolate to fill nan values. BRYAN WOODS@StackOverflow
+    '''
+    inds = np.arange(A.shape[0])
+    good = np.where(np.isfinite(A))
+    f = interpolate.interp1d(inds[good], A[good],bounds_error=False)
+    B = np.where(np.isfinite(A),A,f(inds))
+    return B
