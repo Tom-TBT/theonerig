@@ -35,5 +35,5 @@ def load_vivo_2p():
     len_records = np.load(join(vivo_2p_dir, "record_lengths.npy"))
     with open(join(vivo_2p_dir, "twoP_frame_timepoints.pkl"), mode="rb") as f:
         rec_TP = pickle.load(f)
-    print("Successfully imported stim_d, S_matrix, A_matrix, proj_TP, proj_DATA, eye_TP, eye_DATA, treadm_DATA, len_records, rec_TP, reM")
+    print("Returning stim_d, S_matrix, A_matrix, proj_TP, proj_DATA, eye_TP, eye_DATA, treadm_DATA, len_records, rec_TP, reM")
     return locals()
