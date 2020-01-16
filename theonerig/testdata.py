@@ -11,12 +11,12 @@ import matplotlib.pyplot as plt
 from .core import *
 
 
-def load_vivo_2p():
+def load_vivo_2p(testdata_dir):
     """Quick function to get all test data. For a convenient
     usage, use the function as such:
         locals().update(load_vivo_2p())
     """
-    vivo_2p_dir = "./files/vivo_2p"
+    vivo_2p_dir = testdata_dir
     reM = import_record(join(vivo_2p_dir, "record_master.h5"))
     stim_d = {"0_darkness": np.load(join(vivo_2p_dir,"0_darkness.npy")),
              "38786_checkerboard": np.load(join(vivo_2p_dir,"38786_checkerboard.npy")),
