@@ -169,7 +169,7 @@ the processing of the data.</p>
 
 <span class="c1">#Load all the test data</span>
 <span class="kn">from</span> <span class="nn">theonerig.testdata</span> <span class="k">import</span> <span class="o">*</span>
-<span class="nb">locals</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">load_vivo_2p</span><span class="p">())</span>
+<span class="nb">locals</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">load_vivo_2p</span><span class="p">(</span><span class="s2">&quot;./files/vivo_2p&quot;</span><span class="p">))</span>
 
 <span class="c1">#Few tests on the shape of the data</span>
 <span class="n">test_eq</span><span class="p">(</span><span class="n">S_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">49000</span><span class="p">))</span>
