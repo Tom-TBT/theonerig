@@ -50,8 +50,9 @@ def align_sync_timepoints(timepoints:np.ndarray, signals:np.ndarray,
     timepoints = np.array(timepoints)
     signals = np.array(signals)
 
-    if shift is None: #If a shift is provided we use it, otherwise we use the max correlation
-        shift = np.argmax(np.correlate(ref_signals, signals, mode="valid"))
+    if shift is None:
+        #If a shift is provided we use it, otherwise we use the first signal different than 0
+        shift = np.where([ref_signals])[0][0] - np.where([signals])[0][0]
 
     spb = np.mean(timepoints[1:]-timepoints[:-1]) #spf: sample_per_bin
     n_left  = ref_signals.idx + shift
