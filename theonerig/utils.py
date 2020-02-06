@@ -17,8 +17,7 @@ def extend_sync_timepoints(timepoints:np.ndarray, signals:np.ndarray,
                            up_bound, low_bound=0) -> Tuple[DataChunk, DataChunk]:
     """From `timepoints` and `signals` list, extend it on the left so it includes `low_bound`, and extend it
     up to `up_bound`.
-    Return the new timepoints and signals as DataChunk objets with the number of timepoints added to the left
-    as a tuple.
+    The number of frame added to the left can be found in the signal_chunk.idx
     """
     assert len(timepoints) == len(signals)
     timepoints = np.array(timepoints)
@@ -36,40 +35,61 @@ def extend_sync_timepoints(timepoints:np.ndarray, signals:np.ndarray,
 
     timepoint_chunk = DataChunk(data=new_timepoints, idx=0, group="sync")
     signal_chunk    = DataChunk(data=signals, idx=len(left_side), group="sync")
-    return (timepoint_chunk, signal_chunk, len(left_side))
+    return (timepoint_chunk, signal_chunk)
 
 #Cell
-def align_sync_timepoints(timepoints:np.ndarray, signals:np.ndarray,
-                          ref_timepoints:DataChunk, ref_signals:DataChunk,
-                          shift=None) -> DataChunk:
+def align_sync_timepoints(timepoints:DataChunk, signals:DataChunk,
+                          ref_timepoints:DataChunk, ref_signals:DataChunk) -> Tuple[DataChunk, DataChunk, DataChunk]:
     """Align the `signals` of a `timepoints` timeserie to a reference `ref_timepoints` with the corresponding
-    `ref_signals`. A `shift` can be directly specified, otherwise it will be searched by finding the maximum
-    of the correlations of the two signals timeseries.
+    `ref_signals`. `ref_timepoints` and `ref_signals` are potentially extended and returned
     Returns a DataChunk of the aligned timepoints"""
-    assert len(timepoints) == len(signals)
-    timepoints = np.array(timepoints)
-    signals = np.array(signals)
+    shift_left = ((np.where(ref_signals)[0][0] + ref_signals.idx)
+                  - (np.where(signals)[0][0]) + signals.idx)
+    shift_right   = len(ref_timepoints) - (len(timepoints) + shift_left)
 
-    if shift is None:
-        #If a shift is provided we use it, otherwise we use the first signal different than 0
-        shift = np.where([ref_signals])[0][0] - np.where([signals])[0][0]
+    spb     = np.mean(timepoints[1:]-timepoints[:-1]) #spf: sample_per_bin
+    spb_ref = np.mean(ref_timepoints[1:]-ref_timepoints[:-1]) #spf: sample_per_bin
 
-    spb = np.mean(timepoints[1:]-timepoints[:-1]) #spf: sample_per_bin
-    n_left  = ref_signals.idx + shift
-    n_right = (len(ref_timepoints)
-               - len(timepoints)
-               - n_left)
+    left_timepoints      = np.zeros(0)
+    left_timepoints_ref  = np.zeros(0)
+    right_timepoints     = np.zeros(0)
+    right_timepoints_ref = np.zeros(0)
 
-    init_left  = timepoints[0]-spb
-    init_right = timepoints[-1]+spb
+    if shift_left > 0: #the ref started before, need to extend the other
+        init  = timepoints[0]-spb
+        left_timepoints = np.arange(init ,
+                                    init-(spb*shift_left+1),
+                                    -spb)[:shift_left][::-1].astype(int)
+    else:
+        shift_left = abs(shift_left)
+        init  = ref_timepoints[0]-spb_ref
+        left_timepoints_ref = np.arange(init ,
+                                        init-(spb_ref*shift_left+1),
+                                        -spb_ref)[:shift_left][::-1].astype(int)
+        #We also need to shift the index of the ref signals since we increased the size of the ref_timepoints
+        ref_signals.idx = ref_signals.idx + len(left_timepoints_ref)
 
-    left_side  = np.arange(init_left , init_left-(spb*n_left+1), -spb)[:n_left][::-1].astype(int)
-    right_side = np.arange(init_right, init_right+(spb*n_right+1), spb)[:n_right].astype(int)
+    if shift_right > 0: #the ref ended after, need to extend the other
+        init  = timepoints[-1]-spb
+        right_timepoints = np.arange(init ,
+                                    init-(spb*shift_right+1),
+                                    -spb)[:shift_right][::-1].astype(int)
+    else:
+        shift_right = abs(shift_right)
+        init  = ref_timepoints[-1]-spb
+        right_timepoints_ref = np.arange(init ,
+                                    init-(spb_ref*shift_right+1),
+                                    -spb_ref)[:shift_right][::-1].astype(int)
 
-    new_timepoints = np.concatenate((left_side,
+    timepoint    = DataChunk(data=np.concatenate((left_timepoints,
                                      timepoints,
-                                     right_side))
-    return DataChunk(data=new_timepoints, idx=0, group="sync")
+                                     right_timepoints)), idx=0, group="sync")
+
+    timepoint_ref = DataChunk(data=np.concatenate((left_timepoints_ref,
+                                     ref_timepoints,
+                                     right_timepoints_ref)), idx=0, group="sync")
+
+    return (timepoint, timepoint_ref, ref_signals)
 
 #Cell
 def resample_to_timepoints(timepoints:np.ndarray, data:np.ndarray,
@@ -81,8 +101,8 @@ def resample_to_timepoints(timepoints:np.ndarray, data:np.ndarray,
     timepoints = np.array(timepoints)
     data = np.array(data)
 
-    start_idx = np.argmax(timepoints[0] <=ref_timepoints)
-    stop_idx  = np.argmax(timepoints[-1]<=ref_timepoints)
+    start_idx = np.argmax(ref_timepoints >= timepoints[0])
+    stop_idx  = np.argmax(ref_timepoints >= timepoints[-1])
 
     if len(ref_timepoints[start_idx:stop_idx]) < len(timepoints): #Downsampling
         distance = (np.argmax(timepoints>ref_timepoints[start_idx+1])
@@ -99,7 +119,7 @@ def resample_to_timepoints(timepoints:np.ndarray, data:np.ndarray,
 #Cell
 def stim_to_dataChunk(stim_values, stim_start_idx, reference:DataChunk) -> DataChunk:
     """Factory function for DataChunk of a stimulus"""
-    return DataChunk(data=stim_values, idx = (reference.idx + stim_start_idx), group="stim")
+    return DataChunk(data=stim_values, idx = (stim_start_idx + reference.idx), group="stim")
 
 #Cell
 def spike_to_dataChunk(spike_timepoints, ref_timepoints:DataChunk) -> DataChunk:
