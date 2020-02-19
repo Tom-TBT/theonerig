@@ -67,8 +67,9 @@ def sum_of_2D_gaussian(xz, sigma_x_1, sigma_z_1, amp_1, theta_1, x0_1, z0_1,
 
 
 #Cell
-def fit_sigmoid(nonlin):
-    t = range(len(nonlin))
+def fit_sigmoid(nonlin, t=None):
+    if t is None:
+        t = range(len(nonlin))
     bounds = ([0.000001, 0     , 0     , 0],
               [np.inf  , np.inf, np.inf, np.max(nonlin)])
     try:

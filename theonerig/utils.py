@@ -2,7 +2,7 @@
 
 __all__ = ['extend_sync_timepoints', 'align_sync_timepoints', 'resample_to_timepoints', 'stim_to_dataChunk',
            'spike_to_dataChunk', 'parse_stim_args', 'peak_sta_frame', 'stim_inten_norm', 'twoP_dataChunks',
-           'img_2d_fit', 'fill_nan']
+           'img_2d_fit', 'fill_nan', 'group_direction_response']
 
 #Cell
 import numpy as np
@@ -214,3 +214,25 @@ def fill_nan(A):
     f = interpolate.interp1d(inds[good], A[good],bounds_error=False)
     B = np.where(np.isfinite(A),A,f(inds))
     return B
+
+#Cell
+def group_direction_response(stim_prop, spike_counts, n_repeat, n_cond=32):
+    """Group the record according to conditions."""
+
+    n_cell = spike_counts.shape[-1]
+    condition_repeat = stim_prop.reshape(n_repeat*n_cond,-1,3)[:,1,:]
+    spike_resh       = spike_counts.reshape(n_repeat*n_cond,-1,n_cell)
+    angles = np.unique(condition_repeat[:,1])
+
+    data_dict = {}
+    for cond in np.unique(condition_repeat, axis=0):
+        spat_freq, angle, speed = tuple(cond)
+        idx_cond = np.argwhere(np.all(condition_repeat==cond, axis=1))[:,0]
+
+        cond_key = str(spat_freq)+"@"+str(speed)
+        if cond_key not in data_dict.keys():
+            data_dict[cond_key] = np.empty((8, len(idx_cond), *spike_resh[0].shape))
+
+        idx_angle = np.where(angle==angles)[0][0]
+        data_dict[cond_key][idx_angle] = np.array([spike_resh[idx] for idx in idx_cond])
+    return data_dict
