@@ -2,7 +2,8 @@
 
 __all__ = ['eyetrack_stim_inten', 'saccade_distances', 'smooth_eye_position', 'process_sta_batch', 'cross_correlation',
            'corrcoef', 'flatten_corrcoef', 'stimulus_ensemble', 'process_nonlinearity', 'activity_histogram',
-           'cross_distances', 'cross_distances_sta', 'paired_distances', 'paired_distances_sta']
+           'cross_distances', 'cross_distances_sta', 'paired_distances', 'paired_distances_sta',
+           'direction_selectivity']
 
 #Cell
 from functools import partial
@@ -289,3 +290,26 @@ def paired_distances_sta(sta_fits_1, sta_fits_2, sta_shape, f):
         else:
             sta_masks_2[i] = sta_mask > .5
     return paired_distances(sta_masks_1, sta_masks_2)
+
+#Cell
+def direction_selectivity(grouped_spikes_d):
+    """Compute the direction selectivity index of cells in the given dict containing for each condition as
+    the keys, an array of shape (n_angle, n_repeat, trial_len, n_cell). Such dictionnary can be obtained
+    by using utils.group_direction_response
+    Return a dictionnary containing for each condition a tuple:
+        - spike_sum: a sum of the spikes for each angle for each cell
+        - dir_pref : an imaginary number of the prefered direction for each cell
+        - the direction selectivity index of each cell"""
+
+    res_d = {}
+    for cond, sp_count in grouped_spikes_d.items():
+        n_angle = sp_count.shape[0]
+        mean_n_spike = np.sum(sp_count, axis=(1,2)).T
+
+        x         = np.linspace(0, (n_angle-1)/4*np.pi, num=n_angle)
+        vect      = np.array([np.cos(x) + np.sin(x)*1j])
+        dir_pref  = np.nan_to_num((vect * mean_n_spike).sum(axis=1) / mean_n_spike.sum(axis=1))
+        ds_idx    = abs(dir_pref)
+
+        res_d[cond] = (mean_n_spike, dir_pref, ds_idx)
+    return res_d
