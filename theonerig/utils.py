@@ -229,7 +229,7 @@ def group_direction_response(stim_prop, spike_counts, n_repeat, n_cond=32):
         spat_freq, angle, speed = tuple(cond)
         idx_cond = np.argwhere(np.all(condition_repeat==cond, axis=1))[:,0]
 
-        cond_key = str(spat_freq)+"@"+str(speed)
+        cond_key = str(spat_freq)+"@"+str(round(speed,2))
         if cond_key not in data_dict.keys():
             data_dict[cond_key] = np.empty((8, len(idx_cond), *spike_resh[0].shape))
 

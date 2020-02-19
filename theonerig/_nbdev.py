@@ -46,6 +46,7 @@ index = {"DataChunk": "00_core.ipynb",
          "plot_2d_sta": "04_plotting.ipynb",
          "plot_cross_correlation": "04_plotting.ipynb",
          "plot_2d_fit": "04_plotting.ipynb",
+         "plot_ds_wheel": "04_plotting.ipynb",
          "load_vivo_2p": "99_testdata.ipynb"}
 
 modules = ["core.py",
