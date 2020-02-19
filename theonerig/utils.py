@@ -2,7 +2,7 @@
 
 __all__ = ['extend_sync_timepoints', 'align_sync_timepoints', 'resample_to_timepoints', 'stim_to_dataChunk',
            'spike_to_dataChunk', 'parse_stim_args', 'peak_sta_frame', 'stim_inten_norm', 'twoP_dataChunks',
-           'img_2d_fit', 'fill_nan', 'group_direction_response']
+           'img_2d_fit', 'fill_nan', 'group_direction_response', 'group_chirp_bumps']
 
 #Cell
 import numpy as np
@@ -236,3 +236,44 @@ def group_direction_response(stim_prop, spike_counts, n_repeat, n_cond=32):
         idx_angle = np.where(angle==angles)[0][0]
         data_dict[cond_key][idx_angle] = np.array([spike_resh[idx] for idx in idx_cond])
     return data_dict
+
+#Cell
+def group_chirp_bumps(stim_inten, spike_counts, n_repeat):
+    repeat = stim_inten.reshape(n_repeat,-1)[0]
+    spike_counts = spike_counts.reshape(n_repeat,-1,spike_counts.shape[-1])
+    epoch_l = [0]
+    end_l = [len(repeat)]
+    i = 1
+    curr = repeat[0]
+
+    while True:
+        while repeat[i]==curr:
+            i+=1
+        epoch_l.append(i)
+        curr = repeat[i]
+        if curr==repeat[i+1]:
+            continue
+        else:
+            break
+
+    i = len(repeat)-2
+    curr = repeat[-1]
+
+    while True:
+        while repeat[i]==curr:
+            i-=1
+        end_l.insert(0,i)
+        curr = repeat[i]
+        if curr==repeat[i-1]:
+            continue
+        else:
+            break
+    slices = [slice(epoch_l[i-1],epoch_l[i]) for i in range(1,len(epoch_l))]
+    slices.extend([slice(end_l[i-1],end_l[i]) for i in range(1,len(end_l))])
+
+    res_d = {}
+    for slc in slices:
+        key = str(stim_inten[slc.start])+"@"+str(slc.start)
+        res_d[key] = spike_counts[:,slc]
+
+    return res_d
