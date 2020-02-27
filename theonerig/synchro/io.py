@@ -7,6 +7,7 @@ __all__ = ['atoi', 'natural_keys', 'filter_per_extension', 'print_and_log', 'pri
 # Cell
 import numpy as np
 import re, sys, os, logging
+import h5py
 from colorama import Fore
 
 def atoi(text):
