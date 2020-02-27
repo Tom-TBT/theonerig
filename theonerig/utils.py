@@ -2,7 +2,8 @@
 
 __all__ = ['extend_sync_timepoints', 'align_sync_timepoints', 'resample_to_timepoints', 'stim_to_dataChunk',
            'spike_to_dataChunk', 'parse_stim_args', 'peak_sta_frame', 'stim_inten_norm', 'twoP_dataChunks',
-           'img_2d_fit', 'fill_nan', 'group_direction_response', 'group_chirp_bumps']
+           'img_2d_fit', 'fill_nan', 'group_direction_response', 'group_chirp_bumps', 'limited_stim_ensemble',
+           'buszaki_shank_channels', 'phy_results_dict']
 
 #Cell
 import numpy as np
@@ -185,7 +186,7 @@ def twoP_dataChunks(ref_timepoints:DataChunk, frame_timepoints, len_epochs, C_ma
     cursor = 0
     for i, len_epoch in enumerate(len_epochs):
         start_idx = np.argmax(ref_timepoints>frame_timepoints[i][0])
-        stop_idx  = np.argmax(ref_timepoints>frame_timepoints[i][-6])
+        stop_idx  = np.argmax(ref_timepoints>frame_timepoints[i][-6]) #-6 to exclujde the always present extra 5 frame of the calcium pulses
         sub_C, sub_S = C_matrix.T[cursor:cursor+len_epoch], S_matrix.T[cursor:cursor+len_epoch]
         cursor += len_epoch
         f = interpolate.interp1d(range(len_epoch), sub_C, axis=0)
@@ -277,3 +278,48 @@ def group_chirp_bumps(stim_inten, spike_counts, n_repeat):
         res_d[key] = spike_counts[:,slc]
 
     return res_d
+
+#Cell
+def limited_stim_ensemble(stim_inten, cell_sta, Hw=16, window=4):
+    y,x = np.argwhere(np.abs(cell_sta)==1)[0][1:]
+    x_low, x_high = max(0, x-window), min(cell_sta.shape[2]-1, x+window)
+    y_low, y_high = max(0, y-window), min(cell_sta.shape[1]-1, y+window)
+    y, x = np.meshgrid(np.linspace(y_low,y_high,window*2+1, dtype=int),
+                       np.linspace(x_low,x_high,window*2+1, dtype=int))
+    limited_stim = stim_inten[:,y, x]
+
+    stim_ensemble = np.zeros((len(limited_stim)-Hw, limited_stim.shape[-2]*limited_stim.shape[-1]*Hw))
+    for i in range(Hw, len(limited_stim)):
+        flat_stim = np.ndarray.flatten(limited_stim[i-Hw:i]) #,5:11,22:28
+        stim_ensemble[i-Hw] = flat_stim
+    return stim_ensemble
+
+#Cell
+def buszaki_shank_channels(channel_positions):
+    shank_1_mask = channel_positions[:,0]<180
+    shank_1_idx  = np.argwhere(shank_1_mask)[:,0]
+    shank_2_mask = (channel_positions[:,0]<380) & np.invert(shank_1_mask)
+    shank_2_idx  = np.argwhere(shank_2_mask)[:,0]
+    shank_4_mask = channel_positions[:,0]>580
+    shank_4_idx  = np.argwhere(shank_4_mask)[:,0]
+    shank_3_mask = (channel_positions[:,0]>380) & np.invert(shank_4_mask)
+    shank_3_idx  = np.argwhere(shank_3_mask)[:,0]
+
+    shanks_idx = np.zeros((4,8), dtype=int) - 1 #Initialize with -1 in case of channel missing
+    shanks_idx[0,:len(shank_1_idx)] = shank_1_idx
+    shanks_idx[1,:len(shank_1_idx)] = shank_2_idx
+    shanks_idx[2,:len(shank_1_idx)] = shank_3_idx
+    shanks_idx[3,:len(shank_1_idx)] = shank_4_idx
+    return shanks_idx
+
+#Cell
+def phy_results_dict(phy_dir):
+    res_dict = {}
+    res_dict["amplitudes"] = np.load(phy_dir+"/amplitudes.npy")
+    res_dict["channel_map"] = np.load(phy_dir+"/channel_map.npy")
+    res_dict["channel_positions"] = np.load(phy_dir+"/channel_positions.npy")
+    res_dict["spike_clusters"] = np.load(phy_dir+"/spike_clusters.npy")
+    res_dict["spike_templates"] = np.load(phy_dir+"/spike_templates.npy")
+    res_dict["spike_times"] = np.load(phy_dir+"/spike_times.npy")
+    res_dict["templates"] = np.load(phy_dir+"/templates.npy")
+    return res_dict
