@@ -68,8 +68,7 @@ modules = ["core.py",
            "utils.py",
            "processing.py",
            "modelling.py",
-           "plotting.py",
-           "dump.py"]
+           "plotting.py"]
 
 git_url = "https://github.com/Tom-TBT/theonerig/tree/master/"
 
