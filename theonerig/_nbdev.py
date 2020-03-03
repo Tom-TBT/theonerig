@@ -79,7 +79,9 @@ index = {"DataChunk": "00_core.ipynb",
          "H5File": "10_synchro.io.ipynb",
          "RawBinaryFile": "10_synchro.io.ipynb",
          "NumpyFile": "10_synchro.io.ipynb",
+         "get_QDSpy_logs": "11_synchro.extracting.ipynb",
          "QDSpy_log": "11_synchro.extracting.ipynb",
+         "Stimulus": "11_synchro.extracting.ipynb",
          "load_vivo_2p": "99_testdata.ipynb"}
 
 modules = ["core.py",
