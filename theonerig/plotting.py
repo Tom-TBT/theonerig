@@ -7,6 +7,7 @@ __all__ = ['DEFAULT_COLORS', 'plot_2d_sta', 'plot_cross_correlation', 'plot_2d_f
 # Cell
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
+from matplotlib.backends.backend_pdf import PdfPages
 import seaborn as sns
 import pandas as pd
 import numpy as np
@@ -110,7 +111,11 @@ def plot_t_sta(ax, sta):
     ax.set_ylim(-1,1)
 
 # Cell
-def plot_chirp(ax, stim_inten, spike_bins, n_repeats=10, smooth=True):
+def plot_chirp(ax, stim_inten, spike_bins, smooth=True):
+    #Getting the number of repeats by convolving a part of the stimulus
+    conv_res  = np.convolve(stim_inten[360:600].astype(float), stim_inten.astype(float), mode="full")
+    n_repeats = np.sum(conv_res.max()==conv_res)
+
     trace = spike_bins.reshape(n_repeats,-1)
     len_    = trace.shape[1]
 
@@ -122,8 +127,7 @@ def plot_chirp(ax, stim_inten, spike_bins, n_repeats=10, smooth=True):
                                           [str(i)]*len_,
                                           repeat_am)), columns=["timepoint","repeat","signal"])
         df = df.append(repeat_df, ignore_index=True)
-    g = sns.relplot(x="timepoint", y="signal",
-                kind="line", data=df, ax=ax)
+    g = sns.lineplot(x="timepoint", y="signal", data=df, ax=ax)
 #         trace = np.mean(trace, axis=0)
 #         if smooth:
 #             trace = np.convolve([.2]*3, trace, mode="same")
@@ -164,11 +168,15 @@ def plot_autocorrelogram(ax, cluster, spike_times, spike_clusters, bin_ms=.001, 
     ax.bar(np.linspace(-tails*bin_ms*1000,tails*bin_ms*1000,tails*2+1), corr, width=bin_ms*1000)
     ax.set_title("Autocorrelogram, bin="+str(bin_ms*1000)+"ms")
 
-def plot_spike_amplitudes(ax, cluster, spike_templates, spike_clusters, spike_times, amplitudes):
+def plot_spike_amplitudes(ax, cluster, spike_templates, spike_clusters, spike_times, amplitudes, n_max_dots=5000):
     mask_cluster = spike_clusters==cluster
-    for templ in np.unique(spike_templates[mask_cluster]):
+    clusters = np.unique(spike_templates[mask_cluster])
+    points_per_cluster = n_max_dots//len(clusters)
+    for templ in clusters:
         mask_template = spike_templates==templ
-        plt.scatter(spike_times[mask_template], amplitudes[mask_template], s=.2)
+        n_spike_template = np.sum(mask_template)
+        mask_selected_spikes = np.linspace(0, n_spike_template, min(n_spike_template, points_per_cluster), dtype=int, endpoint=False)
+        plt.scatter(spike_times[mask_template][mask_selected_spikes], amplitudes[mask_template][mask_selected_spikes], s=1)
 
     ax.set_xticks([])
     ax.set_title("Spike amplitudes")
@@ -182,14 +190,14 @@ def plot_stim_epochs_to_spikes(ax, reM, y_pos):
         len_dc = seq["main_tp"][dc.idx+len(dc)]-seq["main_tp"][dc.idx]
         start_dc = seq["main_tp"][dc.idx]
         ax.barh(y_pos, len_dc, left=start_dc, height=.1)
-        ax.text(start_dc, y_pos+(.1*pos_text_cursor), stim_name, fontdict={"size":5})
+        ax.text(start_dc, y_pos+(.1*pos_text_cursor), stim_name, fontdict={"size":10})
         pos_text_cursor*=-1
 
 
 # Cell
 def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, cell_db_ids=None,
                          checkerboard=None, fullfield_fl=None, chirp_am=None,
-                         chirp_fm=None, moving_gratings=None, fl_bars=None):
+                         chirp_fm=None, moving_gratings=None, fl_bars=None, export_path=None):
     """Plot the recapitulating form of in vivo electrophy records
     title_dict -> A dictionnary containing the str info for the title: keys(condition, date, record_name, record_id)
     reM -> The record master object of the record
@@ -221,6 +229,8 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, cell_db_ids=Non
                                     "ytick.labelsize":SMALL_SIZE,
                                     "legend.fontsize":SMALL_SIZE,
                                     "figure.titlesize":BIGGER_SIZE})
+    sns.set_style("white")
+    sns.set_style("ticks")
 
     shanks_idx = buszaki_shank_channels(phy_dict["channel_positions"])
     cond = title_dict["condition"]
@@ -230,6 +240,9 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, cell_db_ids=Non
 
     if cell_db_ids is None:
         cell_db_ids = [-1]*len(cluster_ids)
+
+    if export_path is not None:
+        pp = PdfPages(export_path)
 
     for cluster, cell_id in zip(cluster_ids, cell_db_ids):
         reM_cell_idx = np.where(cluster==cluster_ids)[0][0]
@@ -271,12 +284,12 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, cell_db_ids=Non
 
         #Chirp_FM
         chirpfm_ax = fig.add_subplot(gs[13:16,:])
-        plot_chirp(chirpfm_ax, chirp_fm[0], chirp_fm[1][:,reM_cell_idx], n_repeats=10)
+        plot_chirp(chirpfm_ax, chirp_fm[0], chirp_fm[1][:,reM_cell_idx])
         chirpfm_ax.set_title("Chirp FM")
 
         #Chirp_AM
         chirpam_ax = fig.add_subplot(gs[17:20,:])
-        plot_chirp(chirpam_ax, chirp_am[0], chirp_am[1][:,reM_cell_idx], n_repeats=10)
+        plot_chirp(chirpam_ax, chirp_am[0], chirp_am[1][:,reM_cell_idx])
         chirpam_ax.set_title("Chirp AM")
 
         #Flickering bars
@@ -287,4 +300,13 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, cell_db_ids=Non
         ds_ax = fig.add_subplot(gs[21:,13:], projection="polar")
         plot_ds_wheel(ds_ax, moving_gratings, cell_idx=reM_cell_idx)
 
+        if export_path is not None:
+            pp.savefig()
+        plt.close()
+
+        print("Cell cluster n°",cluster,"done")
+
+    if export_path is not None:
+        pp.close()
+    sns.set()
     plt.rcdefaults()
