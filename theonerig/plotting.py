@@ -148,10 +148,12 @@ def plot_spike_template(ax, cluster_composition, templates, shanks_idx, channel_
     template_pos = np.where(np.abs(templates[cluster_composition[0]])
                             == np.max(np.abs(templates[cluster_composition[0]])))[1][0]
     template_shank = np.where(shanks_idx==template_pos)[0][0]
-    shank_templates = templates[:,:,shanks_idx[template_shank]]
+    selected_channels = shanks_idx[template_shank]
+    selected_channels = selected_channels[selected_channels!=-1] #Removing the disabled channels
+    shank_templates = templates[:,:,selected_channels]
 
-    min_x = np.min(channel_positions[shanks_idx[template_shank]][:,0])
-    for i, pos in enumerate(channel_positions[shanks_idx[template_shank]]):
+    min_x = np.min(channel_positions[selected_channels][:,0])
+    for i, pos in enumerate(channel_positions[selected_channels]):
         for j, cell in enumerate(cluster_composition):
             color = DEFAULT_COLORS[j]
             ax.plot(np.arange(n_points)+pos[0]-min_x, shank_templates[cell,mask_trace,i]*4+pos[1], c=color)
@@ -273,32 +275,38 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, cell_db_ids=Non
         plot_stim_epochs_to_spikes(sp_amp_ax, reM, y_pos=0.6)
 
         #Checkerboard STA
-        inner_grid = gridspec.GridSpecFromSubplotSpec(4, 4,
-                    subplot_spec=gs[5:12,0:12], wspace=.09, hspace=.13)
-        plot_2d_sta(checkerboard[reM_cell_idx], grid=inner_grid)
+        if checkerboard is not None:
+            inner_grid = gridspec.GridSpecFromSubplotSpec(4, 4,
+                        subplot_spec=gs[5:12,0:12], wspace=.09, hspace=.13)
+            plot_2d_sta(checkerboard[reM_cell_idx], grid=inner_grid)
 
         #Fullfield flickering STA
-        sp_amp_ax = fig.add_subplot(gs[5:12,13:])
-        plot_t_sta(sp_amp_ax, fullfield_fl[reM_cell_idx])
-        sp_amp_ax.set_title("Fullfield_flickering")
+        if fullfield_fl is not None:
+            sp_amp_ax = fig.add_subplot(gs[5:12,13:])
+            plot_t_sta(sp_amp_ax, fullfield_fl[reM_cell_idx])
+            sp_amp_ax.set_title("Fullfield_flickering")
 
         #Chirp_FM
-        chirpfm_ax = fig.add_subplot(gs[13:16,:])
-        plot_chirp(chirpfm_ax, chirp_fm[0], chirp_fm[1][:,reM_cell_idx])
-        chirpfm_ax.set_title("Chirp FM")
+        if chirp_fm is not None:
+            chirpfm_ax = fig.add_subplot(gs[13:16,:])
+            plot_chirp(chirpfm_ax, chirp_fm[0], chirp_fm[1][:,reM_cell_idx])
+            chirpfm_ax.set_title("Chirp FM")
 
         #Chirp_AM
-        chirpam_ax = fig.add_subplot(gs[17:20,:])
-        plot_chirp(chirpam_ax, chirp_am[0], chirp_am[1][:,reM_cell_idx])
-        chirpam_ax.set_title("Chirp AM")
+        if chirp_am is not None:
+            chirpam_ax = fig.add_subplot(gs[17:20,:])
+            plot_chirp(chirpam_ax, chirp_am[0], chirp_am[1][:,reM_cell_idx])
+            chirpam_ax.set_title("Chirp AM")
 
         #Flickering bars
-        nonlin_ax = fig.add_subplot(gs[21:,:12])
-        nonlin_ax.set_title("Flickering_bars")
+        if fl_bars is not None:
+            nonlin_ax = fig.add_subplot(gs[21:,:12])
+            nonlin_ax.set_title("Flickering_bars")
 
         #Moving gratings
-        ds_ax = fig.add_subplot(gs[21:,13:], projection="polar")
-        plot_ds_wheel(ds_ax, moving_gratings, cell_idx=reM_cell_idx)
+        if moving_gratings is not None:
+            ds_ax = fig.add_subplot(gs[21:,13:], projection="polar")
+            plot_ds_wheel(ds_ax, moving_gratings, cell_idx=reM_cell_idx)
 
         if export_path is not None:
             pp.savefig()
