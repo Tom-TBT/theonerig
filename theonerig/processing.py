@@ -12,6 +12,7 @@ from sklearn.decomposition import PCA
 from sklearn import cluster
 import scipy.ndimage as ndimage
 import scipy.signal as signal
+import scipy as sp
 
 from .core import *
 from .utils import *
@@ -121,19 +122,19 @@ def _linear_transform(box_dim, transfo_matrix, x_eyeShift, y_eyeShift):
     return stim_vec[0], -stim_vec[1]
 
 # Cell
-def process_sta_batch(stim_inten, spike_counts, Hw=30, Fw=2):
+def process_sta_batch(stim_inten, spike_counts, Hw=30, Fw=2, return_pval=False):
     """Calculate the STA for a batch of cells."""
     #Preparing the stimulus
     shape_y, shape_x = stim_inten.shape[-2:]
     stim_inten = stim_inten_norm(stim_inten)
+    sum_spikes = np.sum(spike_counts, axis=0)
+    len_stim = len(stim_inten)
 
     #We just have to calculate one STA over the whole record
     stim_inten   = np.reshape(stim_inten, (len(stim_inten),-1))
     stim_inten   = np.transpose(stim_inten)
     allCells_sta = staEst_fromBins(stim_inten, spike_counts, Hw, Fw=Fw)
 
-    for k, cell_sta in enumerate(allCells_sta): #Easy way to do normalization for each cell that works for all possible shapes
-        allCells_sta[k] = np.nan_to_num(cell_sta/np.max(np.abs(cell_sta)))
     if shape_y>1 and shape_x>1:
         allCells_sta = allCells_sta.reshape((len(allCells_sta),Hw+Fw, shape_y, shape_x))
     elif shape_y>1 or shape_x>1:
@@ -141,7 +142,19 @@ def process_sta_batch(stim_inten, spike_counts, Hw=30, Fw=2):
     else:
         allCells_sta = allCells_sta.reshape((len(allCells_sta),Hw+Fw))
 
-    return allCells_sta
+    if return_pval:
+        p_values = np.empty(allCells_sta.shape)
+    for k, cell_sta in enumerate(allCells_sta): #Easy way to do normalization for each cell that works for all possible shapes
+        if return_pval:
+            z_scores = cell_sta/ np.sqrt(1/sum_spikes[k])
+            p_values[k] = sp.stats.norm.sf(abs(z_scores))*2*(len_stim-Hw)
+
+        allCells_sta[k] = np.nan_to_num(cell_sta/np.max(np.abs(cell_sta)))
+
+    if return_pval:
+        return allCells_sta, p_values
+    else:
+        return allCells_sta
 
 def staEst_fromBins(stim, spike_counts, Hw, Fw=0):
     """Fw is the amount of frame after a spike that we calculate the average for.
