@@ -307,9 +307,9 @@ def buszaki_shank_channels(channel_positions):
 
     shanks_idx = np.zeros((4,8), dtype=int) - 1 #Initialize with -1 in case of channel missing
     shanks_idx[0,:len(shank_1_idx)] = shank_1_idx
-    shanks_idx[1,:len(shank_1_idx)] = shank_2_idx
-    shanks_idx[2,:len(shank_1_idx)] = shank_3_idx
-    shanks_idx[3,:len(shank_1_idx)] = shank_4_idx
+    shanks_idx[1,:len(shank_2_idx)] = shank_2_idx
+    shanks_idx[2,:len(shank_3_idx)] = shank_3_idx
+    shanks_idx[3,:len(shank_4_idx)] = shank_4_idx
     return shanks_idx
 
 # Cell
