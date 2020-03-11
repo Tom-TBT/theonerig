@@ -120,12 +120,18 @@ class ContiguousRecord():
     def __getitem__(self, key):
         if isinstance(key, str):
             l_datachunk = self._data_dict[key]
+            fill_value  = l_datachunk[0].fill
             shape     = l_datachunk[0].shape
-            full_sequence = np.full(shape=(self.length, *shape[1:]),
-                                    fill_value=l_datachunk[0].fill,
-                                    dtype=l_datachunk[0].dtype)
+#             full_sequence = np.full(shape=(self.length, *shape[1:]),
+#                                     fill_value=fill_value,
+#                                     dtype=l_datachunk[0].dtype)
+            full_sequence = DataChunk(np.zeros((self.length, *shape[1:]),
+                                               dtype=l_datachunk[0].dtype)+fill_value,
+                                      0,
+                                      fill_value)
             for datachunk in l_datachunk:
                 full_sequence[datachunk.slice] = datachunk.data
+                full_sequence.attrs.update(datachunk.attrs)
 
             return full_sequence
 

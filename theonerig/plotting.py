@@ -265,7 +265,7 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, cell_db_ids=Non
         pp = PdfPages(export_path)
 
     for cluster, cell_id in zip(cluster_ids, cell_db_ids):
-        reM_cell_idx = np.where(cluster==cluster_ids)[0][0]
+        reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][cluster]#np.where(cluster==cluster_ids)[0][0]
 
         fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches(damn) *2
         suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id),

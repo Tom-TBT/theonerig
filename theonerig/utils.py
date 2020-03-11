@@ -126,15 +126,15 @@ def stim_to_dataChunk(stim_values, stim_start_idx, reference:DataChunk) -> DataC
 def spike_to_dataChunk(spike_timepoints, ref_timepoints:DataChunk) -> DataChunk:
     """`spike_timepoints` must be a dictionnary of cell spike_timepoints list. This function then
     bins the """
-    cell_keys = list(map(str,
-                         sorted(map(int,
-                                    spike_timepoints.keys()))))
+    type_cast = type(list(spike_timepoints.keys())[0])
+    cell_keys = sorted(map(int,
+                                    spike_timepoints.keys()))
     cell_map = dict([ (cell_key, i) for i, cell_key in enumerate(cell_keys) ])
     spike_bins = np.zeros((ref_timepoints.shape[0], len(cell_keys)))
     bins = np.concatenate((ref_timepoints[:], [(ref_timepoints[-1]*2)-ref_timepoints[-2]]))
-    for i, cell in enumerate(cell_keys):
 
-        spike_bins[:, i] = np.histogram(spike_timepoints[cell], bins)[0]
+    for i, cell in enumerate(cell_keys):
+        spike_bins[:, i] = np.histogram(spike_timepoints[type_cast(cell)], bins)[0]
 
     datachunk = DataChunk(data=spike_bins, idx = ref_timepoints.idx, group="cell")
     datachunk.attrs["cell_map"] = cell_map
