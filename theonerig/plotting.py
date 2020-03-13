@@ -2,7 +2,9 @@
 
 __all__ = ['DEFAULT_COLORS', 'plot_2d_sta', 'plot_cross_correlation', 'plot_2d_fit', 'plot_ds_wheel',
            'plot_dark_white_response', 'plot_fl_bars', 'plot_t_sta', 'plot_chirp', 'plot_spike_template',
-           'plot_autocorrelogram', 'plot_spike_amplitudes', 'plot_stim_epochs_to_spikes', 'plot_recap_vivo_ephy']
+           'plot_autocorrelogram', 'plot_spike_amplitudes', 'plot_cell_spatial', 'plot_calcium_trace',
+           'plot_stim_epochs_to_spikes', 'plot_stim_epochs_to_calcium', 'configure_pyplot_recap',
+           'plot_recap_vivo_ephy', 'plot_recap_vivo_calcium']
 
 # Cell
 import matplotlib.pyplot as plt
@@ -192,20 +194,37 @@ def plot_spike_amplitudes(ax, cluster, spike_templates, spike_clusters, spike_ti
     mask_cluster = spike_clusters==cluster
     clusters = np.unique(spike_templates[mask_cluster])
     points_per_cluster = n_max_dots//len(clusters)
+    total_spikes = 0
     for templ in clusters:
         mask_template = spike_templates==templ
         n_spike_template = np.sum(mask_template)
+        total_spikes+=n_spike_template
         mask_selected_spikes = np.linspace(0, n_spike_template, min(n_spike_template, points_per_cluster), dtype=int, endpoint=False)
         plt.scatter(spike_times[mask_template][mask_selected_spikes], amplitudes[mask_template][mask_selected_spikes], s=1)
 
     ax.set_xticks([])
-    ax.set_title("Spike amplitudes")
+    ax.set_title("Spike amplitudes - n°spike: "+str(total_spikes))
+
+def plot_cell_spatial(ax, cell_spatial):
+    ax.imshow(cell_spatial)
+
+def plot_calcium_trace(ax, cell_trace):
+    ax.plot(range(0,len(cell_trace),8), cell_trace[::8], linewidth=.1)
+    ax.set_xticks([])
+    ax.set_title("Calcium activity")
 
 def plot_stim_epochs_to_spikes(ax, reM, y_pos):
     pos_text_cursor = 1
     seq = reM._sequences[0]
     stim_names = seq.get_names_group("stim")
+    idx_l = []
     for stim_name in stim_names:
+        dc = seq._data_dict[stim_name][0]
+        idx_l.append(dc.idx)
+    idx_l = np.array(idx_l)
+    order_stim = np.argsort(idx_l)
+    for stim_idx in order_stim:
+        stim_name = stim_names[stim_idx]
         dc = seq._data_dict[stim_name][0]
         len_dc = seq["main_tp"][dc.idx+len(dc)]-seq["main_tp"][dc.idx]
         start_dc = seq["main_tp"][dc.idx]
@@ -213,11 +232,50 @@ def plot_stim_epochs_to_spikes(ax, reM, y_pos):
         ax.text(start_dc, y_pos+(.1*pos_text_cursor), stim_name, fontdict={"size":10})
         pos_text_cursor*=-1
 
+def plot_stim_epochs_to_calcium(ax, reM, y_pos):
+    pos_text_cursor = 1
+    seq = reM._sequences[0]
+    stim_names = seq.get_names_group("stim")
+    idx_l = []
+    for stim_name in stim_names:
+        dc = seq._data_dict[stim_name][0]
+        idx_l.append(dc.idx)
+    idx_l = np.array(idx_l)
+    order_stim = np.argsort(idx_l)
+    for stim_idx in order_stim:
+        stim_name = stim_names[stim_idx]
+        dc = seq._data_dict[stim_name][0]
+        len_dc = len(dc)
+        start_dc = dc.idx
+        ax.barh(y_pos, width=len_dc, left=start_dc, height=.1)
+        ax.text(start_dc, y_pos+(.1*pos_text_cursor), stim_name, fontdict={"size":10})
+        pos_text_cursor*=-1
+
+
+# Cell
+def configure_pyplot_recap(small_size=14, medium_size=18, bigger_size=24):
+    plt.rc('font', size=small_size)          # controls default text sizes
+    plt.rc('axes', titlesize=small_size)     # fontsize of the axes title
+    plt.rc('axes', labelsize=medium_size)    # fontsize of the x and y labels
+    plt.rc('xtick', labelsize=small_size)    # fontsize of the tick labels
+    plt.rc('ytick', labelsize=small_size)    # fontsize of the tick labels
+    plt.rc('legend', fontsize=small_size)    # legend fontsize
+    plt.rc('figure', titlesize=bigger_size)  # fontsize of the figure title
+
+    sns.set_context("notebook", rc={"font.size":small_size,
+                                    "axes.titlesize":small_size,
+                                    "axes.labelsize":medium_size,
+                                    "xtick.labelsize":small_size,
+                                    "ytick.labelsize":small_size,
+                                    "legend.fontsize":small_size,
+                                    "figure.titlesize":bigger_size})
+    sns.set_style("white")
+    sns.set_style("ticks")
 
 # Cell
 def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, cell_db_ids=None,
-                         checkerboard=None, fullfield_fl=None, chirp_am=None,
-                         chirp_fm=None, moving_gratings=None, fl_bars=None, export_path=None):
+                         checkerboard=None, fullfield_fl=None, fl_bars=None, chirp_am=None,
+                         chirp_fm=None, moving_gratings=None, export_path=None):
     """Plot the recapitulating form of in vivo electrophy records
     title_dict -> A dictionnary containing the str info for the title: keys(condition, date, record_name, record_id)
     reM -> The record master object of the record
@@ -226,31 +284,13 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, cell_db_ids=Non
     cell_db_ids -> A list of the database ids of the cells corresponding to cluster_ids
     checkerboard -> A matrix of STA of cells to the checkerboard stimulus of shape (n_cell, 16, height, width)
     fullfield_fl -> A matrix of STA of cells to the fullfield_flicker stimulus of shape (n_cell, 16)
+    fl_bars -> A matrix of STA of cells to the flickering_bars stimulus of shape (n_cell, 16, height, width)
     chirp_am -> A tuple of the chirp_am obtained from a pipe, where [0] is the stimulus and [1] the cells response
     chirp_fm -> Same as chirp_am but for a chirp_fm stimulus
     moving_gratings -> The dict of response obtained from utils.group_direction_response
-    fl_bars -> A matrix of STA of cells to the flickering_bars stimulus of shape (n_cell, 16, height, width)
+    export_path -> The path for a pdf file to be exported. If None, the plot is displayed.
     """
-    SMALL_SIZE = 14#8
-    MEDIUM_SIZE = 18#10
-    BIGGER_SIZE = 24#12
-    plt.rc('font', size=SMALL_SIZE)          # controls default text sizes
-    plt.rc('axes', titlesize=SMALL_SIZE)     # fontsize of the axes title
-    plt.rc('axes', labelsize=MEDIUM_SIZE)    # fontsize of the x and y labels
-    plt.rc('xtick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
-    plt.rc('ytick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
-    plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
-    plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
-
-    sns.set_context("notebook", rc={"font.size":SMALL_SIZE,
-                                    "axes.titlesize":SMALL_SIZE,
-                                    "axes.labelsize":MEDIUM_SIZE,
-                                    "xtick.labelsize":SMALL_SIZE,
-                                    "ytick.labelsize":SMALL_SIZE,
-                                    "legend.fontsize":SMALL_SIZE,
-                                    "figure.titlesize":BIGGER_SIZE})
-    sns.set_style("white")
-    sns.set_style("ticks")
+    configure_pyplot_recap()
 
     shanks_idx = buszaki_shank_channels(phy_dict["channel_positions"])
     cond = title_dict["condition"]
@@ -335,5 +375,108 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, cell_db_ids=Non
 
     if export_path is not None:
         pp.close()
+    else:
+        plt.show()
+    sns.set()
+    plt.rcdefaults()
+
+
+# Cell
+def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, cell_indexes=None, cell_db_ids=None,
+                         checkerboard=None, fullfield_fl=None, fl_bars=None, chirp_am=None,
+                         chirp_fm=None, moving_gratings=None, export_path=None):
+    """Plot the recapitulating form of in vivo electrophy records
+    title_dict -> A dictionnary containing the str info for the title: keys(condition, date, record_name, record_id)
+    reM -> The record master object of the record
+    A_matrix -> A matrix of the cell spatial components obtained from CaImAn
+    cell_indexes -> A list of the indexes of the cell to plot. Leave to None for plotting all of them.
+    cell_db_ids -> A list of the database ids of the cells in the order of the cells data index.
+    checkerboard -> A matrix of STA of cells to the checkerboard stimulus of shape (n_cell, 16, height, width)
+    fullfield_fl -> A matrix of STA of cells to the fullfield_flicker stimulus of shape (n_cell, 16)
+    fl_bars -> A matrix of STA of cells to the flickering_bars stimulus of shape (n_cell, 16, height, width)
+    chirp_am -> A tuple of the chirp_am obtained from a pipe, where [0] is the stimulus and [1] the cells response
+    chirp_fm -> Same as chirp_am but for a chirp_fm stimulus
+    moving_gratings -> The dict of response obtained from utils.group_direction_response
+    export_path -> The path for a pdf file to be exported. If None, the plot is displayed.
+    """
+    configure_pyplot_recap()
+
+    cond = title_dict["condition"]
+    date = title_dict["date"]
+    record_name = title_dict["record_name"]
+    record_id = title_dict["record_id"]
+    if cell_indexes is None:
+        cell_indexes = list(range(len(A_matrix)))
+    if cell_db_ids is None:
+        cell_db_ids = [-1]*len(cell_indexes)
+
+    if export_path is not None:
+        pp = PdfPages(export_path)
+
+    for cell_idx, cell_db_id in zip(cell_indexes, cell_db_ids):
+
+        fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches(damn) *2
+        suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id),
+                               "Cell n°"+str(cell_idx), "Cell DB id n°"+str(cell_db_id)])
+        plt.suptitle(suptitle)
+
+        gs = gridspec.GridSpec(28, 20, left=0.05,
+                               right=.95, top=.92,
+                               bottom=.05, wspace=0.00, hspace=0.00)
+
+        #Template on electrodes
+        cell_loc_ax = fig.add_subplot(gs[0:4,0:4])
+        plot_cell_spatial(cell_loc_ax, A_matrix[cell_idx])
+
+        #Spike amplitude across time
+        calcium_trace_ax = fig.add_subplot(gs[0:4,5:])
+        plot_calcium_trace(calcium_trace_ax, cell_traces[:, cell_idx])
+        plot_stim_epochs_to_calcium(calcium_trace_ax, reM, y_pos=-0.3)
+
+        #Checkerboard STA
+        if checkerboard is not None:
+            inner_grid = gridspec.GridSpecFromSubplotSpec(4, 4,
+                        subplot_spec=gs[5:12,0:12], wspace=.09, hspace=.13)
+            plot_2d_sta(checkerboard[cell_idx][::4], grid=inner_grid)
+
+        #Fullfield flickering STA
+        if fullfield_fl is not None:
+            sp_amp_ax = fig.add_subplot(gs[5:12,13:])
+            plot_t_sta(sp_amp_ax, fullfield_fl[0][cell_idx], fullfield_fl[1][cell_idx])
+            sp_amp_ax.set_title("Fullfield_flickering")
+
+        #Chirp_FM
+        if chirp_fm is not None:
+            chirpfm_ax = fig.add_subplot(gs[13:16,:])
+            plot_chirp(chirpfm_ax, chirp_fm[0], chirp_fm[1][:,cell_idx])
+            chirpfm_ax.set_title("Chirp FM")
+
+        #Chirp_AM
+        if chirp_am is not None:
+            chirpam_ax = fig.add_subplot(gs[17:20,:])
+            plot_chirp(chirpam_ax, chirp_am[0], chirp_am[1][:,cell_idx])
+            chirpam_ax.set_title("Chirp AM")
+
+        #Flickering bars
+        if fl_bars is not None:
+            fl_bars_ax = fig.add_subplot(gs[21:,:12])
+            plot_fl_bars(fl_bars_ax, fl_bars[cell_idx])
+            fl_bars_ax.set_title("Flickering_bars")
+
+        #Moving gratings
+        if moving_gratings is not None:
+            ds_ax = fig.add_subplot(gs[21:,13:], projection="polar")
+            plot_ds_wheel(ds_ax, moving_gratings, cell_idx=cell_idx)
+
+        if export_path is not None:
+            pp.savefig()
+        plt.close()
+
+        print("Cell n°",cell_idx,"done")
+
+    if export_path is not None:
+        pp.close()
+    else:
+        plt.show()
     sns.set()
     plt.rcdefaults()
