@@ -13,6 +13,9 @@ from sklearn import cluster
 import scipy.ndimage as ndimage
 import scipy.signal as signal
 import scipy as sp
+from cmath import *
+import itertools
+import random
 
 from .core import *
 from .utils import *
@@ -321,11 +324,49 @@ def direction_selectivity(grouped_spikes_d):
         mean_n_spike = np.sum(sp_count, axis=(1,2)).T
 
         x         = np.linspace(0, (n_angle-1)/4*np.pi, num=n_angle)
-        vect      = np.array([np.cos(x) + np.sin(x)*1j])
-        dir_pref  = np.nan_to_num((vect * mean_n_spike).sum(axis=1) / mean_n_spike.sum(axis=1))
+
+        #Direction selectivity
+        vect_dir  = np.exp(x*1j)#np.array([np.cos(x) + np.sin(x)*1j])
+        dir_pref  = np.nan_to_num((vect_dir * mean_n_spike).sum(axis=1) / mean_n_spike.sum(axis=1))
         ds_idx    = abs(dir_pref)
 
-        res_d[cond] = (mean_n_spike, dir_pref, ds_idx)
+        #Orientation selectivity
+        vect_ori  = np.exp(x*1j*2)#np.concatenate((vect_dir[:,:n_angle//2], vect_dir[:,:n_angle//2]), axis=1)
+        ori_pref  = np.nan_to_num((vect_ori * mean_n_spike).sum(axis=1) / mean_n_spike.sum(axis=1))
+        ori_idx   = abs(ori_pref)
+
+        #Generating direction and orientation index from shuffled trials
+        axtup_l = list(itertools.product(range(sp_count.shape[0]), range(sp_count.shape[1])))
+        random.seed(1)
+        n_shuffle = 1000
+        axtup_l_shuffled = axtup_l.copy()
+        rand_ori_idx_l = np.empty((n_shuffle, sp_count.shape[3]))
+        rand_dir_idx_l = np.empty((n_shuffle, sp_count.shape[3]))
+        for i in range(n_shuffle):
+            random.shuffle(axtup_l_shuffled)
+            shuffled_sp_count = np.empty(sp_count.shape)
+            for axtup, axtup_shuff in zip(axtup_l, axtup_l_shuffled):
+                shuffled_sp_count[axtup] = sp_count[axtup_shuff]
+            rand_mean_n_spike      = np.sum(shuffled_sp_count, axis=(1,2)).T
+            rand_dir_pref     = np.nan_to_num((vect_dir * rand_mean_n_spike).sum(axis=1) / rand_mean_n_spike.sum(axis=1))
+            rand_dir_idx_l[i] = abs(rand_dir_pref)
+
+            rand_ori_pref     = np.nan_to_num((vect_ori * rand_mean_n_spike).sum(axis=1) / rand_mean_n_spike.sum(axis=1))
+            rand_ori_idx_l[i] = abs(rand_ori_pref)
+
+        #Same calculation of pval as in Baden et al 2016
+        p_val_dir = np.sum(rand_dir_idx_l<dir_pref, axis=0)/n_shuffle
+        p_val_ori = np.sum(rand_ori_idx_l<ori_pref, axis=0)/n_shuffle
+
+        #Finally we have to transform the orientation selectivity vectors to put them back in their
+        # original orientation, by divinding the phase of the vector by two
+        tau = np.pi*2
+        polar_ori_pref = np.array(list((map(polar, ori_pref))))
+        polar_ori_pref[:,1] = ((polar_ori_pref[:,1]+tau)%tau)/2 #Convert to positive radian angle and divide by two
+        ori_pref = np.array([rect(pol[0], pol[1]) for pol in polar_ori_pref])
+
+        res_d[cond] = (mean_n_spike, dir_pref, ds_idx, ori_pref, ori_idx, p_val_dir, p_val_ori)
+
     return res_d
 
 # Cell

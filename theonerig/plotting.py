@@ -82,20 +82,40 @@ def plot_ds_wheel(ax, ds_dict, cell_idx):
 
     n_angle = ds_dict[key_0][0].shape[1]
     x = np.linspace(0, (n_angle-1)/4*np.pi, num=n_angle)
-
     linestyle = [":", "--"]
+    best_oi, best_di = None, None
     for j, (key, data) in enumerate(ds_dict.items()):
         spike_counts = data[0][cell_idx,:]
         dir_pref = data[1][cell_idx]
-        mod, phase = polar(dir_pref)
+        dir_mod, dir_phase = polar(dir_pref)
+        dir_pval = data[5][cell_idx]
+        #We could aswell use the already calculated index but polar provide us an angle that can be plotted.
+        ori_pref = data[3][cell_idx]
+        ori_mod, ori_phase = polar(ori_pref)
+        ori_pval = data[6][cell_idx]
 
+        if best_oi is None:
+            best_oi, best_di = (ori_mod, ori_phase, ori_pval), (dir_mod, dir_phase, dir_pval)
+        else:
+            if best_oi[2]<ori_pval:
+                best_oi=(ori_mod, ori_phase, ori_pval)
+            if best_di[2]<dir_pval:
+                best_di=(dir_mod, dir_phase, dir_pval)
+
+        label = (key+"   DI:"+str(round(dir_mod,2))+" / p"+str(round(1-dir_pval,2))+
+                    "    OI:"+str(round(ori_mod,2))+" / p"+str(round(1-ori_pval,2)))
 
         ax.plot(np.concatenate((x, x[0:1])), np.concatenate((spike_counts, spike_counts[0:1])),
-                linestyle=linestyle[j//2], c=DEFAULT_COLORS[j%2], label=key+" "+str(round(mod,3)))
-        ax.legend(loc=(-.1,-.16))
+                linestyle=linestyle[j//2], c=DEFAULT_COLORS[j%2],
+                label=label)
 
-#             plt.arrow(0, 0, phase, max_spike/2, width=.04, length_includes_head=True, head_length=30,
-#                      shape="left")
+    x_uplim = ax.get_ylim()[1]
+    ds_arrow = ax.arrow(0,.1,best_di[1],  best_di[0]*x_uplim, width=.3, head_width=0.0000000001, color='tab:purple', label="Best DI")
+    os_arrow = ax.arrow(0,.1,best_oi[1],best_oi[0]*x_uplim, width=.3, head_width=0.0000000001, color='tab:green', label="Best OI")
+    legend_obj, legend_label = ax.get_legend_handles_labels()
+    # legend_obj.extend([ds_arrow, os_arrow])
+    # legend_label.extend(["Best direction selectivity", "Best orientation selectivity"])
+    ax.legend(legend_obj, legend_label, loc=(-.1,-.16))
 
 # Cell
 def plot_dark_white_response(ax, spike_bins):
