@@ -3,12 +3,15 @@
 __all__ = ['extend_sync_timepoints', 'align_sync_timepoints', 'resample_to_timepoints', 'stim_to_dataChunk',
            'spike_to_dataChunk', 'parse_stim_args', 'peak_sta_frame', 'stim_inten_norm', 'twoP_dataChunks',
            'img_2d_fit', 'fill_nan', 'group_direction_response', 'group_chirp_bumps', 'limited_stim_ensemble',
-           'buszaki_shank_channels', 'phy_results_dict', 'format_pval', 'stim_recap_df',
+           'buszaki_shank_channels', 'phy_results_dict', 'format_pval', 'get_calcium_stack_lenghts', 'stim_recap_df',
            'extract_old_stimulus_metadata']
 
 # Cell
 import numpy as np
 import pandas as pd
+import os
+import glob
+import re
 from typing import Dict, Tuple, Sequence, Union, Callable
 import scipy.interpolate as interpolate
 from scipy.ndimage import convolve1d
@@ -329,6 +332,16 @@ def phy_results_dict(phy_dir):
 # Cell
 def format_pval(pval, significant_figures=2):
     return '{:g}'.format(float('{:.{p}g}'.format(pval, p=significant_figures)))
+
+# Cell
+def get_calcium_stack_lenghts(folder):
+    record_lenghts = []
+    pattern_nFrame = r".*number=(\d*) .*"
+    for fn in glob.glob(folder+"/*.txt"):
+        with open(fn) as f:
+            line = f.readline()
+            record_lenghts.append(int(re.findall(pattern_nFrame, line)[0]))
+    return record_lenghts
 
 # Cell
 def stim_recap_df(h5_stim_group):
