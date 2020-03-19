@@ -237,12 +237,13 @@ class RecordMaster(list):
     def __len__(self):
         return len(self._sequences)
 
-    def plot(self):
+    def plot(self, ax=None):
         colors = {"sync":"cornflowerblue", "stim":"orange", "data":"yellowgreen", "cell":"plum"}
         cursor = 0
         y_pos_dict = {}
         y_count    = 0
-        fig, ax = plt.subplots(figsize=(10, 5))
+        if ax is None:
+            fig, ax = plt.subplots(figsize=(10, 5))
         ax.invert_yaxis()
         ax.xaxis.set_visible(False)
         for seq in self._sequences:

@@ -3,16 +3,19 @@
 __all__ = ['DEFAULT_COLORS', 'plot_2d_sta', 'plot_cross_correlation', 'plot_2d_fit', 'plot_ds_wheel',
            'plot_dark_white_response', 'plot_fl_bars', 'plot_t_sta', 'plot_chirp', 'plot_spike_template',
            'plot_autocorrelogram', 'plot_spike_amplitudes', 'plot_cell_spatial', 'plot_calcium_trace',
-           'plot_stim_epochs_to_spikes', 'plot_stim_epochs_to_calcium', 'configure_pyplot_recap',
-           'plot_recap_vivo_ephy', 'plot_recap_vivo_calcium']
+           'plot_stim_epochs_to_spikes', 'plot_stim_epochs_to_calcium', 'plot_stim_recap_table',
+           'plot_composed_A_masks', 'plot_sta_positions', 'configure_pyplot_recap', 'plot_recap_vivo_ephy',
+           'plot_recap_vivo_calcium']
 
 # Cell
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
 from matplotlib.backends.backend_pdf import PdfPages
+from matplotlib.patches import Ellipse
 import seaborn as sns
 import pandas as pd
 import numpy as np
+import scipy.ndimage as ndimage
 from cmath import *
 
 from .core import *
@@ -23,7 +26,7 @@ from .modelling import *
 DEFAULT_COLORS = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
 # Cell
-def plot_2d_sta(sta, grid=None):
+def plot_2d_sta(sta, grid=None, pval=None):
     sta = np.array(sta)
     if len(sta.shape) == 2:
         sta = [sta]
@@ -43,6 +46,12 @@ def plot_2d_sta(sta, grid=None):
                     ax.set_xticks([])
                 if j != 0:
                     ax.set_yticks([])
+
+                if i==0 and j==1:
+                    if pval is None:
+                        ax.set_title("Checkerboard")
+                    else:
+                        ax.set_title("Checkerboard p="+format_pval(pval))
 
 # Cell
 def plot_cross_correlation(correlation_array, threshold=.1  ,two_sided=True):
@@ -110,8 +119,8 @@ def plot_ds_wheel(ax, ds_dict, cell_idx):
                 label=label)
 
     x_uplim = ax.get_ylim()[1]
-    ds_arrow = ax.arrow(0,.1,best_di[1],  best_di[0]*x_uplim, width=.3, head_width=0.0000000001, color='tab:purple', label="Best DI")
-    os_arrow = ax.arrow(0,.1,best_oi[1],best_oi[0]*x_uplim, width=.3, head_width=0.0000000001, color='tab:green', label="Best OI")
+    ds_arrow = ax.arrow(0,x_uplim/500,best_di[1],  best_di[0]*x_uplim, width=.3, head_width=x_uplim/1000000, color='tab:purple', label="Best DI")
+    os_arrow = ax.arrow(0,x_uplim/500,best_oi[1],  best_oi[0]*x_uplim, width=.3, head_width=x_uplim/1000000, color='tab:green', label="Best OI")
     legend_obj, legend_label = ax.get_legend_handles_labels()
     # legend_obj.extend([ds_arrow, os_arrow])
     # legend_label.extend(["Best direction selectivity", "Best orientation selectivity"])
@@ -128,27 +137,30 @@ def plot_dark_white_response(ax, spike_bins):
         ax.legend()
 
 # Cell
-def plot_fl_bars(ax, sta):
+def plot_fl_bars(ax, sta, pval=None):
     time_axis = np.round(np.linspace(0,len(sta)/60,len(sta))[::-1]*(-1),3)
     ax.imshow(sta, cmap='gray',vmin=-1, vmax=1, aspect="auto")
     ax.set_yticks(np.arange(0, len(sta), 1))
     ax.set_yticklabels(time_axis)
 
+    if pval is None:
+        ax.set_title("Flickering_bars")
+    else:
+        ax.set_title("Flickering_bars p="+format_pval(pval))
+
 # Cell
-def plot_t_sta(ax, sta, pvals=None):
+def plot_t_sta(ax, sta, pval=None):
     time_axis = np.linspace(0,len(sta)/60,len(sta))[::-1]*(-1)
     lns = ax.plot(time_axis,sta, label="STA norm")
     ax.set_ylim(-1,1)
     ax.legend()
-    if pvals is not None:
-        ax2 = ax.twinx()
-        lns2 = ax2.plot(time_axis, pvals, label='p-value', color="g")
-        ax2.set_yscale('log')
-        ax2.set_ylim((None, 1000))
-        lns = lns+lns2
 
     labs = [l.get_label() for l in lns]
     ax.legend(lns, labs, loc=0)
+    if pval is None:
+        ax.set_title("Fullfield_flickering")
+    else:
+        ax.set_title("Fullfield_flickering p="+format_pval(pval))
 
 # Cell
 def plot_chirp(ax, stim_inten, spike_bins, smooth=True):
@@ -271,6 +283,53 @@ def plot_stim_epochs_to_calcium(ax, reM, y_pos):
         ax.text(start_dc, y_pos+(.1*pos_text_cursor), stim_name, fontdict={"size":10})
         pos_text_cursor*=-1
 
+def plot_stim_recap_table(ax, df):
+    width_ratios = [2.5,2,2,1,1,1,1,2,2]
+    widths = [w/np.sum(width_ratios) for w in width_ratios]
+
+    ax.table(cellText=np.vstack([df.columns, df.values]),
+             cellColours=[['lightgray']*df.shape[1]] + [['none']*df.shape[1]]*df.shape[0],
+             bbox=[0,0,1,1],
+             colWidths=widths)
+    ax.axis('off')
+
+
+# Cell
+def plot_composed_A_masks(ax, A_matrix):
+    center_mass_l = []
+    final_img = np.ones((3,*A_matrix.shape[1:]), dtype="float")
+    for i, cell_A in enumerate(A_matrix):
+        cell_A = cell_A/np.max(cell_A)
+        hexa_color = DEFAULT_COLORS[i%len(DEFAULT_COLORS)]
+        red, green, blue = int(hexa_color[1:3], 16),int(hexa_color[3:5], 16), int(hexa_color[5:7], 16)
+        color = np.zeros((3,*A_matrix.shape[1:]), dtype="float")
+        color[0] += red/255; color[1] += green/255; color[2] += blue/255;
+        final_img = color*cell_A + final_img*(1-cell_A)
+
+        center_mass_l.append(ndimage.measurements.center_of_mass(cell_A))
+
+    ax.imshow(final_img.T)
+
+    for i, (x,y) in enumerate(center_mass_l):
+        ax.text(x,y, str(i))
+
+def plot_sta_positions(ax, stas):
+    for i, sta in enumerate(stas):
+        color = DEFAULT_COLORS[i%len(DEFAULT_COLORS)]
+        best_frame = np.unravel_index(np.argmax(np.abs(sta)), sta.shape)[0]
+        sfit = fit_spatial_sta(sta[best_frame])
+        e = Ellipse(xy=[sfit["x0_1"], sta.shape[1]-sfit["z0_1"]],
+                          width=sfit["sigma_x_1"], height=sfit["sigma_z_1"],
+                          angle=sfit["theta_1"]*180*np.pi, fill=False)
+        ax.add_artist(e)
+        e.set_clip_box(ax.bbox)
+        e.set_alpha(.9)
+        e.set_edgecolor(color)
+
+        ax.text(e.center[0], e.center[1], str(i), horizontalalignment="center", verticalalignment="center")
+
+    ax.set_xlim(0,sta.shape[2])
+    ax.set_ylim(0,sta.shape[1])
 
 # Cell
 def configure_pyplot_recap(small_size=14, medium_size=18, bigger_size=24):
@@ -293,7 +352,7 @@ def configure_pyplot_recap(small_size=14, medium_size=18, bigger_size=24):
     sns.set_style("ticks")
 
 # Cell
-def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, cell_db_ids=None,
+def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_db_ids=None,
                          checkerboard=None, fullfield_fl=None, fl_bars=None, chirp_am=None,
                          chirp_fm=None, moving_gratings=None, export_path=None):
     """Plot the recapitulating form of in vivo electrophy records
@@ -324,10 +383,27 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, cell_db_ids=Non
     if export_path is not None:
         pp = PdfPages(export_path)
 
+    #Plotting Cover
+    fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
+    gs  = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
+    ax_rem  = fig.add_subplot(gs[:10,2:-1])
+    reM.plot(ax_rem)
+
+    ax_stim_recap  = fig.add_subplot(gs[11:16,:])
+    plot_stim_recap_table(ax_stim_recap, df_stim)
+    suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id)])
+    plt.suptitle(suptitle)
+
+    if export_path is not None:
+        pp.savefig()
+    plt.close()
+
+
+
     for cluster, cell_id in zip(cluster_ids, cell_db_ids):
         reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][cluster]#np.where(cluster==cluster_ids)[0][0]
 
-        fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches(damn) *2
+        fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
         suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id),
                                "Cluster n°"+str(cluster), "Cell id n°"+str(cell_id)])
         plt.suptitle(suptitle)
@@ -354,15 +430,18 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, cell_db_ids=Non
 
         #Checkerboard STA
         if checkerboard is not None:
+            pval_checker = checkerboard[1][reM_cell_idx]
+            pval_checker = np.min(pval_checker[pval_checker!=0])
             inner_grid = gridspec.GridSpecFromSubplotSpec(4, 4,
                         subplot_spec=gs[5:12,0:12], wspace=.09, hspace=.13)
-            plot_2d_sta(checkerboard[reM_cell_idx], grid=inner_grid)
+            plot_2d_sta(checkerboard[0][reM_cell_idx], pval=pval_checker, grid=inner_grid)
 
         #Fullfield flickering STA
         if fullfield_fl is not None:
+            pval_fffl = fullfield_fl[1][reM_cell_idx]
+            pval_fffl = np.min(pval_fffl[pval_fffl!=0])
             sp_amp_ax = fig.add_subplot(gs[5:12,13:])
-            plot_t_sta(sp_amp_ax, fullfield_fl[0][reM_cell_idx], fullfield_fl[1][reM_cell_idx])
-            sp_amp_ax.set_title("Fullfield_flickering")
+            plot_t_sta(sp_amp_ax, fullfield_fl[0][reM_cell_idx], pval=pval_fffl)
 
         #Chirp_FM
         if chirp_fm is not None:
@@ -378,9 +457,10 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, cell_db_ids=Non
 
         #Flickering bars
         if fl_bars is not None:
+            pval_bars = fl_bars[1][reM_cell_idx]
+            pval_bars = np.min(pval_bars[pval_bars!=0])
             fl_bars_ax = fig.add_subplot(gs[21:,:12])
-            plot_fl_bars(fl_bars_ax, fl_bars[reM_cell_idx])
-            fl_bars_ax.set_title("Flickering_bars")
+            plot_fl_bars(fl_bars_ax, fl_bars[0][reM_cell_idx], pval=pval_bars)
 
         #Moving gratings
         if moving_gratings is not None:
@@ -402,7 +482,7 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, cell_db_ids=Non
 
 
 # Cell
-def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, cell_indexes=None, cell_db_ids=None,
+def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, df_stim, cell_indexes=None, cell_db_ids=None,
                          checkerboard=None, fullfield_fl=None, fl_bars=None, chirp_am=None,
                          chirp_fm=None, moving_gratings=None, export_path=None):
     """Plot the recapitulating form of in vivo electrophy records
@@ -433,6 +513,28 @@ def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, cell_indexes
     if export_path is not None:
         pp = PdfPages(export_path)
 
+    #Plotting Cover
+    fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
+    gs  = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
+    ax_rem  = fig.add_subplot(gs[:10,2:-1])
+    reM.plot(ax_rem)
+
+    ax_stim_recap  = fig.add_subplot(gs[11:16,:])
+    plot_stim_recap_table(ax_stim_recap, df_stim)
+
+    ax_axon_terminals  = fig.add_subplot(gs[17:27,1:10])
+    plot_composed_A_masks(ax_axon_terminals, A_matrix)
+
+    ax_sta_pos = fig.add_subplot(gs[20:25,11:])
+    plot_sta_positions(ax_sta_pos, checkerboard[0])
+
+    suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id)])
+    plt.suptitle(suptitle)
+
+    if export_path is not None:
+        pp.savefig()
+    plt.close()
+
     for cell_idx, cell_db_id in zip(cell_indexes, cell_db_ids):
 
         fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches(damn) *2
@@ -455,15 +557,18 @@ def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, cell_indexes
 
         #Checkerboard STA
         if checkerboard is not None:
+            pval_checker = checkerboard[1][cell_idx]
+            pval_checker = np.min(pval_checker[pval_checker!=0])
             inner_grid = gridspec.GridSpecFromSubplotSpec(4, 4,
                         subplot_spec=gs[5:12,0:12], wspace=.09, hspace=.13)
-            plot_2d_sta(checkerboard[cell_idx][::4], grid=inner_grid)
+            plot_2d_sta(checkerboard[0][cell_idx][::4], pval=pval_checker, grid=inner_grid)
 
         #Fullfield flickering STA
         if fullfield_fl is not None:
+            pval_fffl = fullfield_fl[1][cell_idx]
+            pval_fffl = np.min(pval_fffl[pval_fffl!=0])
             sp_amp_ax = fig.add_subplot(gs[5:12,13:])
-            plot_t_sta(sp_amp_ax, fullfield_fl[0][cell_idx], fullfield_fl[1][cell_idx])
-            sp_amp_ax.set_title("Fullfield_flickering")
+            plot_t_sta(sp_amp_ax, fullfield_fl[0][cell_idx], pval=pval_fffl)
 
         #Chirp_FM
         if chirp_fm is not None:
@@ -479,12 +584,24 @@ def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, cell_indexes
 
         #Flickering bars
         if fl_bars is not None:
+            pval_bars = fl_bars[1][cell_idx]
+            pval_bars = np.min(pval_bars[pval_bars!=0])
             fl_bars_ax = fig.add_subplot(gs[21:,:12])
-            plot_fl_bars(fl_bars_ax, fl_bars[cell_idx])
+            plot_fl_bars(fl_bars_ax, fl_bars[0][cell_idx], pval=pval_bars)
             fl_bars_ax.set_title("Flickering_bars")
 
         #Moving gratings
         if moving_gratings is not None:
+            #The very small values of calcium need a normalization to higher values
+            # for plotting purpose
+            all_val = None
+            for i, (k,v) in enumerate(moving_gratings.items()):
+                if all_val is None:
+                    all_val = np.zeros((len(moving_gratings), *v[0].shape))
+                all_val[i] = v[0]
+            for k,v  in moving_gratings.items():
+                moving_gratings[k] = ((v[0].T / np.max(all_val, axis=(0,2))).T*100, *v[1:])
+
             ds_ax = fig.add_subplot(gs[21:,13:], projection="polar")
             plot_ds_wheel(ds_ax, moving_gratings, cell_idx=cell_idx)
 
