@@ -2,7 +2,7 @@
 
 __all__ = ['atoi', 'natural_keys', 'filter_per_extension', 'print_and_log', 'print_info', 'print_error', 'get_offset',
            'logger', 'DataFile', 'read_header', 'get_bytes_per_data_block', 'read_qstring', 'RHDFile', 'H5File',
-           'RawBinaryFile', 'NumpyFile']
+           'RawBinaryFile', 'NumpyFile', 'load_all_data', 'load_all_data_adc']
 
 # Cell
 import numpy as np
@@ -1257,3 +1257,38 @@ class NumpyFile(RawBinaryFile):
 
     def _close(self):
         self.data = None
+
+# Cell
+def load_all_data(datafile:DataFile):
+    datafile.open()
+    if isinstance(datafile, RHDFile):
+        chunk_size = 1800960
+    else:
+        chunk_size =  datafile.duration
+    n_chunks, _ = datafile.analyze(chunk_size)
+    data = np.zeros((datafile.duration, datafile._shape[1]))
+    print("Loading the data... "+str(round(0,2))+"%    ",end='\r',flush=True)
+    for idx in range(n_chunks):
+        data_tmp, t_offset = datafile.get_data(idx, chunk_size)
+        data[t_offset:t_offset+len(data_tmp)] = data_tmp
+        print("Loading the data... "+str(round(100*(idx+1)/n_chunks,2))+"%    ",end='\r',flush=True)
+    print("Loading the data... "+str(round(100,2))+"%    ",end='\r',flush=True)
+    return data
+
+def load_all_data_adc(datafile:DataFile):
+    datafile.open()
+    if isinstance(datafile, RHDFile):
+        chunk_size = 1800960
+    else:
+        chunk_size =  datafile.duration
+    n_chunks, _ = datafile.analyze(chunk_size)
+    data = np.zeros(datafile.duration)
+    print("Loading the data... "+str(round(0,2))+"%    ",end='\r',flush=True)
+    for idx in range(n_chunks):
+        data_tmp, t_offset = datafile.get_data_adc(idx, chunk_size)
+        if data_tmp.ndim == 2:
+            data_tmp = data_tmp[:,0]
+        data[t_offset:t_offset+len(data_tmp)] = data_tmp
+        print("Loading the data... "+str(round(100*(idx+1)/n_chunks,2))+"%    ",end='\r',flush=True)
+    print("Loading the data... "+str(round(100,2))+"%    ",end='\r',flush=True)
+    return data

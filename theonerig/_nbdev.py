@@ -94,9 +94,12 @@ index = {"DataChunk": "00_core.ipynb",
          "H5File": "10_synchro.io.ipynb",
          "RawBinaryFile": "10_synchro.io.ipynb",
          "NumpyFile": "10_synchro.io.ipynb",
+         "load_all_data": "10_synchro.io.ipynb",
+         "load_all_data_adc": "10_synchro.io.ipynb",
          "get_QDSpy_logs": "11_synchro.extracting.ipynb",
          "QDSpy_log": "11_synchro.extracting.ipynb",
          "Stimulus": "11_synchro.extracting.ipynb",
+         "get_thresholds": "12_synchro.processing.ipynb",
          "load_vivo_2p": "99_testdata.ipynb"}
 
 modules = ["core.py",
@@ -107,6 +110,7 @@ modules = ["core.py",
            "database.py",
            "synchro/io.py",
            "synchro/extracting.py",
+           "synchro/processing.py",
            "testdata.py"]
 
 doc_url = "https://Tom-TBT.github.io/theonerig/"
