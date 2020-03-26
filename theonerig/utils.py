@@ -366,25 +366,25 @@ def extract_old_stimulus_metadata(h5_group, df):
     nhash_letters = 10
     if stim_name=="checkerboard":
         df.loc["checkerboard"]["hash"]      = h5_group.attrs["hash"][:nhash_letters]
-        df.loc["checkerboard"]["n frames"]    = h5_group.attrs["n_frames"]
+        df.loc["checkerboard"]["n frames"]    = len(h5_group["intensity"])
         df.loc["checkerboard"]["frequency"]      = h5_group.attrs["refresh_rate"]
         df.loc["checkerboard"]["stimulus"]  = stim_name
 
     elif stim_name=="fullfield_flicker":
         df.loc["fullfield_flicker"]["hash"]   = h5_group.attrs["hash"][:nhash_letters]
-        df.loc["fullfield_flicker"]["n frames"] = h5_group.attrs["n_frames"]
+        df.loc["fullfield_flicker"]["n frames"] =len(h5_group["intensity"])
         df.loc["fullfield_flicker"]["frequency"]   = h5_group.attrs["refresh_rate"]
         df.loc["fullfield_flicker"]["stimulus"]  = stim_name
 
     elif stim_name=="flickering_bars" or stim_name=="flickering_bars_pr":
         df.loc["flickering_bars"]["hash"]   = h5_group.attrs["hash"][:nhash_letters]
-        df.loc["flickering_bars"]["n frames"] = h5_group.attrs["n_frames"]
+        df.loc["flickering_bars"]["n frames"] = len(h5_group["intensity"])
         df.loc["flickering_bars"]["frequency"]   = h5_group.attrs["refresh_rate"]
         df.loc["flickering_bars"]["stimulus"]  = stim_name
 
     elif stim_name=="chirp_am":
         df.loc["chirp_am"]["hash"]    = h5_group.attrs["hash"][:nhash_letters]
-        df.loc["chirp_am"]["n frames"]  = h5_group.attrs["n_frames"]
+        df.loc["chirp_am"]["n frames"]  = len(h5_group["intensity"])
         df.loc["chirp_am"]["n repeats"] = h5_group.attrs["n_repeat"]
         df.loc["chirp_am"]["frequency"]    = h5_group.attrs["contrast_frequency"]
         df.loc["chirp_am"]["n ON"]     = int(float(h5_group.attrs["tSteadyON_s"])*60)
@@ -393,7 +393,7 @@ def extract_old_stimulus_metadata(h5_group, df):
 
     elif stim_name=="chirp_freq_epoch":
         df.loc["chirp_fm"]["hash"]    = h5_group.attrs["hash"][:nhash_letters]
-        df.loc["chirp_fm"]["n frames"]  = h5_group.attrs["n_frames"]
+        df.loc["chirp_fm"]["n frames"]  = len(h5_group["intensity"])
         df.loc["chirp_fm"]["n repeats"] = h5_group.attrs["n_repeat"]
         df.loc["chirp_fm"]["n ON"]     = int(float(h5_group.attrs["tSteadyON_s"])*60)
         df.loc["chirp_fm"]["n OFF"]    = int(float(h5_group.attrs["tSteadyOFF_s"])*60)
@@ -401,7 +401,7 @@ def extract_old_stimulus_metadata(h5_group, df):
 
     elif stim_name=="moving_gratings":
         df.loc["moving_gratings"]["hash"]                = h5_group.attrs["hash"][:nhash_letters]
-        df.loc["moving_gratings"]["n frames"]              = h5_group.attrs["n_frames"]
+        df.loc["moving_gratings"]["n frames"]              = len(h5_group["intensity"])
         df.loc["moving_gratings"]["n repeats"]             = h5_group.attrs["n_repeat"]
         df.loc["moving_gratings"]["n ON"]                 = h5_group.attrs["n_frame_on"]
         df.loc["moving_gratings"]["n OFF"]                = h5_group.attrs["n_frame_off"]
