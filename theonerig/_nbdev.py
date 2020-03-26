@@ -100,6 +100,11 @@ index = {"DataChunk": "00_core.ipynb",
          "QDSpy_log": "11_synchro.extracting.ipynb",
          "Stimulus": "11_synchro.extracting.ipynb",
          "get_thresholds": "12_synchro.processing.ipynb",
+         "get_first_high": "12_synchro.processing.ipynb",
+         "reverse_detection": "12_synchro.processing.ipynb",
+         "extend_timepoints": "12_synchro.processing.ipynb",
+         "detect_frames": "12_synchro.processing.ipynb",
+         "cluster_frame_signals": "12_synchro.processing.ipynb",
          "load_vivo_2p": "99_testdata.ipynb"}
 
 modules = ["core.py",
