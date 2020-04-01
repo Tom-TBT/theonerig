@@ -106,6 +106,8 @@ index = {"DataChunk": "00_core.ipynb",
          "extend_timepoints": "12_synchro.processing.ipynb",
          "detect_frames": "12_synchro.processing.ipynb",
          "cluster_frame_signals": "12_synchro.processing.ipynb",
+         "parse_time": "12_synchro.processing.ipynb",
+         "get_position_estimate": "12_synchro.processing.ipynb",
          "load_vivo_2p": "99_testdata.ipynb"}
 
 modules = ["core.py",
