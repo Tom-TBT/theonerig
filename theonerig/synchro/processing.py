@@ -40,7 +40,7 @@ def reverse_detection(data, frame_timepoints, low_threshold, increment):
 
 def extend_timepoints(frame_timepoints, n=10):
     frame_timepoints = np.array(frame_timepoints)
-    typical_distance = int(np.mean(frame_timepoints[1:]-frame_timepoints[:-1]))
+    typical_distance = int(np.mean(np.diff(frame_timepoints)))
     extended_tp = [frame_timepoints[0]-(i+1)*typical_distance for i in range(n) if (frame_timepoints[0]-(i+1)*typical_distance)>0]
     return extended_tp[::-1]
 
@@ -84,7 +84,7 @@ def detect_frames(data, low_threshold, high_threshold, increment):
 
 # Cell
 def cluster_frame_signals(data, frame_timepoints, n_cluster=5):
-    frame_aucs = np.array(list(map(np.trapz, np.split(data, frame_timepoints))))
+    frame_aucs = np.fromiter(map(np.trapz, np.split(data, frame_timepoints)), float)
     if frame_timepoints[0] != 0: #We need to remove the first part if it wasn't a full frame
         frame_aucs = frame_aucs[1:]
     frame_auc_sorted = np.sort(frame_aucs)

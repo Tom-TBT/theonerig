@@ -11,7 +11,8 @@ from .io import *
 
 def get_QDSpy_logs(log_dir):
     log_names = glob.glob(os.path.join(log_dir,'[0-9]*.log'))
-    qdspy_logs = [QDSpy_log(os.path.join(log_dir, log_name)) for log_name in log_names]
+#     log_names = [os.path.basename(log_name) for log_name in log_names]
+    qdspy_logs = [QDSpy_log(log_name) for log_name in log_names]
     for qdspy_log in qdspy_logs:
         qdspy_log.find_stimuli()
     return qdspy_logs
@@ -66,7 +67,7 @@ class QDSpy_log:
     def find_stimuli(self):
         """Find the stimuli in the log file and return the list of the stimuli
         found by this object."""
-        with open(self.log_path, 'r') as log_file:
+        with open(self.log_path, 'r', encoding="ISO-8859-1") as log_file:
             for line in log_file:
                 if "DATA" in line:
                     data_juice = self._extract_data(line)
