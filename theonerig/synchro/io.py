@@ -1273,6 +1273,7 @@ def load_all_data(datafile:DataFile):
         data[t_offset:t_offset+len(data_tmp)] = data_tmp
         print("Loading the data... "+str(round(100*(idx+1)/n_chunks,2))+"%    ",end='\r',flush=True)
     print("Loading the data... "+str(round(100,2))+"%    ",end='\r',flush=True)
+    datafile.close()
     return data
 
 def load_all_data_adc(datafile:DataFile):
@@ -1291,4 +1292,5 @@ def load_all_data_adc(datafile:DataFile):
         data[t_offset:t_offset+len(data_tmp)] = data_tmp
         print("Loading the data... "+str(round(100*(idx+1)/n_chunks,2))+"%    ",end='\r',flush=True)
     print("Loading the data... "+str(round(100,2))+"%    ",end='\r',flush=True)
+    datafile.close()
     return data

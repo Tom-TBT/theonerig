@@ -105,7 +105,7 @@ def cluster_frame_signals(data, frame_timepoints, n_cluster=5):
     for i, idx in enumerate(idx_gaps):
         thresholds[i] = (frame_auc_sorted[idx+1] + frame_auc_sorted[idx])/2
 
-    return np.array([np.sum(auc>thresholds) for auc in frame_aucs])
+    return np.array([np.sum(auc>thresholds) for auc in frame_aucs], dtype=int)
 
 # Cell
 def parse_time(time_str, pattern="%y%m%d_%H%M%S"):
