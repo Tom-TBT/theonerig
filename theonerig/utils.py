@@ -125,7 +125,7 @@ def resample_to_timepoints(timepoints:np.ndarray, data:np.ndarray,
 # Cell
 def stim_to_dataChunk(stim_values, stim_start_idx, reference:DataChunk) -> DataChunk:
     """Factory function for DataChunk of a stimulus"""
-    return DataChunk(data=stim_values, idx = (stim_start_idx + reference.idx), group="stim")
+    return DataChunk(data=np.squeeze(stim_values), idx = (stim_start_idx + reference.idx), group="stim")
 
 # Cell
 def spike_to_dataChunk(spike_timepoints, ref_timepoints:DataChunk) -> DataChunk:
