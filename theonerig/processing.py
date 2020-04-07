@@ -144,6 +144,7 @@ def process_sta_batch(stim_inten, spike_counts, Hw=30, Fw=2, return_pval=False):
         allCells_sta = allCells_sta.reshape((len(allCells_sta),Hw+Fw,-1))
     else:
         allCells_sta = allCells_sta.reshape((len(allCells_sta),Hw+Fw))
+    allCells_sta = np.squeeze(allCells_sta)
 
     if return_pval:
         p_values = np.empty(allCells_sta.shape)
