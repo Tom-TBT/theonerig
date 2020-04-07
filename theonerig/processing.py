@@ -128,7 +128,7 @@ def _linear_transform(box_dim, transfo_matrix, x_eyeShift, y_eyeShift):
 def process_sta_batch(stim_inten, spike_counts, Hw=30, Fw=2, return_pval=False):
     """Calculate the STA for a batch of cells."""
     #Preparing the stimulus
-    shape_y, shape_x = stim_inten.shape[-2:]
+    orig_shape = stim_inten.shape
     stim_inten = stim_inten_norm(stim_inten)
     sum_spikes = np.sum(spike_counts, axis=0)
     len_stim = len(stim_inten)
@@ -138,9 +138,9 @@ def process_sta_batch(stim_inten, spike_counts, Hw=30, Fw=2, return_pval=False):
     stim_inten   = np.transpose(stim_inten)
     allCells_sta = staEst_fromBins(stim_inten, spike_counts, Hw, Fw=Fw)
 
-    if shape_y>1 and shape_x>1:
-        allCells_sta = allCells_sta.reshape((len(allCells_sta),Hw+Fw, shape_y, shape_x))
-    elif shape_y>1 or shape_x>1:
+    if len(orig_shape)==3:
+        allCells_sta = allCells_sta.reshape((len(allCells_sta),Hw+Fw, orig_shape[-2], orig_shape[-1]))
+    elif len(orig_shape)==2:
         allCells_sta = allCells_sta.reshape((len(allCells_sta),Hw+Fw,-1))
     else:
         allCells_sta = allCells_sta.reshape((len(allCells_sta),Hw+Fw))
@@ -149,7 +149,7 @@ def process_sta_batch(stim_inten, spike_counts, Hw=30, Fw=2, return_pval=False):
         p_values = np.empty(allCells_sta.shape)
     for k, cell_sta in enumerate(allCells_sta): #Easy way to do normalization for each cell that works for all possible shapes
         if return_pval:
-            z_scores = cell_sta/ np.sqrt(1/sum_spikes[k])
+            z_scores    = cell_sta/ np.sqrt(1/sum_spikes[k])
             p_values[k] = sp.stats.norm.sf(abs(z_scores))*2*(len_stim-Hw)
 
         allCells_sta[k] = np.nan_to_num(cell_sta/np.max(np.abs(cell_sta)))
