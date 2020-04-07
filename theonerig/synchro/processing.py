@@ -177,14 +177,14 @@ def apply_shifts_to_reference(signals, unpacked, range_):
 
             change_idx = np.argmax(np.abs(all_shifts_conv)>.5)
             if all_shifts_conv[change_idx]>.5:#Need to delete frame in reference
-                operation_log.append((change_idx, "del"))
+                operation_log.append([int(change_idx), "del"])
                 marker = np.concatenate((marker[:change_idx], marker[change_idx+1:], [0]))
                 intensity = np.concatenate((intensity[:change_idx], intensity[change_idx+1:], np.zeros((1,*intensity.shape[1:]))))
                 if shader is not None:
                     shader = np.concatenate((shader[:change_idx], shader[change_idx+1:], np.zeros((1,*shader.shape[1:]))))
 
             else:#Need to insert frame in reference
-                operation_log.append((change_idx, "ins"))
+                operation_log.append([int(change_idx), "ins"])
                 #inserting a frame and excluding the last frame to keep the references the same length
                 marker     = np.insert(marker, change_idx, marker[change_idx], axis=0)[:-1]
                 intensity  = np.insert(intensity, change_idx, intensity[change_idx], axis=0)[:-1]
