@@ -9,10 +9,14 @@ from sqlalchemy import Table, Column, Integer, String, MetaData, select
 
 import pandas as pd
 import getpass
+import json
 
 # Cell
 def get_db_engine(username, password, ip_adress, model_name, rdbms="mysql"):
-    return create_engine("%s://%s:%s@%s/%s" % (rdbms, username, password, ip_adress, model_name),echo = False)
+    engine = create_engine("%s://%s:%s@%s/%s" % (rdbms, username, password, ip_adress, model_name),echo = False)
+    test_query = "SELECT * FROM Project"
+    pd.read_sql_query(test_query, engine)
+    return engine
 
 def prompt_credentials(user=None, db_adress=None):
     if user is None:
