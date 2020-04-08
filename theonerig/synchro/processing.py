@@ -2,7 +2,8 @@
 
 __all__ = ['get_thresholds', 'get_first_high', 'reverse_detection', 'extend_timepoints', 'detect_frames', 'error_check',
            'cluster_frame_signals', 'parse_time', 'get_position_estimate', 'match_starting_position', 'display_match',
-           'frame_error_correction', 'error_frame_matches', 'apply_shifts_to_reference']
+           'frame_error_correction', 'error_frame_matches', 'apply_shifts', 'shift_detection_conv',
+           'shift_detection_NW']
 
 # Cell
 import numpy as np
@@ -160,8 +161,12 @@ def display_match(match_position, recorded=None, reference=None, corrected=None,
         print()
 
 # Cell
-def frame_error_correction(signals, unpacked):
-    intensity, marker, shader, op_log = apply_shifts_to_reference(signals, unpacked, range_=5)
+def frame_error_correction(signals, unpacked, algo="nw"):
+    if algo=="nw":
+        op_log = shift_detection_NW(signals.astype(int), unpacked[1].astype(int))
+    elif algo=="conv":
+        op_log = shift_detection_conv(signals.astype(int), unpacked[1].astype(int), range_=5)
+    intensity, marker, shader = apply_shifts(unpacked, op_log)
     error_frames, replacements = error_frame_matches(signals, marker, range_=5)
     intensity[error_frames]    = intensity[replacements]
     marker[error_frames]       = marker[replacements]
@@ -186,11 +191,40 @@ def error_frame_matches(signals, marker, range_):
 
     return error_frames, replacements
 
-def apply_shifts_to_reference(signals, unpacked, range_):
+def apply_shifts(unpacked, op_log):
     intensity, marker, shader = unpacked[0], unpacked[1], None
     if len(unpacked)==3:
         shader = unpacked[2]
 
+    res_inten, res_marker = np.zeros(intensity.shape), np.zeros(marker.shape)
+    res_shader=None
+    if shader is not None:
+        res_shader = np.zeros(shader.shape)
+    cursor, shift = 0,0
+    for idx, op in op_log:
+        res_inten[cursor+shift:idx] = intensity[cursor:idx-shift]
+        res_marker[cursor+shift:idx] = marker[cursor:idx-shift]
+        if shader is not None:
+            res_shader[cursor+shift:idx] = shader[cursor:idx-shift]
+        if op=="ins": #We add the duplicated frame
+            res_inten[idx]  = intensity[idx-1] #duplicating
+            res_marker[idx] = marker[idx-1]
+            if shader is not None:
+                res_shader[idx] = shader[idx-1]
+            shift += 1 #And incrementing index
+        elif op=="del":
+            shift -= 1
+        cursor += len(marker[cursor:idx-shift])
+
+    res_inten[cursor+shift:] = intensity[cursor:cursor+len(res_inten[cursor+shift:])]
+    res_marker[cursor+shift:] = marker[cursor:cursor+len(res_marker[cursor+shift:])]
+    if shader is not None:
+        res_shader[cursor+shift:] = shader[cursor:cursor+len(res_shader[cursor+shift:])]
+
+    return (res_inten, res_marker, res_shader)
+
+def shift_detection_conv(signals, marker, range_):
+    marker = marker.copy()
     shift_detected = True
     operation_log = []
     while shift_detected:
@@ -202,20 +236,72 @@ def apply_shifts_to_reference(signals, unpacked, range_):
 
         shift_detected = np.any(np.abs(all_shifts_conv)>.5)
         if shift_detected: #iF the -.5 threshold is crossed, we insert a "fake" frame in the reference and we repeat the operation
-
             change_idx = np.argmax(np.abs(all_shifts_conv)>.5)
             if all_shifts_conv[change_idx]>.5:#Need to delete frame in reference
                 operation_log.append([int(change_idx), "del"])
                 marker = np.concatenate((marker[:change_idx], marker[change_idx+1:], [0]))
-                intensity = np.concatenate((intensity[:change_idx], intensity[change_idx+1:], np.zeros((1,*intensity.shape[1:]))))
-                if shader is not None:
-                    shader = np.concatenate((shader[:change_idx], shader[change_idx+1:], np.zeros((1,*shader.shape[1:]))))
-
             else:#Need to insert frame in reference
                 operation_log.append([int(change_idx), "ins"])
                 #inserting a frame and excluding the last frame to keep the references the same length
                 marker     = np.insert(marker, change_idx, marker[change_idx], axis=0)[:-1]
-                intensity  = np.insert(intensity, change_idx, intensity[change_idx], axis=0)[:-1]
-                if shader is not None:
-                    shader = np.insert(shader, change_idx, shader[change_idx], axis=0)[:-1]
-    return intensity, marker, shader, operation_log
+    return operation_log
+
+def shift_detection_NW(signals, marker):
+    """Memory optimized Needleman-Wunsch algorithm.
+    Instead of an N*N matrix, it uses a N*(side*2+1) matrix. Indexing goes slightly differently but
+    result is the same, with far less memory consumption and exection speed scaling better with
+    size of the sequences to align."""
+    #Setting the similarity matrix
+    side = 5
+    sim_mat = np.empty((len(marker), side*2+1), dtype="int32")
+    #Setting the errors
+    insertion_v = -10 #insertions are commons not so high penalty
+    deletion_v  = -10 #deletions detection happens during periods of confusion but are temporary. High value
+    error_match = np.array([1,-1,-3,-3,-1]) #The value for a 0 matching with [0,1,2,3,4]
+    error_mat = np.empty((5,5))
+    for i in range(5):
+        error_mat[i] = np.roll(error_match,i)
+
+    #Filling the similarity matrix
+    sim_mat[0, side] = error_mat[marker[0], signals[0]]
+    #Initialization: Setting the score of the first few row and first few column cells
+    for j in range(side+1, side*2+1):
+        sim_mat[0,j] = sim_mat[0,side] + insertion_v*j
+    for i in range(1, side+1):
+        sim_mat[i,side-i] = sim_mat[0,side] + deletion_v*i
+
+    #Corpus: if j is the first cell of the row, the insert score is set super low
+    #        if j is the last  cell of the row, the delete score is set super low
+    for i in range(1, sim_mat.shape[0]):
+        start = max(side-i+1, 0)
+        stop  = min(side*2+1, side+sim_mat.shape[0]-i)
+        for j in range(start, stop):
+            if j==0:#j==start and i>side:
+                insert = -99999
+                delete = sim_mat[i-1, j+1] + deletion_v
+            elif j==side*2:
+                delete = -99999
+                insert = sim_mat[i, j-1] + insertion_v
+            else:
+                insert = sim_mat[i, j-1] + insertion_v
+                delete = sim_mat[i-1, j+1] + deletion_v
+            match  = sim_mat[i-1, j] + error_mat[marker[i], signals[j+i-side]]
+            sim_mat[i,j] = max(insert,delete,match)
+
+    #Reading the similarity matrix
+    #In general, it's the same, at the difference that when i decrement, must add 1 to j compared to usual.
+    i = len(marker)-1
+    j = side
+    operation_log = []
+    while (i > 0 or j>side-i):
+        if (i > 0 and j>side-i and sim_mat[i,j]==(sim_mat[i-1,j]+error_mat[marker[i], signals[j+i-side]])):
+            i -= 1
+        elif(i > 0 and sim_mat[i,j] == sim_mat[i-1,j+1] + deletion_v):
+            operation_log.insert(0,(i, "del"))
+            i-=1
+            j+=1
+        else:
+            operation_log.insert(0,(j+i-side, "ins"))
+            j-=1
+
+    return operation_log

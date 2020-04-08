@@ -118,7 +118,9 @@ index = {"DataChunk": "00_core.ipynb",
          "display_match": "12_synchro.processing.ipynb",
          "frame_error_correction": "12_synchro.processing.ipynb",
          "error_frame_matches": "12_synchro.processing.ipynb",
-         "apply_shifts_to_reference": "12_synchro.processing.ipynb",
+         "apply_shifts": "12_synchro.processing.ipynb",
+         "shift_detection_conv": "12_synchro.processing.ipynb",
+         "shift_detection_NW": "12_synchro.processing.ipynb",
          "load_vivo_2p": "99_testdata.ipynb"}
 
 modules = ["core.py",
