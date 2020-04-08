@@ -137,10 +137,15 @@ def match_starting_position(frame_timepoints, frame_signals, stim_signals, estim
     return search_slice.start + np.argmax(np.correlate(frame_signals[search_slice],
                                                        stim_signals[:stim_matching_len]))
 
-def display_match(recorded, reference, match_position, len_print=200, len_line=50):
-    for line in range(0, len_print, len_line):
-        print("["+str(line)+"] "," ".join(map(str,map(int, reference[line:line+len_line]))))
-        print("["+str(line)+"] "," ".join(map(str,map(int, recorded[line+match_position:line+len_line+match_position]))))
+def display_match(match_position, recorded=None, reference=None, corrected=None, len_line=50):
+    start, mid, end = 0, len(reference)//2, len(reference)-len_line
+    for line in [start, mid, end]:
+        if reference is not None:
+            print("REF ["+str(line)+"] "," ".join(map(str,map(int, reference[line:line+len_line]))))
+        if recorded is not None:
+            print("REC ["+str(line)+"] "," ".join(map(str,map(int, recorded[line+match_position:line+len_line+match_position]))))
+        if corrected is not None:
+            print("COR ["+str(line)+"] "," ".join(map(str,map(int, corrected[line:line+len_line]))))
         print()
 
 # Cell
