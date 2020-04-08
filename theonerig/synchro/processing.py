@@ -95,13 +95,19 @@ def cluster_frame_signals(data, frame_timepoints, n_cluster=5):
     deriv = np.array(frame_auc_sorted[1:]-frame_auc_sorted[:-1])
     deriv[:5]  = 0 #removing tails values that can show weird stuff
     deriv[-5:] = 0
+    threshold_peak = np.std(deriv)*3
     n          = n_cluster - 1
-    idx_gaps = np.zeros(n, dtype="int")
+    idx_gaps = np.zeros(n+3, dtype="int")
     tmp_deriv = deriv.copy()
-    for i in range(n):
+    for i in range(n+3): #Detecting more peaks than needed and then taking them starting on the right
+        if tmp_deriv[np.argmax(tmp_deriv)] < threshold_peak:
+            if i<n_cluster-1:
+                print("Less transition in AUC detected than needed, results will be weird")
+            break
         idx_gaps[i] = np.argmax(tmp_deriv)
         tmp_deriv[idx_gaps[i]] = 0
     idx_gaps = np.sort(idx_gaps)
+    idx_gaps = idx_gaps[-4:]
     thresholds = np.zeros(n, dtype="float")
     for i, idx in enumerate(idx_gaps):
         thresholds[i] = (frame_auc_sorted[idx+1] + frame_auc_sorted[idx])/2
