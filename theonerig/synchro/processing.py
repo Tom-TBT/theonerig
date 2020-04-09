@@ -149,7 +149,7 @@ def match_starting_position(frame_timepoints, frame_signals, stim_signals, estim
     return search_slice.start + np.argmax(np.correlate(frame_signals[search_slice],
                                                        stim_signals[:stim_matching_len]))
 
-def display_match(match_position, recorded=None, reference=None, corrected=None, len_line=50):
+def display_match(match_position, reference=None, recorded=None, corrected=None, len_line=50):
     start, mid, end = 0, len(reference)//2, len(reference)-len_line
     for line in [start, mid, end]:
         if reference is not None:
@@ -163,16 +163,16 @@ def display_match(match_position, recorded=None, reference=None, corrected=None,
 # Cell
 def frame_error_correction(signals, unpacked, algo="nw"):
     if algo=="nw":
-        op_log = shift_detection_NW(signals.astype(int), unpacked[1].astype(int))
+        shift_log = shift_detection_NW(signals.astype(int), unpacked[1].astype(int))
     elif algo=="conv":
-        op_log = shift_detection_conv(signals.astype(int), unpacked[1].astype(int), range_=5)
-    intensity, marker, shader = apply_shifts(unpacked, op_log)
+        shift_log = shift_detection_conv(signals.astype(int), unpacked[1].astype(int), range_=5)
+    intensity, marker, shader = apply_shifts(unpacked, shift_log)
     error_frames, replacements = error_frame_matches(signals, marker, range_=5)
     intensity[error_frames]    = intensity[replacements]
     marker[error_frames]       = marker[replacements]
     if shader is not None:
         shader[error_frames] = shader[replacements]
-    return (intensity, marker, shader), op_log
+    return (intensity, marker, shader), shift_log, list(zip(map(int,error_frames), map(int,replacements)))
 
 def error_frame_matches(signals, marker, range_):
     error_frames = np.nonzero(signals!=marker)[0]
@@ -196,7 +196,7 @@ def apply_shifts(unpacked, op_log):
     if len(unpacked)==3:
         shader = unpacked[2]
 
-    res_inten, res_marker = np.zeros(intensity.shape), np.zeros(marker.shape)
+    res_inten, res_marker = np.zeros(intensity.shape), np.zeros(marker.shape, dtype=int)
     res_shader=None
     if shader is not None:
         res_shader = np.zeros(shader.shape)
@@ -232,12 +232,18 @@ def shift_detection_conv(signals, marker, range_):
 
         all_shifts = np.zeros(len(marker))
         all_shifts[error_frames] = replacements-error_frames
-        all_shifts_conv = np.convolve(all_shifts, [.05]*20, mode="same") #Averaging the shifts to find consistant shifts
+        all_shifts_conv = np.convolve(all_shifts, [1/20]*20, mode="same") #Averaging the shifts to find consistant shifts
 
         shift_detected = np.any(np.abs(all_shifts_conv)>.5)
         if shift_detected: #iF the -.5 threshold is crossed, we insert a "fake" frame in the reference and we repeat the operation
             change_idx = np.argmax(np.abs(all_shifts_conv)>.5)
             if all_shifts_conv[change_idx]>.5:#Need to delete frame in reference
+                #Need to refine index to make sure we delete a useless frame
+                start,stop = max(0,change_idx-2), min(len(marker),change_idx+2)
+                for i in range(start,stop):
+                    if marker[i] not in signals[start:stop]:
+                        change_idx = i
+                        break
                 operation_log.append([int(change_idx), "del"])
                 marker = np.concatenate((marker[:change_idx], marker[change_idx+1:], [0]))
             else:#Need to insert frame in reference
@@ -297,11 +303,11 @@ def shift_detection_NW(signals, marker):
         if (i > 0 and j>side-i and sim_mat[i,j]==(sim_mat[i-1,j]+error_mat[marker[i], signals[j+i-side]])):
             i -= 1
         elif(i > 0 and sim_mat[i,j] == sim_mat[i-1,j+1] + deletion_v):
-            operation_log.insert(0,(i, "del"))
+            operation_log.insert(0,(i+1, "del")) #Insert at i+1 (and j+1 bello) showed better empirical results
             i-=1
             j+=1
         else:
-            operation_log.insert(0,(j+i-side, "ins"))
+            operation_log.insert(0,(j+i-side+1, "ins"))
             j-=1
 
     return operation_log
