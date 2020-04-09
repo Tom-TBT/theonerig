@@ -192,36 +192,26 @@ def error_frame_matches(signals, marker, range_):
     return error_frames, replacements
 
 def apply_shifts(unpacked, op_log):
-    intensity, marker, shader = unpacked[0], unpacked[1], None
+    inten, marker, shader = unpacked[0].copy(), unpacked[1].copy(), None
     if len(unpacked)==3:
-        shader = unpacked[2]
-
-    res_inten, res_marker = np.zeros(intensity.shape), np.zeros(marker.shape, dtype=int)
-    res_shader=None
-    if shader is not None:
-        res_shader = np.zeros(shader.shape)
-    cursor, shift = 0,0
+        shader = unpacked[2].copy()
+    orig_len = len(marker)
     for idx, op in op_log:
-        res_inten[cursor+shift:idx] = intensity[cursor:idx-shift]
-        res_marker[cursor+shift:idx] = marker[cursor:idx-shift]
-        if shader is not None:
-            res_shader[cursor+shift:idx] = shader[cursor:idx-shift]
-        if op=="ins": #We add the duplicated frame
-            res_inten[idx]  = intensity[idx-1] #duplicating
-            res_marker[idx] = marker[idx-1]
+        if op=="ins": #We insert a frame
+            marker = np.insert(marker, idx, marker[idx])
+            inten  = np.insert(inten , idx, inten[idx])
             if shader is not None:
-                res_shader[idx] = shader[idx-1]
-            shift += 1 #And incrementing index
-        elif op=="del":
-            shift -= 1
-        cursor += len(marker[cursor:idx-shift])
-
-    res_inten[cursor+shift:] = intensity[cursor:cursor+len(res_inten[cursor+shift:])]
-    res_marker[cursor+shift:] = marker[cursor:cursor+len(res_marker[cursor+shift:])]
+                shader = np.insert(shader, idx, shader[idx])
+        elif op=="del": #We concatenate without the deleted frame
+            marker = np.concatenate((marker[:idx],marker[idx+1:]))
+            inten  = np.concatenate((inten[:idx],inten[idx+1:]))
+            if shader is not None:
+                shader = np.concatenate((shader[:idx],shader[idx+1:]))
+    marker = marker[:orig_len]
+    inten  = inten[:orig_len]
     if shader is not None:
-        res_shader[cursor+shift:] = shader[cursor:cursor+len(res_shader[cursor+shift:])]
-
-    return (res_inten, res_marker, res_shader)
+        shader = shader[:orig_len]
+    return (inten, marker, shader)
 
 def shift_detection_conv(signals, marker, range_):
     marker = marker.copy()
@@ -303,11 +293,11 @@ def shift_detection_NW(signals, marker):
         if (i > 0 and j>side-i and sim_mat[i,j]==(sim_mat[i-1,j]+error_mat[marker[i], signals[j+i-side]])):
             i -= 1
         elif(i > 0 and sim_mat[i,j] == sim_mat[i-1,j+1] + deletion_v):
-            operation_log.insert(0,(i+1, "del")) #Insert at i+1 (and j+1 bello) showed better empirical results
-            i-=1
+            operation_log.insert(0,(j+i-side+1, "del")) #Insert the j value for deletion too because all shifts
+            i-=1                                        #are relative to the signals recorded, unlike normal NW
             j+=1
         else:
-            operation_log.insert(0,(j+i-side+1, "ins"))
+            operation_log.insert(0,(j+i-side, "ins"))
             j-=1
 
     return operation_log
