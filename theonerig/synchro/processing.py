@@ -258,7 +258,7 @@ def shift_detection_NW(signals, marker):
     result is the same, with far less memory consumption and exection speed scaling better with
     size of the sequences to align."""
     #Setting the similarity matrix
-    side = 5
+    side = 20
     sim_mat = np.empty((len(marker), side*2+1), dtype="int32")
     #Setting the errors
     insertion_v = -10 #insertions are commons not so high penalty
