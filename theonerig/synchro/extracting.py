@@ -159,10 +159,7 @@ def unpack_stim_npy(npy_dir, md5_hash):
             unpack_shader[cursor:cursor+n_frame] = shader[i]
         cursor += n_frame
 
-    if shader is not None:
-        return unpack_inten, unpack_marker, unpack_shader
-
-    return unpack_inten, unpack_marker
+    return unpack_inten, unpack_marker, unpack_shader
 
 # Cell
 def extract_spyking_circus_results(dir_, record_basename):

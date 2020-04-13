@@ -192,9 +192,9 @@ def error_frame_matches(signals, marker, range_):
     return error_frames, replacements
 
 def apply_shifts(unpacked, op_log):
-    inten, marker, shader = unpacked[0].copy(), unpacked[1].copy(), None
-    if len(unpacked)==3:
-        shader = unpacked[2].copy()
+    inten, marker, shader = unpacked[0].copy(), unpacked[1].copy(), unpacked[2]
+    if shader is not None:
+        shader = shader.copy()
     orig_len = len(marker)
     for idx, op in op_log:
         if op=="ins": #We insert a frame
