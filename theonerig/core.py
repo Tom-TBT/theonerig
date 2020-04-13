@@ -49,6 +49,21 @@ class DataChunk(np.ndarray):
     def __repr__(self):
         return "DataChunk(%s,%s,%s,%s)"%(self.shape, self.idx, self.group, self.fill)
 
+    def __getitem__(self, *args, **kwargs):
+        if isinstance(args[0], int):
+            res = super().__getitem__(*args, **kwargs)
+        elif isinstance(args[0], slice):
+            shift = args[0].start
+            if shift is None:
+                shift=0
+            res = DataChunk(super().__getitem__(*args, **kwargs),
+                                          idx=self.idx+shift,
+                                          fill = self.fill,
+                                          group=self.group)
+            res.attrs = self.attrs
+        return res
+
+
 # Cell
 class ContiguousRecord():
     """Representation of a contiguous recording session to store DataChunk
