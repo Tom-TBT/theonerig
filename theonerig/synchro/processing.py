@@ -198,10 +198,10 @@ def apply_shifts(unpacked, op_log):
     orig_len = len(marker)
     for idx, op in op_log:
         if op=="ins": #We insert a frame
-            marker = np.insert(marker, idx, marker[idx])
-            inten  = np.insert(inten , idx, inten[idx])
+            marker = np.insert(marker, idx, marker[idx], axis=0)
+            inten  = np.insert(inten , idx, inten[idx], axis=0)
             if shader is not None:
-                shader = np.insert(shader, idx, shader[idx])
+                shader = np.insert(shader, idx, shader[idx], axis=0)
         elif op=="del": #We concatenate without the deleted frame
             marker = np.concatenate((marker[:idx],marker[idx+1:]))
             inten  = np.concatenate((inten[:idx],inten[idx+1:]))
