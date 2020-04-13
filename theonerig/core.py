@@ -52,8 +52,12 @@ class DataChunk(np.ndarray):
     def __getitem__(self, *args, **kwargs):
         if isinstance(args[0], int):
             res = super().__getitem__(*args, **kwargs)
-        elif isinstance(args[0], slice):
-            shift = args[0].start
+        else:
+            if isinstance(args[0], slice):
+                shift = args[0].start
+            elif isinstance(args[0], tuple):
+                shift = args[0][0].start
+
             if shift is None:
                 shift=0
             res = DataChunk(super().__getitem__(*args, **kwargs),
@@ -62,7 +66,6 @@ class DataChunk(np.ndarray):
                                           group=self.group)
             res.attrs = self.attrs
         return res
-
 
 # Cell
 class ContiguousRecord():
