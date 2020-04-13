@@ -23,21 +23,22 @@ class DataChunk(np.ndarray):
         obj.fill = fill
 
         obj.attrs = {}
-        obj.slice = obj._get_slice()
-        obj.range = obj._range()
 
         return obj
 
     def __array_finalize__(self, obj):
         if obj is None: return
-        self.idx = getattr(obj, 'idx', None)
+        self.idx   = getattr(obj, 'idx', None)
         self.group = getattr(obj, 'group', None)
-        self.fill = getattr(obj, 'fill', 0)
+        self.fill  = getattr(obj, 'fill', 0)
+        self.attrs = getattr(obj, 'attrs', {})
 
-    def _range(self):
+    @property
+    def range(self):
         return range(self.idx, self.idx + len(self))
 
-    def _get_slice(self):
+    @property
+    def slice(self):
         return slice(self.idx, self.idx + len(self))
 
     def __str__(self):
@@ -48,24 +49,6 @@ class DataChunk(np.ndarray):
 
     def __repr__(self):
         return "DataChunk(%s,%s,%s,%s)"%(self.shape, self.idx, self.group, self.fill)
-
-    def __getitem__(self, *args, **kwargs):
-        if isinstance(args[0], int):
-            res = super().__getitem__(*args, **kwargs)
-        else:
-            if isinstance(args[0], slice):
-                shift = args[0].start
-            elif isinstance(args[0], tuple):
-                shift = args[0][0].start
-
-            if shift is None:
-                shift=0
-            res = DataChunk(super().__getitem__(*args, **kwargs),
-                                          idx=self.idx+shift,
-                                          fill = self.fill,
-                                          group=self.group)
-            res.attrs = self.attrs
-        return res
 
 # Cell
 class ContiguousRecord():
