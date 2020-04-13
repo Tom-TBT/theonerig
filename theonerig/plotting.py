@@ -93,6 +93,8 @@ def plot_ds_wheel(ax, ds_dict, cell_idx):
     x = np.linspace(0, (n_angle-1)/4*np.pi, num=n_angle)
     linestyle = [":", "--"]
     best_oi, best_di = None, None
+    idx_best_oi, idx_best_di =  0, 0
+    to_plot = []
     for j, (key, data) in enumerate(ds_dict.items()):
         spike_counts = data[0][cell_idx,:]
         dir_pref = data[1][cell_idx]
@@ -108,11 +110,20 @@ def plot_ds_wheel(ax, ds_dict, cell_idx):
         else:
             if best_oi[2]<ori_pval:
                 best_oi=(ori_mod, ori_phase, ori_pval)
+                idx_best_oi = j
             if best_di[2]<dir_pval:
                 best_di=(dir_mod, dir_phase, dir_pval)
+                idx_best_di = j
 
-        label = (key+"   DI:"+str(round(dir_mod,2))+" / p"+str(round(1-dir_pval,2))+
-                    "    OI:"+str(round(ori_mod,2))+" / p"+str(round(1-ori_pval,2)))
+        to_plot.append((key, spike_counts, dir_mod, dir_pval, ori_mod, ori_pval))
+
+    for j, (key, spike_counts, dir_mod, dir_pval, ori_mod, ori_pval) in enumerate(to_plot):
+        label = key+"   DI:"+str(round(dir_mod,2))+" / p"+str(round(1-dir_pval,2))
+        if j==idx_best_di:
+            label += " *"
+        label += "    OI:"+str(round(ori_mod,2))+" / p"+str(round(1-ori_pval,2))
+        if j==idx_best_oi:
+            label += " *"
 
         ax.plot(np.concatenate((x, x[0:1])), np.concatenate((spike_counts, spike_counts[0:1])),
                 linestyle=linestyle[j//2], c=DEFAULT_COLORS[j%2],
@@ -122,9 +133,10 @@ def plot_ds_wheel(ax, ds_dict, cell_idx):
     ds_arrow = ax.arrow(0,x_uplim/500,best_di[1],  best_di[0]*x_uplim, width=.3, head_width=x_uplim/1000000, color='tab:purple', label="Best DI")
     os_arrow = ax.arrow(0,x_uplim/500,best_oi[1],  best_oi[0]*x_uplim, width=.3, head_width=x_uplim/1000000, color='tab:green', label="Best OI")
     legend_obj, legend_label = ax.get_legend_handles_labels()
-    # legend_obj.extend([ds_arrow, os_arrow])
-    # legend_label.extend(["Best direction selectivity", "Best orientation selectivity"])
-    ax.legend(legend_obj, legend_label, loc=(-.1,-.16))
+    #For double legend box, need to add manually the artist for the first legend
+    first_legend = ax.legend(legend_obj, legend_label, loc=(-.1,-.16))
+    plt.gca().add_artist(first_legend)
+    ax.legend([ds_arrow, os_arrow], ["best direction index (DI)", "best orientation index (OI)"], loc=(-.1,.95), ncol=2)
 
 # Cell
 def plot_dark_white_response(ax, spike_bins):
@@ -284,7 +296,9 @@ def plot_stim_epochs_to_calcium(ax, reM, y_pos):
         pos_text_cursor*=-1
 
 def plot_stim_recap_table(ax, df):
-    width_ratios = [2.5,2,2,1,1,1,1,2,2]
+    width_ratios = []
+    for col in df.columns:
+        width_ratios.append(max(5, len(col), max(map(len,map(str,df[col])))))
     widths = [w/np.sum(width_ratios) for w in width_ratios]
 
     ax.table(cellText=np.vstack([df.columns, df.values]),

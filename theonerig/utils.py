@@ -362,8 +362,7 @@ def stim_recap_df(reM):
             elif stim_dc.attrs["name"]=="chirp_fm":
                 param_d["frequency"] = stim_dc.attrs["max_frequency"]
             elif stim_dc.attrs["name"]=="chirp_freq_epoch":
-                param_d["frequency"] = (str([round(60/nfr,2) for nfr in dc.attrs["n_frame_cycle"]]) + ","+
-                                        str([int(dur*60) for dur in dc.attrs["durations_chirp_s"]]))
+                param_d["frequency"] = str([round(60/nfr,2) for nfr in dc.attrs["n_frame_cycle"]])
         elif stim_dc.attrs["name"]=="moving_gratings":
             param_d["n repeats"]           = stim_dc.attrs["n_repeat"]
             param_d["n ON"]                = stim_dc.attrs["n_frame_on"]
@@ -371,10 +370,22 @@ def stim_recap_df(reM):
             param_d["speeds"]              = stim_dc.attrs["speeds"]
             param_d["spatial frequencies"] = stim_dc.attrs["spatial_frequencies"]
 
+        if "frame_replacement" in stim_dc.attrs:
+            param_d["total drop"] = len(stim_dc.attrs["frame_replacement"])
+        if "signal_shifts" in stim_dc.attrs:
+            shift = 0
+            for _, which_shift in stim_dc.attrs["signal_shifts"]:
+                if which_shift=="ins":
+                    shift += 1
+                elif which_shift=="del":
+                    shift -= 1
+            param_d["total shift"] = shift
+
         return param_d
 
     df = pd.DataFrame(columns=["stimulus", "hash", "n frames", "n repeats",
-                               "frequency", "n ON", "n OFF", "speeds", "spatial frequencies"])
+                               "frequency", "n ON", "n OFF", "speeds", "spatial frequencies",
+                              "total shift", "total drop"])
     cursor = 0
     for k, dc_l in reM[0]:
         dc = dc_l[0]
