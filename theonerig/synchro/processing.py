@@ -3,7 +3,7 @@
 __all__ = ['get_thresholds', 'get_first_high', 'reverse_detection', 'extend_timepoints', 'detect_frames', 'error_check',
            'cluster_frame_signals', 'parse_time', 'get_position_estimate', 'match_starting_position', 'display_match',
            'frame_error_correction', 'error_frame_matches', 'apply_shifts', 'shift_detection_conv',
-           'shift_detection_NW']
+           'shift_detection_NW', 'chop_stim_edges']
 
 # Cell
 import numpy as np
@@ -301,3 +301,18 @@ def shift_detection_NW(signals, marker):
             j-=1
 
     return operation_log
+
+# Cell
+def chop_stim_edges(first_frame, last_frame, stim_tuple, shift_log, frame_replacement):
+    inten, marker, shader = stim_tuple
+    if last_frame<0: #Using negative indexing
+        last_frame = len(marker)+last_frame
+    inten = inten[first_frame:last_frame]
+    marker = marker[first_frame:last_frame]
+    if shader is not None:
+        shader = shader[first_frame:last_frame]
+
+    shift_log = [(shift[0]-first_frame, shift[1]) for shift in shift_log if shift[0]<last_frame]
+    frame_replacement = [(fr[0]-first_frame, fr[1]-first_frame) for fr in frame_replacement if fr[0]<last_frame]
+
+    return (inten, marker, shader), shift_log, frame_replacement
