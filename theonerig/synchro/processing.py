@@ -117,9 +117,9 @@ def cluster_frame_signals(data, frame_timepoints, n_cluster=5):
                 print("Less transition in AUC detected than needed, results will be weird")
             break
         idx_gaps[i] = np.argmax(tmp_deriv)
-        tmp_deriv[idx_gaps[i]] = 0
+        tmp_deriv[idx_gaps[i]-10:idx_gaps[i]+10] = 0
     idx_gaps = np.sort(idx_gaps)
-    idx_gaps = idx_gaps[-4:]
+    idx_gaps = idx_gaps[-(n_cluster-1):]
     thresholds = np.zeros(n, dtype="float")
     for i, idx in enumerate(idx_gaps):
         thresholds[i] = (frame_auc_sorted[idx+1] + frame_auc_sorted[idx])/2
@@ -168,26 +168,29 @@ def frame_error_correction(signals, unpacked, algo="nw"):
         shift_log = shift_detection_conv(signals.astype(int), unpacked[1].astype(int), range_=5)
     intensity, marker, shader = apply_shifts(unpacked, shift_log)
     error_frames, replacements = error_frame_matches(signals, marker, range_=5)
-    intensity[error_frames]    = intensity[replacements]
-    marker[error_frames]       = marker[replacements]
-    if shader is not None:
-        shader[error_frames] = shader[replacements]
+    if len(error_frames)>0:
+        intensity[error_frames]    = intensity[replacements]
+        marker[error_frames]       = marker[replacements]
+        if shader is not None:
+            shader[error_frames] = shader[replacements]
     return (intensity, marker, shader), shift_log, list(zip(map(int,error_frames), map(int,replacements)))
 
 def error_frame_matches(signals, marker, range_):
     error_frames = np.nonzero(signals!=marker)[0]
-    where_equal = [((np.where(marker[err_id-range_:err_id+(range_+1)] == signals[err_id])[0]) - range_) for err_id in error_frames]
-
+    if len(error_frames)>0:
+        where_equal = [((np.where(marker[err_id-range_:err_id+(range_+1)] == signals[err_id])[0]) - range_) for err_id in error_frames]
     #filtering out the frames where no match was found
-    tmp    = np.array([[wheq,err] for (wheq, err) in zip(where_equal, error_frames) if len(wheq)>0])
-    where_equal  = tmp[:,0]
-    error_frames = tmp[:,1]
+        tmp    = np.array([[wheq,err] for (wheq, err) in zip(where_equal, error_frames) if len(wheq)>0])
+        where_equal  = tmp[:,0]
+        error_frames = tmp[:,1]
 
     #Choosing among the equal frame signals the one that is the closest
-    closest_equal = [wheq[(np.abs(wheq)).argmin()] for wheq in where_equal]
-
-    error_frames = np.array(error_frames, dtype=int)
-    replacements  = error_frames + np.array(closest_equal, dtype=int)
+        closest_equal = [wheq[(np.abs(wheq)).argmin()] for wheq in where_equal]
+        error_frames  = np.array(error_frames, dtype=int)
+        replacements  = error_frames + np.array(closest_equal, dtype=int)
+    else:
+        replacements = np.empty(shape=(0,), dtype=int)
+        error_frames = np.empty(shape=(0,), dtype=int)
 
     return error_frames, replacements
 
