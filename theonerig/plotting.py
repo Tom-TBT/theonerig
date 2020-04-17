@@ -383,6 +383,7 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
     moving_gratings -> The dict of response obtained from utils.group_direction_response
     export_path -> The path for a pdf file to be exported. If None, the plot is displayed.
     """
+    print("Generating the recap plot")
     configure_pyplot_recap()
 
     shanks_idx = buszaki_shank_channels(phy_dict["channel_positions"])
@@ -493,6 +494,7 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
         plt.show()
     sns.set()
     plt.rcdefaults()
+    print()
 
 
 # Cell
@@ -513,6 +515,7 @@ def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, df_stim, cel
     moving_gratings -> The dict of response obtained from utils.group_direction_response
     export_path -> The path for a pdf file to be exported. If None, the plot is displayed.
     """
+    print("Generating the recap plot")
     configure_pyplot_recap()
 
     cond = title_dict["condition"]
@@ -631,3 +634,4 @@ def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, df_stim, cel
         plt.show()
     sns.set()
     plt.rcdefaults()
+    print()

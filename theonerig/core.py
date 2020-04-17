@@ -449,6 +449,7 @@ class Data_Pipe():
 # Cell
 def export_record(_path, record_master):
     """Export a Record_Master object to an h5 file, readable outside of this library."""
+    print("Exporting the record master")
     with h5py.File(_path, mode="w") as h5_f:
         h5_f.attrs["frame_time"] = record_master.frame_time
         h5_f.attrs["sep_size"]   = record_master.sep_size
@@ -468,9 +469,11 @@ def export_record(_path, record_master):
                         dset.attrs[attr_k] = json.dumps(attr_v)
                     dset.attrs["__fill"] = datachunk.fill
                     dset.attrs["__group"] = datachunk.group
+    print()
 
 def import_record(_path):
     """Import a Record_Master from an h5 file saved by the export_record function of this library."""
+    print("Importing the record master")
     with h5py.File(_path, mode="r") as h5_f:
         record_master = None
         for j, key_contig in enumerate(h5_f.keys()):
@@ -505,4 +508,5 @@ def import_record(_path):
                     if kstream in ["main_tp", "signals"] and k==0:
                         continue
                     record_master.set_datachunk(dc, name=kstream, sequence_idx=j)
+    print()
     return record_master
