@@ -2,7 +2,7 @@
 
 __all__ = ['atoi', 'natural_keys', 'filter_per_extension', 'print_and_log', 'print_info', 'print_error', 'get_offset',
            'logger', 'DataFile', 'read_header', 'get_bytes_per_data_block', 'read_qstring', 'RHDFile', 'H5File',
-           'RawBinaryFile', 'NumpyFile', 'load_all_data', 'load_all_data_adc']
+           'RawBinaryFile', 'NumpyFile', 'load_all_data', 'load_all_data_adc', 'export_adc_raw', 'load_adc_raw']
 
 # Cell
 import numpy as np
@@ -1294,3 +1294,25 @@ def load_all_data_adc(datafile:DataFile):
     print("Loading the data... "+str(round(100,2))+"%    ",end='\r',flush=True)
     datafile.close()
     return data
+
+def export_adc_raw(datafile:DataFile):
+    data = load_all_data_adc(datafile)
+    raw_fn = os.path.splitext(datafile.file_name)[0]+".dat"
+    param_d = {'sampling_rate': datafile.sampling_rate,
+               'data_dtype': 'float64',
+               'gain': 1,
+               'nb_channels': 1,
+               'dtype_offset': 0}
+    raw_file = RawBinaryFile(raw_fn, param_d, is_empty=True)
+    raw_file.allocate(datafile.shape[0])
+    raw_file.set_data(0, data.copy())
+    raw_file.close()
+
+def load_adc_raw(filepath, sampling_rate):
+    param_d = {'sampling_rate': sampling_rate,
+               'data_dtype': 'float64',
+               'gain': 1,
+               'nb_channels': 1,
+               'dtype_offset': 0}
+    raw_file = RawBinaryFile(filepath, param_d)
+    return load_all_data_adc(raw_file)
