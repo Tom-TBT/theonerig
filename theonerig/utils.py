@@ -353,16 +353,20 @@ def stim_recap_df(reM):
 
         if stim_dc.attrs["name"] in ["checkerboard", "fullfield_flicker", "flickering_bars", "flickering_bars_pr"]:
             param_d["frequency"] = stim_dc.attrs["refresh_rate"]
-        elif stim_dc.attrs["name"] in ["chirp_am","chirp_fm","chirp_freq_epoch"]:
+        elif stim_dc.attrs["name"] in ["chirp_am","chirp_fm","chirp_freq_epoch", "chirp_co"]:
             param_d["n ON"]      = int(stim_dc.attrs["tSteadyON_s"]*60)
             param_d["n OFF"]     = int(stim_dc.attrs["tSteadyOFF_s"]*60)
-            param_d["n repeats"] = stim_dc.attrs["n_repeat"]
-            if stim_dc.attrs["name"]=="chirp_am":
+            param_d["n repeats"] = int(stim_dc.attrs["n_repeat"])
+            if stim_dc.attrs["name"] in ["chirp_am","chirp_co"]:
                 param_d["frequency"] = stim_dc.attrs["contrast_frequency"]
             elif stim_dc.attrs["name"]=="chirp_fm":
                 param_d["frequency"] = stim_dc.attrs["max_frequency"]
             elif stim_dc.attrs["name"]=="chirp_freq_epoch":
                 param_d["frequency"] = str([round(60/nfr,2) for nfr in dc.attrs["n_frame_cycle"]])
+        elif stim_dc.attrs["name"] in ["fullfield_color_mix"]:
+            param_d["n ON"]      = int(stim_dc.attrs["n_frame_on"])
+            param_d["n OFF"]     = int(stim_dc.attrs["n_frame_off"])
+            param_d["n repeats"] = int(stim_dc.attrs["n_repeat"])
         elif stim_dc.attrs["name"]=="moving_gratings":
             param_d["n repeats"]           = stim_dc.attrs["n_repeat"]
             param_d["n ON"]                = stim_dc.attrs["n_frame_on"]
