@@ -162,12 +162,19 @@ def display_match(match_position, reference=None, recorded=None, corrected=None,
 
 # Cell
 def frame_error_correction(signals, unpacked, algo="nw"):
-    if algo=="nw":
-        shift_log = shift_detection_NW(signals.astype(int), unpacked[1].astype(int))
-    elif algo=="conv":
-        shift_log = shift_detection_conv(signals.astype(int), unpacked[1].astype(int), range_=5)
-    intensity, marker, shader = apply_shifts(unpacked, shift_log)
-    error_frames, replacements = error_frame_matches(signals, marker, range_=5)
+    if algo=="no_shift":
+        intensity, marker, shader  = unpacked[0].copy(), unpacked[1].copy(), unpacked[2]
+        if shader is not None:
+            shader = shader.copy()
+        error_frames, replacements = error_frame_matches(signals, marker, range_=5)
+        shift_log = []
+    else:
+        if algo=="nw":
+            shift_log = shift_detection_NW(signals.astype(int), unpacked[1].astype(int))
+        elif algo=="conv":
+            shift_log = shift_detection_conv(signals.astype(int), unpacked[1].astype(int), range_=5)
+        intensity, marker, shader = apply_shifts(unpacked, shift_log)
+        error_frames, replacements = error_frame_matches(signals, marker, range_=5)
     if len(error_frames)>0:
         intensity[error_frames]    = intensity[replacements]
         marker[error_frames]       = marker[replacements]
