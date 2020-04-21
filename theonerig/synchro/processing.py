@@ -161,7 +161,7 @@ def display_match(match_position, reference=None, recorded=None, corrected=None,
         print()
 
 # Cell
-def frame_error_correction(signals, unpacked, algo="nw"):
+def frame_error_correction(signals, unpacked, algo="nw", **kwargs):
     if algo=="no_shift":
         intensity, marker, shader  = unpacked[0].copy(), unpacked[1].copy(), unpacked[2]
         if shader is not None:
@@ -170,9 +170,9 @@ def frame_error_correction(signals, unpacked, algo="nw"):
         shift_log = []
     else:
         if algo=="nw":
-            shift_log = shift_detection_NW(signals.astype(int), unpacked[1].astype(int))
+            shift_log = shift_detection_NW(signals.astype(int), unpacked[1].astype(int), **kwargs)
         elif algo=="conv":
-            shift_log = shift_detection_conv(signals.astype(int), unpacked[1].astype(int), range_=5)
+            shift_log = shift_detection_conv(signals.astype(int), unpacked[1].astype(int), range_=5, **kwargs)
         intensity, marker, shader = apply_shifts(unpacked, shift_log)
         error_frames, replacements = error_frame_matches(signals, marker, range_=5)
     if len(error_frames)>0:
@@ -252,20 +252,20 @@ def shift_detection_conv(signals, marker, range_):
                 marker     = np.insert(marker, change_idx, marker[change_idx], axis=0)[:-1]
     return operation_log
 
-def shift_detection_NW(signals, marker):
+def shift_detection_NW(signals, marker, simmat_basis=[1,-1,-3,-3,-1], insdel=-10, rowside=20):
     """Memory optimized Needleman-Wunsch algorithm.
     Instead of an N*N matrix, it uses a N*(side*2+1) matrix. Indexing goes slightly differently but
     result is the same, with far less memory consumption and exection speed scaling better with
     size of the sequences to align."""
     #Setting the similarity matrix
-    side = 20
+    side = rowside
     sim_mat = np.empty((len(marker), side*2+1), dtype="int32")
     #Setting the errors
-    insertion_v = -10 #insertions are commons not so high penalty
-    deletion_v  = -10 #deletions detection happens during periods of confusion but are temporary. High value
-    error_match = np.array([1,-1,-3,-3,-1]) #The value for a 0 matching with [0,1,2,3,4]
-    error_mat = np.empty((5,5))
-    for i in range(5):
+    insertion_v = insdel #insertions are commons not so high penalty
+    deletion_v  = insdel #deletions detection happens during periods of confusion but are temporary. High value
+    error_match = np.array(simmat_basis) #The value for a 0 matching with [0,1,2,3,4]
+    error_mat = np.empty((len(simmat_basis),len(simmat_basis)))
+    for i in range(len(simmat_basis)):
         error_mat[i] = np.roll(error_match,i)
 
     #Filling the similarity matrix
