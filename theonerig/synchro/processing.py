@@ -62,7 +62,10 @@ def detect_frames(data, low_threshold, high_threshold, increment):
     frame_signals.append(1)
 
     new_timepoints   = reverse_detection(data, frame_timepoints, low_threshold, increment)
-    new_extrapolated = extend_timepoints(new_timepoints)
+    if len(new_timepoints)>1:
+        new_extrapolated = extend_timepoints(new_timepoints)
+    else:
+        new_extrapolated = []
     frame_timepoints = new_extrapolated + new_timepoints + frame_timepoints
     frame_signals    = [0]*(len(new_timepoints)+len(new_extrapolated)) + frame_signals
 
@@ -111,13 +114,14 @@ def cluster_frame_signals(data, frame_timepoints, n_cluster=5):
     n          = n_cluster - 1
     idx_gaps = np.zeros(n+3, dtype="int")
     tmp_deriv = deriv.copy()
+    zero_set_range = int(len(deriv)*0.05) #Around the peaks, we set the values to 0 around
     for i in range(n+3): #Detecting more peaks than needed and then taking them starting on the right
         if tmp_deriv[np.argmax(tmp_deriv)] < threshold_peak:
             if i<n_cluster-1:
                 print("Less transition in AUC detected than needed, results will be weird")
             break
         idx_gaps[i] = np.argmax(tmp_deriv)
-        tmp_deriv[idx_gaps[i]-10:idx_gaps[i]+10] = 0
+        tmp_deriv[idx_gaps[i]-zero_set_range:idx_gaps[i]+zero_set_range] = 0
     idx_gaps = np.sort(idx_gaps)
     idx_gaps = idx_gaps[-(n_cluster-1):]
     thresholds = np.zeros(n, dtype="float")
