@@ -49,7 +49,7 @@ def extend_timepoints(frame_timepoints, n=10):
     extended_tp = [frame_timepoints[0]-(i+1)*typical_distance for i in range(n) if (frame_timepoints[0]-(i+1)*typical_distance)>0]
     return extended_tp[::-1]
 
-def detect_frames(data, low_threshold, high_threshold, increment):
+def detect_frames(data, low_threshold, high_threshold, increment, do_reverse=True):
     frame_timepoints, frame_signals = [], []
     safe_increment = int(increment*95/100)
 
@@ -61,13 +61,14 @@ def detect_frames(data, low_threshold, high_threshold, increment):
     frame_timepoints.append(first_high)
     frame_signals.append(1)
 
-    new_timepoints   = reverse_detection(data, frame_timepoints, low_threshold, increment)
-    if len(new_timepoints)>1:
-        new_extrapolated = extend_timepoints(new_timepoints)
-    else:
-        new_extrapolated = []
-    frame_timepoints = new_extrapolated + new_timepoints + frame_timepoints
-    frame_signals    = [0]*(len(new_timepoints)+len(new_extrapolated)) + frame_signals
+    if do_reverse:
+        new_timepoints   = reverse_detection(data, frame_timepoints, low_threshold, increment)
+        if len(new_timepoints)>1:
+            new_extrapolated = extend_timepoints(new_timepoints)
+        else:
+            new_extrapolated = []
+        frame_timepoints = new_extrapolated + new_timepoints + frame_timepoints
+        frame_signals    = [0]*(len(new_timepoints)+len(new_extrapolated)) + frame_signals
 
     i = first_high + safe_increment
     while i < len(data):
