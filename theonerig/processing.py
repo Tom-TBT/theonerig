@@ -28,7 +28,12 @@ def eyetrack_stim_inten(stim_inten, eye_track,
                         box_w=None, box_h=None):
     """From stimulus data and eye tracking, returns a corrected and upsampled stimulus data."""
     eye_x, eye_y = eye_track[:,0], eye_track[:,1]
-    shape_y, shape_x = stim_inten.shape[-2:]
+    shape_y, shape_x = 1, 1
+    if len(stim_inten.shape)==2:
+        shape_x = stim_inten.shape[1]
+    elif len(stim_inten.shape)==3:
+        shape_y = stim_inten.shape[1]
+        shape_x = stim_inten.shape[2]
     if box_w is None:
         box_w = 1280//shape_x
     if box_h is None:
@@ -36,8 +41,6 @@ def eyetrack_stim_inten(stim_inten, eye_track,
 
     if shape_y>1 and shape_x>1:
         box_w, box_h = int(box_w/upsampling), int(box_h/upsampling)
-    elif shape_y > 1:
-        box_w, box_h = box_w                , int(box_h/upsampling)
     elif shape_x > 1:
         box_w, box_h = int(box_w/upsampling), box_h
 
@@ -47,10 +50,8 @@ def eyetrack_stim_inten(stim_inten, eye_track,
 
     if shape_y>1 and shape_x>1:
         stim_inten = stim_inten.repeat(upsampling,axis=1).repeat(upsampling,axis=2)
-    elif shape_y > 1:
-        stim_inten = stim_inten.repeat(upsampling,axis=1)
     elif shape_x > 1:
-        stim_inten = stim_inten.repeat(upsampling,axis=2)
+        stim_inten = stim_inten.repeat(upsampling,axis=1)
 
     xpos_avg = np.mean(eye_x)
     ypos_avg = np.mean(eye_y)
@@ -68,10 +69,8 @@ def eyetrack_stim_inten(stim_inten, eye_track,
         if shape_y>1 and shape_x>1:
             rolled_stim = np.roll(stim_inten[i],stim_shift_y,axis=0)
             rolled_stim = np.roll(rolled_stim  ,stim_shift_x,axis=1)
-        elif shape_y > 1:
-            rolled_stim = np.roll(stim_inten[i],stim_shift_y,axis=0)
         elif shape_x > 1:
-            rolled_stim = np.roll(stim_inten[i],stim_shift_x,axis=1)
+            rolled_stim = np.roll(stim_inten[i],stim_shift_x,axis=0)
         stim_inten[i] = rolled_stim
 
     return stim_inten
