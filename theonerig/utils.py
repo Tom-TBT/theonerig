@@ -109,6 +109,8 @@ def resample_to_timepoints(timepoints:np.ndarray, data:np.ndarray,
 
     start_idx = np.argmax(ref_timepoints >= timepoints[0])
     stop_idx  = np.argmax(ref_timepoints >= timepoints[-1])
+    if stop_idx == 0:
+        stop_idx = len(ref_timepoints)
 
     if len(ref_timepoints[start_idx:stop_idx]) < len(timepoints): #Downsampling
         distance = (np.argmax(timepoints>ref_timepoints[start_idx+1])
