@@ -2,7 +2,8 @@
 
 __all__ = ['atoi', 'natural_keys', 'filter_per_extension', 'print_and_log', 'print_info', 'print_error', 'get_offset',
            'logger', 'DataFile', 'read_header', 'get_bytes_per_data_block', 'read_qstring', 'RHDFile', 'H5File',
-           'RawBinaryFile', 'NumpyFile', 'load_all_data', 'load_all_data_adc', 'export_adc_raw', 'load_adc_raw']
+           'RawBinaryFile', 'NumpyFile', 'load_all_data', 'load_all_data_adc', 'export_adc_raw', 'load_adc_raw',
+           'load_sync_raw']
 
 # Cell
 import numpy as np
@@ -1311,6 +1312,15 @@ def export_adc_raw(datafile:DataFile):
 def load_adc_raw(filepath, sampling_rate):
     param_d = {'sampling_rate': sampling_rate,
                'data_dtype': 'float64',
+               'gain': 1,
+               'nb_channels': 1,
+               'dtype_offset': 0}
+    raw_file = RawBinaryFile(filepath, param_d)
+    return load_all_data_adc(raw_file)
+
+def load_sync_raw(filepath, sampling_rate=10000):
+    param_d = {'sampling_rate': sampling_rate,
+               'data_dtype': '>d',
                'gain': 1,
                'nb_channels': 1,
                'dtype_offset': 0}
