@@ -115,7 +115,7 @@ def cluster_frame_signals(data, frame_timepoints, n_cluster=5):
     n          = n_cluster - 1
     idx_gaps = np.zeros(n+3, dtype="int")
     tmp_deriv = deriv.copy()
-    zero_set_range = int(len(deriv)*0.05) #Around the peaks, we set the values to 0 around
+    zero_set_range = 10#int(len(deriv)*0.05) #Around the peaks, we set the values to 0 around
     for i in range(n+3): #Detecting more peaks than needed and then taking them starting on the right
         if tmp_deriv[np.argmax(tmp_deriv)] < threshold_peak:
             if i<n_cluster-1:
