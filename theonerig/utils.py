@@ -211,7 +211,7 @@ def twoP_dataChunks(ref_timepoints:DataChunk, frame_timepoints, len_epochs, C_ma
     cursor = 0
     for i, len_epoch in enumerate(len_epochs):
         start_idx = np.argmax(ref_timepoints>frame_timepoints[i][0])
-        stop_idx  = np.argmax(ref_timepoints>frame_timepoints[i][-6]) #-6 to exclujde the always present extra 5 frame of the calcium pulses
+        stop_idx  = np.argmax(ref_timepoints>frame_timepoints[i][len_epoch-1])
         sub_C, sub_S = C_matrix.T[cursor:cursor+len_epoch], S_matrix.T[cursor:cursor+len_epoch]
         cursor += len_epoch
         f = interpolate.interp1d(range(len_epoch), sub_C, axis=0)
