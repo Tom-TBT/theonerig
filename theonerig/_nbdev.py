@@ -130,6 +130,7 @@ index = {"DataChunk": "00_core.ipynb",
          "shift_detection_conv": "12_synchro.processing.ipynb",
          "shift_detection_NW": "12_synchro.processing.ipynb",
          "chop_stim_edges": "12_synchro.processing.ipynb",
+         "detect_calcium_frames": "12_synchro.processing.ipynb",
          "load_vivo_2p": "99_testdata.ipynb"}
 
 modules = ["core.py",

@@ -3,7 +3,7 @@
 __all__ = ['get_thresholds', 'get_first_high', 'reverse_detection', 'extend_timepoints', 'detect_frames', 'error_check',
            'cluster_frame_signals', 'cluster_by_epochs', 'parse_time', 'get_position_estimate',
            'match_starting_position', 'display_match', 'frame_error_correction', 'error_frame_matches', 'apply_shifts',
-           'shift_detection_conv', 'shift_detection_NW', 'chop_stim_edges']
+           'shift_detection_conv', 'shift_detection_NW', 'chop_stim_edges', 'detect_calcium_frames']
 
 # Cell
 import numpy as np
@@ -360,3 +360,14 @@ def chop_stim_edges(first_frame, last_frame, stim_tuple, shift_log, frame_replac
     frame_replacement = [(fr[0]-first_frame, fr[1]-first_frame) for fr in frame_replacement if fr[0]<last_frame]
 
     return (inten, marker, shader), shift_log, frame_replacement
+
+# Cell
+def detect_calcium_frames(scanning_data, epoch_threshold=-8):
+    start_set = np.where((scanning_data[1:] > epoch_threshold) & (scanning_data[:-1] < epoch_threshold))[0]
+    end_set   = np.where((scanning_data[1:] < epoch_threshold) & (scanning_data[:-1] > epoch_threshold))[0]
+    list_epoch = np.array_split(scanning_data, np.ravel(list(zip(start_set, end_set))))[1::2]
+
+    def detect_peak_sync(epoch):
+        return signal.find_peaks(epoch, prominence=2)[0]
+
+    return [arr + start_set[i] for i, arr in enumerate(list(map(detect_peak_sync, list_epoch)))]
