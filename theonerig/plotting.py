@@ -408,11 +408,8 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
         suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id)])
         plt.suptitle(suptitle)
 
-        if export_path is not None:
-            pp.savefig()
+        pp.savefig()
         plt.close()
-
-
 
         for cluster, cell_id in zip(cluster_ids, cell_db_ids):
             reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][cluster]#np.where(cluster==cluster_ids)[0][0]
@@ -481,8 +478,7 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
                 ds_ax = fig.add_subplot(gs[21:,13:], projection="polar")
                 plot_ds_wheel(ds_ax, moving_gratings, cell_idx=reM_cell_idx)
 
-            if export_path is not None:
-                pp.savefig()
+            pp.savefig()
             plt.close()
 
             print("Cell cluster n°",cluster,"done")
@@ -541,8 +537,7 @@ def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, df_stim, cel
         suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id)])
         plt.suptitle(suptitle)
 
-        if export_path is not None:
-            pp.savefig()
+        pp.savefig()
         plt.close()
 
         for cell_idx, cell_db_id in zip(cell_indexes, cell_db_ids):
@@ -615,8 +610,7 @@ def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, df_stim, cel
                 ds_ax = fig.add_subplot(gs[21:,13:], projection="polar")
                 plot_ds_wheel(ds_ax, moving_gratings, cell_idx=cell_idx)
 
-            if export_path is not None:
-                pp.savefig()
+            pp.savefig()
             plt.close()
 
             print("Cell n°",cell_idx,"done")
