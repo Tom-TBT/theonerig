@@ -1,11 +1,11 @@
 ---
 
-title: Title
+title: Synchro.extracting
 
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "summary"
+summary: "Function to extract data of an experiment from 3rd party programs"
 ---
 <!--
 
@@ -28,6 +28,19 @@ summary: "summary"
 
 <div class="inner_cell">
     <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">nbdev.showdoc</span> <span class="k">import</span> <span class="o">*</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
 <span class="o">%</span><span class="k">autoreload</span> 2
 </pre></div>
@@ -36,6 +49,19 @@ summary: "summary"
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To align timeseries of an experiment, we need to read logs and import data produced by 3rd party softwares used during the experiment. It includes:</p>
+<ul>
+<li>QDSpy logging</li>
+<li>Numpy arrays of the stimuli</li>
+<li>SpykingCircus spike sorting refined with Phy</li>
+<li>Eye tracking results from MaskRCNN</li>
+</ul>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 
@@ -51,6 +77,7 @@ summary: "summary"
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="get_QDSpy_logs" class="doc_header"><code>get_QDSpy_logs</code><a href="__main__.py#L11" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_QDSpy_logs</code>(<strong><code>log_dir</code></strong>)</p>
 </blockquote>
+<p>Factory function to generate QDSpy_log objects from all the QDSpy logs of the folder <code>log_dir</code></p>
 
 </div>
 
@@ -71,6 +98,13 @@ summary: "summary"
 <div class="output_markdown rendered_html output_subarea ">
 <h2 id="QDSpy_log" class="doc_header"><code>class</code> <code>QDSpy_log</code><a href="" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QDSpy_log</code>(<strong><code>log_path</code></strong>)</p>
 </blockquote>
+<p>Class defining a QDSpy log. 
+It reads the log it represent and extract the stimuli information from it:</p>
+<ul>
+<li>Start and end time</li>
+<li>Parameters like the md5 key</li>
+<li>Frame delays</li>
+</ul>
 
 </div>
 
@@ -92,6 +126,280 @@ summary: "summary"
 <h2 id="Stimulus" class="doc_header"><code>class</code> <code>Stimulus</code><a href="" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Stimulus</code>(<strong><code>start</code></strong>)</p>
 </blockquote>
 <p>Stimulus object containing information about it's presentation.</p>
+<ul>
+<li>start_time : a datetime object)</li>
+<li>stop_time : a datetime object)</li>
+<li>parameters : Parameters extracted from the QDSpy</li>
+<li>md5 : The md5 hash of that compiled version of the stimulus</li>
+<li>name : The name of the stimulus </li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To read QDSpy logs of your experiment, simply provide the folder containing the log you want to read to <a href="/theonerig/synchro.extracting#get_QDSpy_logs"><code>get_QDSpy_logs</code></a></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">logs</span> <span class="o">=</span> <span class="n">get_QDSpy_logs</span><span class="p">(</span><span class="s2">&quot;./files/basic_synchro&quot;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>flickering_bars_pr WARNING dt of frame #15864 was 50.315 m
+flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>It returns a list fo the QDSpy logs. Stimuli are contained in a list inside each log:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">logs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stimuli</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[NoName                   0a3053a663e357056b5b3c55856f8c88 at 2020-03-31 16:57:19,
+ set_background           3e93aba4e4b7bee28aaeb6c6294d9dfe at 2020-03-31 17:08:54,
+ checkerboard             eed21bda540934a428e93897908d049e at 2020-03-31 17:09:26,
+ chirp_am                 31ca901daf66fcc4a832ed489d37de31 at 2020-03-31 17:24:33,
+ chirp_freq_epoch         89c7c36d0071f4f4bef2643086ae9b95 at 2020-03-31 17:27:45,
+ flickering_bars_pr       0049591cdf7aa379a458230e84cc3eec at 2020-03-31 17:30:25,
+ fullfield_flicker        1424ca0ff1e33a87d9072a8dd42a628a at 2020-03-31 17:45:32,
+ moving_gratings          4e9001c1674d1851e7748b37bd1b81a4 at 2020-03-31 17:50:36]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The stimuli objects contains informations on how their display went:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">stim</span> <span class="o">=</span> <span class="n">logs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stimuli</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">stim</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">stim</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span> <span class="n">stim</span><span class="o">.</span><span class="n">frame_delay</span><span class="p">,</span> <span class="n">stim</span><span class="o">.</span><span class="n">md5</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>flickering_bars_pr 2020-03-31 17:30:25 [(15864, 50.315), (19477, 137.235)] 0049591cdf7aa379a458230e84cc3eec
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="unpack_stim_npy" class="doc_header"><code>unpack_stim_npy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/extracting.py#L132" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>unpack_stim_npy</code>(<strong><code>npy_dir</code></strong>, <strong><code>md5_hash</code></strong>)</p>
+</blockquote>
+<p>Find the stimuli of a given hash key in the npy stimulus folder. The stimuli are in a compressed version
+comprising three files. inten for the stimulus values on the screen, marker for the values of the marker
+read by a photodiode to get the stimulus timing during a record, and an optional shader that is used to
+specify informations about a shader when used, like for the moving gratings.</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>To unpack the stimulus values, provide the folder of the numpy arrays and the hash of the stimulus:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">unpacked</span> <span class="o">=</span> <span class="n">unpack_stim_npy</span><span class="p">(</span><span class="s2">&quot;./files/basic_synchro/stimulus_data&quot;</span><span class="p">,</span> <span class="s2">&quot;eed21bda540934a428e93897908d049e&quot;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Unpacked is a tuple, where the first element is the intensity of shape (n_frames, n_colors, y, x)</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">unpacked</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(54039, 1, 18, 32)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The second element of the tuple repesents the marker values for the timing. QDSpy defaults are zero and ones, but I used custom red squares taking intensities [50,100,150,200,250] to time with five different signals</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">unpacked</span><span class="p">[</span><span class="mi">1</span><span class="p">][:</span><span class="mi">50</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([0., 0., 0., 0., 0., 0., 4., 0., 4., 4., 4., 0., 4., 0., 4., 4., 4.,
+       0., 4., 0., 4., 0., 0., 0., 0., 0., 0., 4., 0., 1., 2., 3., 4., 0.,
+       1., 2., 3., 4., 0., 1., 2., 3., 4., 0., 1., 2., 3., 4., 0., 1.])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Each stimulus is also starting with a barcode, of the form:</p>
+<p>0 0 0 0 0 0 4 0 4*[1-4] 0 4*[1-4] 0 4*[1-4] 0 4*[1-4] 0 4 0 0 0 0 0 0</p>
+<p>and ends with 0 0 0 0 0 0</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="extract_spyking_circus_results" class="doc_header"><code>extract_spyking_circus_results</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/extracting.py#L171" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>extract_spyking_circus_results</code>(<strong><code>dir_</code></strong>, <strong><code>record_basename</code></strong>)</p>
+</blockquote>
+<p>Extract the good cells of a record. Overlap with phy_results_dict.</p>
 
 </div>
 
@@ -113,8 +421,10 @@ summary: "summary"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="unpack_stim_npy" class="doc_header"><code>unpack_stim_npy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/extracting.py#L143" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>unpack_stim_npy</code>(<strong><code>npy_dir</code></strong>, <strong><code>md5_hash</code></strong>)</p>
+<h4 id="extract_best_pupil" class="doc_header"><code>extract_best_pupil</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/extracting.py#L189" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>extract_best_pupil</code>(<strong><code>fn</code></strong>)</p>
 </blockquote>
+<p>From results of MaskRCNN, go over all or None pupil detected and select the best pupil.
+Each pupil returned is (x,y,width,height,angle,probability)</p>
 
 </div>
 
@@ -136,51 +446,9 @@ summary: "summary"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="extract_spyking_circus_results" class="doc_header"><code>extract_spyking_circus_results</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/extracting.py#L167" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>extract_spyking_circus_results</code>(<strong><code>dir_</code></strong>, <strong><code>record_basename</code></strong>)</p>
+<h4 id="stack_len_extraction" class="doc_header"><code>stack_len_extraction</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/extracting.py#L206" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stack_len_extraction</code>(<strong><code>stack_info_dir</code></strong>)</p>
 </blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="extract_best_pupil" class="doc_header"><code>extract_best_pupil</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/extracting.py#L184" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>extract_best_pupil</code>(<strong><code>fn</code></strong>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="stack_len_extraction" class="doc_header"><code>stack_len_extraction</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/extracting.py#L198" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stack_len_extraction</code>(<strong><code>stack_info_dir</code></strong>)</p>
-</blockquote>
+<p>Extract from ImageJ macro directives the size of the stacks acquired.</p>
 
 </div>
 

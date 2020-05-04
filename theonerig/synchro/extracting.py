@@ -14,14 +14,20 @@ from .io import *
 from ..utils import *
 
 def get_QDSpy_logs(log_dir):
+    """Factory function to generate QDSpy_log objects from all the QDSpy logs of the folder `log_dir`"""
     log_names = glob.glob(os.path.join(log_dir,'[0-9]*.log'))
-#     log_names = [os.path.basename(log_name) for log_name in log_names]
     qdspy_logs = [QDSpy_log(log_name) for log_name in log_names]
     for qdspy_log in qdspy_logs:
         qdspy_log.find_stimuli()
     return qdspy_logs
 
 class QDSpy_log:
+    """Class defining a QDSpy log.
+    It reads the log it represent and extract the stimuli information from it:
+      - Start and end time
+      - Parameters like the md5 key
+      - Frame delays
+    """
     def __init__(self, log_path):
         self.log_path = log_path
         self.stimuli = []
@@ -40,15 +46,7 @@ class QDSpy_log:
         return data_dict
 
     def _extract_time(self,data_line):
-        line = '%s' % data_line
-        year = int(line[0:4])
-        month = int(line[4:6])
-        day = int(line[6:8])
-        hour =int(line[9:11])
-        minute = int(line[11:13])
-        second = int(line[13:15])
-        result = datetime.datetime(year,month,day,hour,minute,second)
-        return result
+        return datetime.datetime.strptime(data_line.split()[0], '%Y%m%d_%H%M%S')
 
     def _extract_delay(self,data_line):
         ind = data_line.find('#')
@@ -101,32 +99,21 @@ class QDSpy_log:
 
 class Stimulus:
     """Stimulus object containing information about it's presentation.
+        - start_time : a datetime object)
+        - stop_time : a datetime object)
+        - parameters : Parameters extracted from the QDSpy
+        - md5 : The md5 hash of that compiled version of the stimulus
+        - name : The name of the stimulus
     """
     def __init__(self,start):
         self.start_time = start
         self.stop_time = None
         self.parameters = {}
-        self.frame_delay = []
+        self.md5 = None
         self.name = "NoName"
 
-        self.is_recorded = False
-        self.non_matching = False
+        self.frame_delay = []
         self.is_aborted = False
-
-        self.md5 = None
-        #self.compiled_id = None  # ! This is not a reliable value after storage if DB change
-        self.barcode = None
-
-        self.first_frame_idx = None
-
-        self.intensity = None
-        self.marker    = None
-        self.shader    = None
-        self.theor_intensity = None
-        self.theor_marker    = None
-        self.theor_shader    = None
-
-        self.frame_error_idx = [] #The errors detected by comparing the signals
 
     def set_parameters(self, parameters):
         self.parameters.update(parameters)
@@ -143,15 +130,30 @@ class Stimulus:
 
 # Cell
 def unpack_stim_npy(npy_dir, md5_hash):
-    inten  = np.load(glob.glob(os.path.join(npy_dir, "*_intensities_"+md5_hash+".npy"))[0])
-    marker = np.load(glob.glob(os.path.join(npy_dir, "*_marker_"+md5_hash+".npy"))[0])
+    """Find the stimuli of a given hash key in the npy stimulus folder. The stimuli are in a compressed version
+    comprising three files. inten for the stimulus values on the screen, marker for the values of the marker
+    read by a photodiode to get the stimulus timing during a record, and an optional shader that is used to
+    specify informations about a shader when used, like for the moving gratings."""
 
-    tmp = glob.glob(os.path.join(npy_dir, "*_shader_"+md5_hash+".npy"))
+    #Stimuli can be either npy or npz (useful when working remotely)
+    def find_file(ftype):
+        flist = glob.glob(os.path.join(npy_dir, "*_"+ftype+"_"+md5_hash+".npy"))
+        if len(flist)==0:
+            flist = glob.glob(os.path.join(npy_dir, "*_"+ftype+"_"+md5_hash+".npz"))
+            res = np.load(flist[0])["arr_0"]
+        else:
+            res = np.load(flist[0])
+        return res
+
+    inten  = find_file("intensities")
+    marker = find_file("marker")
+
     shader, unpack_shader = None, None
-    if len(tmp)!=0:
-        shader        = np.load(tmp[0])
+    if len(glob.glob(os.path.join(npy_dir, "*_shader_"+md5_hash+".np*")))!=0:
+        marker        = find_file("shader")
         unpack_shader = np.empty((np.sum(marker[:,0]), *shader.shape[1:]))
 
+    #The latter unpacks the arrays
     unpack_inten  = np.empty((np.sum(marker[:,0]), *inten.shape[1:]))
     unpack_marker = np.empty(np.sum(marker[:,0]))
 
@@ -167,6 +169,7 @@ def unpack_stim_npy(npy_dir, md5_hash):
 
 # Cell
 def extract_spyking_circus_results(dir_, record_basename):
+    """Extract the good cells of a record. Overlap with phy_results_dict."""
     phy_dir  = os.path.join(dir_,record_basename+"/"+record_basename+".GUI")
     phy_dict = phy_results_dict(phy_dir)
 
@@ -184,6 +187,8 @@ def extract_spyking_circus_results(dir_, record_basename):
 
 # Cell
 def extract_best_pupil(fn):
+    """From results of MaskRCNN, go over all or None pupil detected and select the best pupil.
+    Each pupil returned is (x,y,width,height,angle,probability)"""
     pupil = np.load(fn)
     filtered_pupil = np.empty((len(pupil), 6))
     for i, detected in enumerate(pupil):
@@ -197,7 +202,9 @@ def extract_best_pupil(fn):
             filtered_pupil[i] = np.array([0,0,0,0,0,0])
     return filtered_pupil
 
+# Cell
 def stack_len_extraction(stack_info_dir):
+    """Extract from ImageJ macro directives the size of the stacks acquired."""
     ptrn_nFrame = r".*number=(\d*) .*"
     l_epochs = []
     for fn in glob.glob(os.path.join(stack_info_dir, "*.txt")):

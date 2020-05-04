@@ -2,6 +2,7 @@
   "theonerig": {
     "Overview": "/",
     "Title": "/testdata",
-    "Utils": "/utils"
+    "Utils": "/utils",
+    "Synchro.extracting": "/synchro.extracting"
   }
 }

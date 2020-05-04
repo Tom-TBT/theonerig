@@ -8,7 +8,7 @@ import pickle
 from os.path import join
 import matplotlib.pyplot as plt
 
-from .core import *
+from .core import import_record
 
 
 def load_vivo_2p(testdata_dir):
