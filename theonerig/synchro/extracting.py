@@ -95,6 +95,8 @@ class QDSpy_log:
             #            print("Probe center not implemented yet")
                 if "WARNING" in line and "dt of frame" and stimulus_ON:
                     curr_stim.frame_delay.append(self._extract_delay(line))
+                    if curr_stim.frame_delay[-1][1] > 2000/60: #if longer than 2 frames could be bad
+                        print(curr_stim.name, " ".join(line.split()[1:])[:-1])
         return self.stimuli
 
 class Stimulus:
