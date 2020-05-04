@@ -12,9 +12,7 @@ from .core import *
 
 
 def load_vivo_2p(testdata_dir):
-    """Quick function to get all test data. For a convenient
-    usage, use the function as such:
-        locals().update(load_vivo_2p())
+    """Use as locals().update(load_vivo_2p()) to load test calcium data (will change soon)
     """
     vivo_2p_dir = testdata_dir
     reM = import_record(join(vivo_2p_dir, "record_master.h5"))
