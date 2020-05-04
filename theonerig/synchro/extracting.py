@@ -50,7 +50,7 @@ class QDSpy_log:
         result = datetime.datetime(year,month,day,hour,minute,second)
         return result
 
-    def _extract_dropped(self,data_line):
+    def _extract_delay(self,data_line):
         ind = data_line.find('#')
         index_frame = int(data_line[ind+1:data_line.find(' ',ind)])
         ind = data_line.find('was')
@@ -94,7 +94,7 @@ class QDSpy_log:
     #                elif 'probeX' in data_juice.keys():
             #            print("Probe center not implemented yet")
                 if "WARNING" in line and "dt of frame" and stimulus_ON:
-                    curr_stim.frame_drop.append(self._extract_dropped(line))
+                    curr_stim.frame_delay.append(self._extract_delay(line))
         return self.stimuli
 
 class Stimulus:
@@ -104,7 +104,7 @@ class Stimulus:
         self.start_time = start
         self.stop_time = None
         self.parameters = {}
-        self.frame_drop = []
+        self.frame_delay = []
         self.name = "NoName"
 
         self.is_recorded = False

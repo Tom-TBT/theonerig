@@ -10,6 +10,7 @@ import numpy as np
 import datetime
 import glob
 import os
+from scipy import signal
 
 # Cell
 def get_thresholds(data):
