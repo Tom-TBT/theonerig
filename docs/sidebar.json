@@ -1,8 +1,9 @@
 {
   "theonerig": {
     "Overview": "/",
-    "Title": "/testdata",
+    "Core": "/core",
     "Utils": "/utils",
+    "Title": "/testdata",
     "Synchro.io": "/synchro.io",
     "Synchro.extracting": "/synchro.extracting",
     "Synchro.processing": "/synchro.processing"

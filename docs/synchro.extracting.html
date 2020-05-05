@@ -256,6 +256,50 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">glob</span><span class="o">,</span> <span class="nn">os</span>
+<span class="n">npy_dir</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;E:\tmp\stimuli_npy&quot;</span>
+<span class="n">md5_hash</span> <span class="o">=</span> <span class="s2">&quot;43a9484a068b5059f3a89b4014eb99be&quot;</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">npy_dir</span><span class="p">,</span> <span class="s2">&quot;*_shader_&quot;</span><span class="o">+</span><span class="n">md5_hash</span><span class="o">+</span><span class="s2">&quot;.np*&quot;</span><span class="p">)))</span><span class="o">&gt;</span><span class="mi">0</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>True</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
 <div class="cell border-box-sizing code_cell rendered">

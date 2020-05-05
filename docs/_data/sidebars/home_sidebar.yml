@@ -10,11 +10,14 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: Title
-      url: /testdata
+      title: Core
+      url: /core
     - output: web,pdf
       title: Utils
       url: /utils
+    - output: web,pdf
+      title: Title
+      url: /testdata
     - output: web,pdf
       title: Synchro.io
       url: /synchro.io
