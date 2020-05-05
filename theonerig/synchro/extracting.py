@@ -149,8 +149,8 @@ def unpack_stim_npy(npy_dir, md5_hash):
     marker = find_file("marker")
 
     shader, unpack_shader = None, None
-    if len(glob.glob(os.path.join(npy_dir, "*_shader_"+md5_hash+".np*")))!=0:
-        marker        = find_file("shader")
+    if len(glob.glob(os.path.join(npy_dir, "*_shader_"+md5_hash+".np*")))>0:
+        shader        = find_file("shader")
         unpack_shader = np.empty((np.sum(marker[:,0]), *shader.shape[1:]))
 
     #The latter unpacks the arrays
