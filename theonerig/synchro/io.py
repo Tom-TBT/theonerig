@@ -1261,6 +1261,8 @@ class NumpyFile(RawBinaryFile):
 
 # Cell
 def load_all_data(datafile:DataFile):
+    """Read all the data contained by a file. For rhd and hdf5, correspond to the ephy channels. To read the ADC
+    data, see `load_all_data_adc`"""
     datafile.open()
     if isinstance(datafile, RHDFile):
         chunk_size = 1800960
@@ -1278,6 +1280,8 @@ def load_all_data(datafile:DataFile):
     return data
 
 def load_all_data_adc(datafile:DataFile):
+    """Read all the data contained by a file. For rhd and hdf5, correspond to the adc channels. To read the ephy
+    data, see `load_all_data`"""
     datafile.open()
     if isinstance(datafile, RHDFile):
         chunk_size = 1800960
@@ -1297,6 +1301,8 @@ def load_all_data_adc(datafile:DataFile):
     return data
 
 def export_adc_raw(datafile:DataFile):
+    """Exports a datafile adc channel to a single raw binary file. Useful to reduce disk usage after that
+    spike sorting is done."""
     data = load_all_data_adc(datafile)
     raw_fn = os.path.splitext(datafile.file_name)[0]+".dat"
     param_d = {'sampling_rate': datafile.sampling_rate,
@@ -1310,6 +1316,7 @@ def export_adc_raw(datafile:DataFile):
     raw_file.close()
 
 def load_adc_raw(filepath, sampling_rate):
+    """Loads adc raw data, in the format exported by `export_adc_raw`"""
     param_d = {'sampling_rate': sampling_rate,
                'data_dtype': 'float64',
                'gain': 1,
@@ -1319,6 +1326,7 @@ def load_adc_raw(filepath, sampling_rate):
     return load_all_data_adc(raw_file)
 
 def load_sync_raw(filepath, sampling_rate=10000):
+    """Loads the sync files made by labview for Asari Lab 2P setup"""
     param_d = {'sampling_rate': sampling_rate,
                'data_dtype': '>d',
                'gain': 1,

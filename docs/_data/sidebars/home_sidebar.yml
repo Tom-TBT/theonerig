@@ -16,8 +16,14 @@ entries:
       title: Utils
       url: /utils
     - output: web,pdf
+      title: Synchro.io
+      url: /synchro.io
+    - output: web,pdf
       title: Synchro.extracting
       url: /synchro.extracting
+    - output: web,pdf
+      title: Synchro.processing
+      url: /synchro.processing
     output: web
     title: theonerig
   output: web

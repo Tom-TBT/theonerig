@@ -3,6 +3,8 @@
     "Overview": "/",
     "Title": "/testdata",
     "Utils": "/utils",
-    "Synchro.extracting": "/synchro.extracting"
+    "Synchro.io": "/synchro.io",
+    "Synchro.extracting": "/synchro.extracting",
+    "Synchro.processing": "/synchro.processing"
   }
 }
