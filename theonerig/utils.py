@@ -50,7 +50,7 @@ def align_sync_timepoints(timepoints:DataChunk, signals:DataChunk,
     `ref_signals`. `ref_timepoints` and `ref_signals` are potentially extended and returned
     Returns a DataChunk of the aligned timepoints"""
     shift_left = ((np.where(ref_signals)[0][0] + ref_signals.idx)
-                  - (np.where(signals)[0][0]) + signals.idx)
+                  - (np.where(signals)[0][0] + signals.idx))
     shift_right   = len(ref_timepoints) - (len(timepoints) + shift_left)
 
     spb     = np.mean(timepoints[1:]-timepoints[:-1]) #spf: sample_per_bin
