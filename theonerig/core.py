@@ -33,6 +33,7 @@ class DataChunk(np.ndarray):
         self.fill  = getattr(obj, 'fill', 0)
         self.attrs = getattr(obj, 'attrs', {})
 
+
     @property
     def range(self):
         return range(self.idx, self.idx + len(self))

@@ -76,16 +76,16 @@ def align_sync_timepoints(timepoints:DataChunk, signals:DataChunk,
         ref_signals.idx = ref_signals.idx + len(left_timepoints_ref)
 
     if shift_right > 0: #the ref ended after, need to extend the other
-        init  = timepoints[-1]-spb
+        init  = timepoints[-1]+spb
         right_timepoints = np.arange(init ,
-                                    init-(spb*shift_right+1),
-                                    -spb)[:shift_right][::-1].astype(int)
+                                    init+(spb*shift_right+1),
+                                    spb)[:shift_right].astype(int)
     else:
         shift_right = abs(shift_right)
-        init  = ref_timepoints[-1]-spb
+        init  = ref_timepoints[-1]+spb_ref
         right_timepoints_ref = np.arange(init ,
-                                    init-(spb_ref*shift_right+1),
-                                    -spb_ref)[:shift_right][::-1].astype(int)
+                                    init+(spb_ref*shift_right+1),
+                                    spb_ref)[:shift_right].astype(int)
 
     timepoint    = DataChunk(data=np.concatenate((left_timepoints,
                                      timepoints,
