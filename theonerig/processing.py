@@ -24,7 +24,7 @@ from .modelling import *
 # Cell
 def eyetrack_stim_inten(stim_inten, eye_track,
                         upsampling=2,
-                        eye_calib=[[94 ,18], [ 8, 59]],
+                        eye_calib=[[94 ,8], [ 18, 59]],
                         box_w=None, box_h=None, stim_axis="x"):
     """From stimulus data and eye tracking, returns a corrected and upsampled stimulus data."""
     eye_x, eye_y = eye_track[:,0], eye_track[:,1]
