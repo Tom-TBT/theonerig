@@ -176,7 +176,7 @@ def sinexp_gauss(x, sigma, x0, amp, phi, freq, exp):
 def sinexp_sigm(x, sigma, x0, y0, amp, phi, freq, exp):
     return sin_exponent(x, amp, phi, freq, exp) * sigmoid(x, sigma, 1, x0, y0)
 
-def fit_chirp_am(cell_mean, start=390, stop=960, freq=1.5):
+def fit_chirp_am(cell_mean, start=420, stop=960, freq=1.5):
 
     to_fit = cell_mean[start:stop]
     t = np.linspace(0, len(to_fit)/60, len(to_fit), endpoint=False)
@@ -196,7 +196,7 @@ def fit_chirp_am(cell_mean, start=390, stop=960, freq=1.5):
         best_cov = np.zeros((4,4)) + np.inf
         return best_fit, best_cov
 
-    for exp in range(4,34,2): #Fitting the data with different sin exponents, to narrow the fit
+    for exp in np.exp2(range(2,10)): #Fitting the data with different sin exponents, to narrow the fit
         try:
             sinexp_sigm_part = partial(sinexp_sigm, phi=phi, freq=freq, exp=exp)
             fit, cov = sp.optimize.curve_fit(sinexp_sigm_part, t, to_fit, bounds=[(-np.inf, -np.inf, 0,           0),
@@ -233,7 +233,7 @@ def fit_chirp_freq_epoch(cell_mean, freqs=[1.875,3.75,7.5,15,30], durations=[2,2
         best_fit = None
         best_cov = np.zeros((2,2)) + np.inf
         tmp_diff = np.inf
-        for exp in range(2,34,2): #Fitting the data with different cos exponents, to narrow the fit
+        for exp in np.exp2(range(1,10)): #Fitting the data with different cos exponents, to narrow the fit
             try:
                 sin_exponent_part = partial(sin_exponent, freq=freq, exp=exp)
                 fit, cov = sp.optimize.curve_fit(sin_exponent_part, t, to_fit, bounds=[(0,          0),
