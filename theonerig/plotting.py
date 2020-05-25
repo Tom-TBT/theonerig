@@ -203,10 +203,10 @@ def plot_chirp(ax, stim_inten, spike_bins, smooth=True):
     ax.imshow([stim_inten.reshape(n_repeats,-1)[0]], aspect='auto', cmap="gray", extent=(0,len_/60,(max_val-min_val)*6/5,max_val))
 
 # Cell
-def plot_chirpam_fit(cell_mean, fit_l, start=360, end=960):
+def plot_chirpam_fit(cell_mean, fit, start=390, end=960):
     plt.figure()
     plt.plot(np.linspace(0, len(cell_mean)/60, len(cell_mean), endpoint=False), cell_mean)
-    plt.plot(np.linspace(start, end, end-start), sinexp_sigm(np.linspace(0, end-start, end-start), *fit))
+    plt.plot(np.linspace(start/60, end/60, end-start, endpoint=False), sinexp_sigm(np.linspace(0, (end-start)/60, end-start, endpoint=False), *fit))
 
 def plot_chirpfm_fit(cell_mean, fit_l, freqs=[1.875,3.75,7.5,15,30], durations=[2,2,2,1,1], start=360):
     plt.figure()
