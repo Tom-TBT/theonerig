@@ -2,10 +2,10 @@
 
 __all__ = ['DEFAULT_COLORS', 'plot_2d_sta', 'plot_cross_correlation', 'plot_2d_fit', 'plot_ds_wheel',
            'plot_dark_white_response', 'plot_fl_bars', 'plot_t_sta', 'plot_chirp', 'plot_chirpam_fit',
-           'plot_chirpfm_fit', 'plot_spike_template', 'plot_autocorrelogram', 'plot_spike_amplitudes',
-           'plot_cell_spatial', 'plot_calcium_trace', 'plot_stim_epochs_to_spikes', 'plot_stim_epochs_to_calcium',
-           'plot_stim_recap_table', 'plot_composed_A_masks', 'plot_sta_positions', 'configure_pyplot_recap',
-           'plot_recap_vivo_ephy', 'plot_recap_vivo_calcium']
+           'plot_chirp_freq_epoch_fit', 'plot_spike_template', 'plot_spike_template_MEA', 'plot_autocorrelogram',
+           'plot_spike_amplitudes', 'plot_cell_spatial', 'plot_calcium_trace', 'plot_stim_epochs_to_spikes',
+           'plot_stim_epochs_to_calcium', 'plot_stim_recap_table', 'plot_composed_A_masks', 'plot_sta_positions',
+           'configure_pyplot_recap', 'plot_recap_vivo_ephy', 'plot_recap_vivo_calcium']
 
 # Cell
 import matplotlib.pyplot as plt
@@ -203,12 +203,12 @@ def plot_chirp(ax, stim_inten, spike_bins, smooth=True):
     ax.imshow([stim_inten.reshape(n_repeats,-1)[0]], aspect='auto', cmap="gray", extent=(0,len_/60,(max_val-min_val)*6/5,max_val))
 
 # Cell
-def plot_chirpam_fit(cell_mean, fit, start=390, end=960):
+def plot_chirpam_fit(cell_mean, fit, start=390, stop=960):
     plt.figure()
     plt.plot(np.linspace(0, len(cell_mean)/60, len(cell_mean), endpoint=False), cell_mean)
     plt.plot(np.linspace(start/60, end/60, end-start, endpoint=False), sinexp_sigm(np.linspace(0, (end-start)/60, end-start, endpoint=False), *fit))
 
-def plot_chirpfm_fit(cell_mean, fit_l, freqs=[1.875,3.75,7.5,15,30], durations=[2,2,2,1,1], start=360):
+def plot_chirp_freq_epoch_fit(cell_mean, fit_l, freqs=[1.875,3.75,7.5,15,30], durations=[2,2,2,1,1], start=360):
     plt.figure()
     plt.plot(np.linspace(0, len(cell_mean)/60, len(cell_mean), endpoint=False), cell_mean)
     len_fits = [int(dur*freq)*int(60/freq) for dur,freq in zip(durations, freqs)]
@@ -232,8 +232,8 @@ def plot_spike_template(ax, cluster_composition, templates, shanks_idx, channel_
     mask_trace = np.arange(templates.shape[1]//2-10,
                            templates.shape[1]//2+(n_points-10))
 
-    template_pos = np.where(np.abs(templates[cluster_composition[0]])
-                            == np.max(np.abs(templates[cluster_composition[0]])))[1][0]
+    template_pos = np.where(np.abs(templates[tmp])
+                            == np.max(np.abs(templates[tmp])))[1][0]
     template_shank = np.where(shanks_idx==template_pos)[0][0]
     selected_channels = shanks_idx[template_shank]
     selected_channels = selected_channels[selected_channels!=-1] #Removing the disabled channels
@@ -245,6 +245,24 @@ def plot_spike_template(ax, cluster_composition, templates, shanks_idx, channel_
             color = DEFAULT_COLORS[j%len(DEFAULT_COLORS)]
             ax.plot(np.arange(n_points)+pos[0]-min_x, shank_templates[cell,mask_trace,i]*4+pos[1], c=color)
     ax.set_title("Shank "+str(template_shank+1))
+
+def plot_spike_template_MEA(ax, cluster_composition, templates, channel_positions):
+    tmp = cluster_composition[0]
+    n_points = 25
+    mask_trace = np.arange(templates.shape[1]//2-10,
+                           templates.shape[1]//2+(n_points-10))
+
+    template_pos = channel_positions[np.where(np.abs(templates[tmp]) == np.max(np.abs(templates[tmp])))[1][0]]
+    selected_channels = np.where(np.linalg.norm(channel_positions - template_pos, axis=1) < 100)[0]
+
+    for i, pos in enumerate(channel_positions[selected_channels]):
+        for j, cell in enumerate(cluster_composition):
+            color = DEFAULT_COLORS[j%len(DEFAULT_COLORS)]
+            ax.plot(np.arange(n_points)+pos[0], templates[cell, mask_trace,i]*4+pos[1], c=color)
+
+    ax.set_ylim(template_pos[1]-150, template_pos[1]+150)
+    ax.set_xlim(template_pos[0]-150, template_pos[0]+150)
+    ax.set_title("X/Y pos: "+str(pos[0])+"/"+str(pos[1]))
 
 def plot_autocorrelogram(ax, cluster, spike_times, spike_clusters, bin_ms=.001, sampling_rate=30000, tails=30):
     cluster_mask = spike_clusters==cluster
