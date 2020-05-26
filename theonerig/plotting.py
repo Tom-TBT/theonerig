@@ -5,7 +5,7 @@ __all__ = ['DEFAULT_COLORS', 'plot_2d_sta', 'plot_cross_correlation', 'plot_2d_f
            'plot_chirp_freq_epoch_fit', 'plot_spike_template', 'plot_spike_template_MEA', 'plot_autocorrelogram',
            'plot_spike_amplitudes', 'plot_cell_spatial', 'plot_calcium_trace', 'plot_stim_epochs_to_spikes',
            'plot_stim_epochs_to_calcium', 'plot_stim_recap_table', 'plot_composed_A_masks', 'plot_sta_positions',
-           'configure_pyplot_recap', 'plot_recap_vivo_ephy', 'plot_recap_vivo_calcium']
+           'configure_pyplot_recap', 'plot_recap_vivo_ephy', 'plot_recap_vivo_calcium', 'plot_recap_vitro_ephy']
 
 # Cell
 import matplotlib.pyplot as plt
@@ -655,6 +655,128 @@ def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, df_stim, cel
             plt.close()
 
             print("Cell n°",cell_idx,"done")
+
+    sns.set()
+    plt.rcdefaults()
+    print()
+
+
+# Cell
+def plot_recap_vitro_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_db_ids=None,
+                         checkerboard=None, fullfield_fl=None, fl_bars=None, chirp_am=None,
+                         chirp_fm=None, moving_gratings=None, export_path="./recap_plot.pdf"):
+    """Plot the recapitulating form of in vitro electrophy records
+    title_dict -> A dictionnary containing the str info for the title: keys(condition, date, record_name, record_id)
+    reM -> The record master object of the record
+    phy_dict -> A dictionnary containing the matrix obtained from phy (see utils.phy_results_dict())
+    cluster_ids -> A list of the cluster id used by phy corresponding to the good cells analysed
+    cell_db_ids -> A list of the database ids of the cells corresponding to cluster_ids
+    checkerboard -> A matrix of STA of cells to the checkerboard stimulus of shape (n_cell, 16, height, width)
+    fullfield_fl -> A matrix of STA of cells to the fullfield_flicker stimulus of shape (n_cell, 16)
+    fl_bars -> A matrix of STA of cells to the flickering_bars stimulus of shape (n_cell, 16, height, width)
+    chirp_am -> A tuple of the chirp_am obtained from a pipe, where [0] is the stimulus and [1] the cells response
+    chirp_fm -> Same as chirp_am but for a chirp_fm stimulus
+    moving_gratings -> The dict of response obtained from utils.group_direction_response
+    export_path -> The path for a pdf file to be exported. If None, the plot is displayed.
+    """
+    print("Generating the recap plot")
+    configure_pyplot_recap()
+
+    cond = title_dict["condition"]
+    date = title_dict["date"]
+    record_name = title_dict["record_name"]
+    record_id = title_dict["record_id"]
+
+    if cell_db_ids is None:
+        cell_db_ids = [-1]*len(cluster_ids)
+
+    with PdfPages(export_path) as pp:
+
+        #Plotting Cover
+        fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
+        gs  = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
+        ax_rem  = fig.add_subplot(gs[:10,2:-1])
+        reM.plot(ax_rem)
+
+        ax_stim_recap  = fig.add_subplot(gs[11:16,:])
+        plot_stim_recap_table(ax_stim_recap, df_stim)
+        suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id)])
+        plt.suptitle(suptitle)
+
+        pp.savefig()
+        plt.close()
+
+        for cluster, cell_id in zip(cluster_ids, cell_db_ids):
+            reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][cluster]#np.where(cluster==cluster_ids)[0][0]
+
+            fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
+            suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id),
+                                   "Cluster n°"+str(cluster), "Cell id n°"+str(cell_id)])
+            plt.suptitle(suptitle)
+
+            mask_cluster = phy_dict["spike_clusters"]==cluster
+            cluster_composition = np.unique(phy_dict["spike_templates"][mask_cluster])
+
+            gs = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
+
+            #Template on electrodes
+            cell_loc_ax = fig.add_subplot(gs[0:4,0:4])
+            plot_spike_template_MEA(cell_loc_ax, cluster_composition, phy_dict["templates"], phy_dict["channel_positions"])
+
+            #Autocorrelogram
+            autocorr_ax = fig.add_subplot(gs[0:4,5:9])
+            plot_autocorrelogram(autocorr_ax, cluster, phy_dict["spike_times"], phy_dict["spike_clusters"],
+                                 bin_ms=.001, sampling_rate=30000, tails=30)
+
+            #Spike amplitude across time
+            sp_amp_ax = fig.add_subplot(gs[0:4,10:])
+            plot_spike_amplitudes(sp_amp_ax, cluster, phy_dict["spike_templates"], phy_dict["spike_clusters"],
+                                  phy_dict["spike_times"], phy_dict["amplitudes"])
+            plot_stim_epochs_to_spikes(sp_amp_ax, reM, y_pos=0.6)
+
+            #Checkerboard STA
+            if checkerboard is not None:
+                pval_checker = checkerboard[1][reM_cell_idx]
+                pval_checker = np.min(pval_checker[pval_checker!=0])
+                inner_grid = gridspec.GridSpecFromSubplotSpec(4, 4,
+                            subplot_spec=gs[5:12,0:12], wspace=.09, hspace=.13)
+                plot_2d_sta(checkerboard[0][reM_cell_idx], pval=pval_checker, grid=inner_grid)
+
+            #Fullfield flickering STA
+            if fullfield_fl is not None:
+                pval_fffl = fullfield_fl[1][reM_cell_idx]
+                pval_fffl = np.min(pval_fffl[pval_fffl!=0])
+                sp_amp_ax = fig.add_subplot(gs[5:12,13:])
+                plot_t_sta(sp_amp_ax, fullfield_fl[0][reM_cell_idx], pval=pval_fffl)
+
+            #Chirp_FM
+            if chirp_fm is not None:
+                chirpfm_ax = fig.add_subplot(gs[13:16,:])
+                plot_chirp(chirpfm_ax, chirp_fm[0], chirp_fm[1][:,reM_cell_idx])
+                chirpfm_ax.set_title("Chirp FM")
+
+            #Chirp_AM
+            if chirp_am is not None:
+                chirpam_ax = fig.add_subplot(gs[17:20,:])
+                plot_chirp(chirpam_ax, chirp_am[0], chirp_am[1][:,reM_cell_idx])
+                chirpam_ax.set_title("Chirp AM")
+
+            #Flickering bars
+            if fl_bars is not None:
+                pval_bars = fl_bars[1][reM_cell_idx]
+                pval_bars = np.min(pval_bars[pval_bars!=0])
+                fl_bars_ax = fig.add_subplot(gs[21:,:12])
+                plot_fl_bars(fl_bars_ax, fl_bars[0][reM_cell_idx], pval=pval_bars)
+
+            #Moving gratings
+            if moving_gratings is not None:
+                ds_ax = fig.add_subplot(gs[21:,13:], projection="polar")
+                plot_ds_wheel(ds_ax, moving_gratings, cell_idx=reM_cell_idx)
+
+            pp.savefig()
+            plt.close()
+
+            print("Cell cluster n°",cluster,"done")
 
     sns.set()
     plt.rcdefaults()
