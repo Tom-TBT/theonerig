@@ -464,7 +464,7 @@ def export_record(_path, record_master):
                 print("...Entering stream",key)
                 stream_ref = cntig_ref.create_group(key)
                 for datachunk in dc_list:
-                    print("......",str(datachunk.idx)+"->"+str(len(datachunk)))
+                    print("......",str(datachunk.idx)+"->"+str(datachunk.idx+len(datachunk)))
                     dset = stream_ref.create_dataset(str(datachunk.idx), data=np.array(datachunk), compression="gzip", compression_opts=4)
                     for attr_k, attr_v in datachunk.attrs.items():
                         dset.attrs[attr_k] = json.dumps(attr_v)
