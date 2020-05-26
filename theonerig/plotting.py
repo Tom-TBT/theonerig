@@ -191,7 +191,7 @@ def plot_chirp(ax, stim_inten, spike_bins, smooth=True):
                                           [str(i)]*len_,
                                           repeat_am)), columns=["timepoint","repeat","signal"])
         df = df.append(repeat_df, ignore_index=True)
-    g = sns.lineplot(x="timepoint", y="signal", data=df, ax=ax)
+    g = sns.lineplot(x="timepoint", y="signal", data=df, ax=ax, n_boot=20)
 #         trace = np.mean(trace, axis=0)
 #         if smooth:
 #             trace = np.convolve([.2]*3, trace, mode="same")
