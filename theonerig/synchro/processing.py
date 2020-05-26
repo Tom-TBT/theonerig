@@ -254,13 +254,17 @@ def error_frame_matches(signals, marker, range_):
         where_equal = [((np.where(marker[err_id-range_:err_id+(range_+1)] == signals[err_id])[0]) - range_) for err_id in error_frames]
     #filtering out the frames where no match was found
         tmp    = np.array([[wheq,err] for (wheq, err) in zip(where_equal, error_frames) if len(wheq)>0])
-        where_equal  = tmp[:,0]
-        error_frames = tmp[:,1]
+        if len(tmp)==0:
+            replacements = np.empty(shape=(0,), dtype=int)
+            error_frames = np.empty(shape=(0,), dtype=int)
+        else:
+            where_equal  = tmp[:,0]
+            error_frames = tmp[:,1]
 
-    #Choosing among the equal frame signals the one that is the closest
-        closest_equal = [wheq[(np.abs(wheq)).argmin()] for wheq in where_equal]
-        error_frames  = np.array(error_frames, dtype=int)
-        replacements  = error_frames + np.array(closest_equal, dtype=int)
+        #Choosing among the equal frame signals the one that is the closest
+            closest_equal = [wheq[(np.abs(wheq)).argmin()] for wheq in where_equal]
+            error_frames  = np.array(error_frames, dtype=int)
+            replacements  = error_frames + np.array(closest_equal, dtype=int)
     else:
         replacements = np.empty(shape=(0,), dtype=int)
         error_frames = np.empty(shape=(0,), dtype=int)
