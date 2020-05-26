@@ -81,6 +81,8 @@ class ContiguousRecord():
         self[self.SIGNALS] = signals
         self[self.MAIN_TP] = main_tp
 
+        self._slice = slice(0,self.length,1)
+
     def dataset_intersect(self, existing_datachunk:list, new_datachunk:DataChunk):
         range_new = set(new_datachunk.range)
         intersect = False
@@ -96,6 +98,25 @@ class ContiguousRecord():
             return [chunk.slice for chunk in self._data_dict[datachunk_name]]
         else:
             return []
+
+    def set_slice(self, slice_):
+        """Set the slice to restrict the size of the DataChunk returned"""
+        if slice_ is None:
+            self._slice = slice(0,self.length,1)
+        else:
+            start, stop, step = slice_.start, slice_.stop, slice_.step
+            if start is None:
+                start = 0
+            if stop is None:
+                stop = self.length
+            if step is None:
+                step = 1
+            if step!=1:
+                print("Step in slice is currently not supported.")
+                self._slice = slice(0,self.length,1)
+            else:
+                self._slice = slice(start,stop,step)
+
 
     def get_names_group(self, group_name:str) -> list:
         names = []
@@ -123,16 +144,24 @@ class ContiguousRecord():
         if isinstance(key, str):
             l_datachunk = self._data_dict[key]
             fill_value  = l_datachunk[0].fill
-            shape     = l_datachunk[0].shape
-#             full_sequence = np.full(shape=(self.length, *shape[1:]),
-#                                     fill_value=fill_value,
-#                                     dtype=l_datachunk[0].dtype)
-            full_sequence = DataChunk(np.zeros((self.length, *shape[1:]),
+            shape       = l_datachunk[0].shape
+
+            full_sequence = DataChunk(np.zeros((len(range(*self._slice.indices(self.length))), *shape[1:]),
                                                dtype=l_datachunk[0].dtype)+fill_value,
-                                      0,
+                                      self._slice.start if self._slice.start is not None else 0,
                                       fill_value)
             for datachunk in l_datachunk:
-                full_sequence[datachunk.slice] = datachunk.data
+                dc_slice = datachunk.slice
+                if dc_slice.start>=self._slice.stop or dc_slice.stop<=self._slice.start:
+                    continue
+
+                start = max(dc_slice.start, self._slice.start) #flooring to the maximum of both start
+                stop  = min(dc_slice.stop, self._slice.stop) # and capping to the min of both end
+
+                new_dc_slice  = slice(start-datachunk.idx, stop-datachunk.idx)
+                res_start = self._slice.start if self._slice.start is not None else 0
+                res_slice = slice(start-res_start, stop-res_start)
+                full_sequence[res_slice] = datachunk.data[new_dc_slice]
                 full_sequence.attrs.update(datachunk.attrs)
 
             return full_sequence
@@ -413,8 +442,10 @@ class Data_Pipe():
         if self._n < len(self):
             res = {}
             seq_idx, _slice = self._slices[self._n]
+            self.record_master[seq_idx].set_slice(_slice)
             for i, name in enumerate(self.data_names):
-                res[self.target_names[i]] = self.record_master[seq_idx][name][_slice]
+                res[self.target_names[i]] = self.record_master[seq_idx][name]#[_slice]
+            self.record_master[seq_idx].set_slice(None)
             self._n += 1
             return res
         else:
@@ -426,9 +457,11 @@ class Data_Pipe():
     def __getitem__(self, key):
         if isinstance(key, (int, np.integer)):
             seq_idx, _slice = self._slices[key]
+            self.record_master[seq_idx].set_slice(_slice)
             res = {}
             for i, name in enumerate(self.data_names):
-                res[self.target_names[i]] = self.record_master[seq_idx][name][_slice]
+                res[self.target_names[i]] = self.record_master[seq_idx][name]#[_slice]
+            self.record_master[seq_idx].set_slice(None)
             return res
         elif isinstance(key, slice):
             l_res = []
