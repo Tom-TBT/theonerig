@@ -191,7 +191,8 @@ def plot_chirp(ax, stim_inten, spike_bins, smooth=True):
                                           [str(i)]*len_,
                                           repeat_am)), columns=["timepoint","repeat","signal"])
         df = df.append(repeat_df, ignore_index=True)
-    g = sns.lineplot(x="timepoint", y="signal", data=df, ax=ax, n_boot=20)
+    g = sns.lineplot(x="timepoint", y="signal", data=df, ax=ax, n_boot=100) #Small n_boot to speed_up plotting
+                                                                            # (default n_boot=10000)
 #         trace = np.mean(trace, axis=0)
 #         if smooth:
 #             trace = np.convolve([.2]*3, trace, mode="same")
@@ -206,7 +207,7 @@ def plot_chirp(ax, stim_inten, spike_bins, smooth=True):
 def plot_chirpam_fit(cell_mean, fit, start=390, stop=960):
     plt.figure()
     plt.plot(np.linspace(0, len(cell_mean)/60, len(cell_mean), endpoint=False), cell_mean)
-    plt.plot(np.linspace(start/60, end/60, end-start, endpoint=False), sinexp_sigm(np.linspace(0, (end-start)/60, end-start, endpoint=False), *fit))
+    plt.plot(np.linspace(start/60, stop/60, stop-start, endpoint=False), sinexp_sigm(np.linspace(0, (stop-start)/60, stop-start, endpoint=False), *fit))
 
 def plot_chirp_freq_epoch_fit(cell_mean, fit_l, freqs=[1.875,3.75,7.5,15,30], durations=[2,2,2,1,1], start=360):
     plt.figure()
