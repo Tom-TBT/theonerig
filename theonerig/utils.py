@@ -4,7 +4,7 @@ __all__ = ['extend_sync_timepoints', 'align_sync_timepoints', 'resample_to_timep
            'flip_gratings', 'stim_to_dataChunk', 'spike_to_dataChunk', 'parse_stim_args', 'peak_sta_frame',
            'stim_inten_norm', 'twoP_dataChunks', 'img_2d_fit', 'fill_nan', 'group_direction_response',
            'group_chirp_bumps', 'limited_stim_ensemble', 'buszaki_shank_channels', 'phy_results_dict', 'format_pval',
-           'get_calcium_stack_lenghts', 'stim_recap_df', 'stim_recap_df_old']
+           'get_calcium_stack_lenghts', 'get_chirp_mean_corrected', 'stim_recap_df', 'stim_recap_df_old']
 
 # Cell
 import numpy as np
@@ -362,6 +362,37 @@ def get_calcium_stack_lenghts(folder):
             line = f.readline()
             record_lenghts.append(int(re.findall(pattern_nFrame, line)[0]))
     return record_lenghts
+
+# Cell
+def get_chirp_mean_corrected(stim_inten, spike_counts):
+    """Correct the stimulus shifts before averaging the spikes"""
+    def count_repl_in_range(fr_replaced, _range):
+        return sum([repl[0] in _range for repl in fr_replaced])
+
+    conv_res  = np.convolve(stim_inten[360:600].astype(float), stim_inten.astype(float), mode="full")
+    n_repeats = np.sum(conv_res.max()==conv_res)
+
+    signal_shifts     = stim_inten.attrs["signal_shifts"]
+    frame_replacement = stim_inten.attrs["frame_replacement"]
+
+    spike_count_corr = spike_counts.copy()
+    shift_cursor = 0
+    prev_del = np.zeros((1, spike_counts.shape[1]))
+    for shift, direction in signal_shifts:
+        if direction=="ins":
+            spike_count_corr[shift+1:] = spike_count_corr[shift:-1]
+            prev_del = spike_count_corr[-1:]
+        else:
+            spike_count_corr[shift-1:-1] = spike_count_corr[shift:]
+            spike_count_corr[-1:] = prev_del
+
+    len_epoch = len(stim_inten)//n_repeats
+    good_spike_counts = []
+    for i in range(n_repeats):
+        if count_repl_in_range(frame_replacement, range(len_epoch*i, len_epoch*(i+1)))>20:
+            continue
+        good_spike_counts.append(spike_count_corr[len_epoch*i:len_epoch*(i+1)])
+    return np.mean(good_spike_counts, axis=0)
 
 # Cell
 def stim_recap_df(reM):
