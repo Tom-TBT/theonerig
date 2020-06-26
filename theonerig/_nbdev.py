@@ -141,6 +141,9 @@ index = {"DataChunk": "00_core.ipynb",
          "shift_detection_NW": "12_synchro.processing.ipynb",
          "chop_stim_edges": "12_synchro.processing.ipynb",
          "detect_calcium_frames": "12_synchro.processing.ipynb",
+         "generate_positions": "13_leddome.ipynb",
+         "as_cartesian": "13_leddome.ipynb",
+         "as_spherical": "13_leddome.ipynb",
          "load_vivo_2p": "99_testdata.ipynb"}
 
 modules = ["core.py",
@@ -152,6 +155,7 @@ modules = ["core.py",
            "synchro/io.py",
            "synchro/extracting.py",
            "synchro/processing.py",
+           "leddome.py",
            "testdata.py"]
 
 doc_url = "https://Tom-TBT.github.io/theonerig/"
