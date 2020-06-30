@@ -43,7 +43,7 @@ def plot_2d_sta(sta, grid=None, pval=None):
         for i in range(grid_x):
             for j in range(grid_y):
                 ax = plt.subplot(grid[i*grid_y+j])#fig.add_subplot(grid[i])
-                ax.imshow(sta[i*grid_y+j], cmap='gray',vmin=-1, vmax=1)
+                ax.imshow(sta[i*grid_y+j], cmap='gray',vmin=-1, vmax=1, interpolation="nearest")
                 if i!=grid_x-1:
                     ax.set_xticks([])
                 if j != 0:
@@ -153,7 +153,7 @@ def plot_dark_white_response(ax, spike_bins):
 # Cell
 def plot_fl_bars(ax, sta, pval=None):
     time_axis = np.round(np.linspace(0,len(sta)/60,len(sta))[::-1]*(-1),3)
-    ax.imshow(sta, cmap='gray',vmin=-1, vmax=1, aspect="auto")
+    ax.imshow(sta, cmap='gray',vmin=-1, vmax=1, aspect="auto", interpolation="nearest")
     ax.set_yticks(np.arange(0, len(sta), 1))
     ax.set_yticklabels(time_axis)
 
@@ -532,13 +532,13 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
             #Chirp_FM
             if chirp_fm is not None:
                 chirpfm_ax = fig.add_subplot(gs[13:16,:])
-                plot_chirp(chirpfm_ax, chirp_fm[0], chirp_fm[1][:,reM_cell_idx])
+                plot_chirp(chirpfm_ax, chirp_fm[0], chirp_fm[1][:,reM_cell_idx], smooth=False)
                 chirpfm_ax.set_title("Chirp FM")
 
             #Chirp_AM
             if chirp_am is not None:
                 chirpam_ax = fig.add_subplot(gs[17:20,:])
-                plot_chirp(chirpam_ax, chirp_am[0], chirp_am[1][:,reM_cell_idx])
+                plot_chirp(chirpam_ax, chirp_am[0], chirp_am[1][:,reM_cell_idx], smooth=False)
                 chirpam_ax.set_title("Chirp AM")
 
             #Flickering bars
@@ -786,13 +786,13 @@ def plot_recap_vitro_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_
             #Chirp_FM
             if chirp_fm is not None:
                 chirpfm_ax = fig.add_subplot(gs[13:16,:])
-                plot_chirp(chirpfm_ax, chirp_fm[0], chirp_fm[1][:,reM_cell_idx])
+                plot_chirp(chirpfm_ax, chirp_fm[0], chirp_fm[1][:,reM_cell_idx], smooth=False)
                 chirpfm_ax.set_title("Chirp FM")
 
             #Chirp_AM
             if chirp_am is not None:
                 chirpam_ax = fig.add_subplot(gs[17:20,:])
-                plot_chirp(chirpam_ax, chirp_am[0], chirp_am[1][:,reM_cell_idx])
+                plot_chirp(chirpam_ax, chirp_am[0], chirp_am[1][:,reM_cell_idx], smooth=False)
                 chirpam_ax.set_title("Chirp AM")
 
             #Flickering bars
