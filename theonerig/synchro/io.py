@@ -1312,7 +1312,7 @@ def export_adc_raw(datafile:DataFile):
                'dtype_offset': 32768}
     raw_file = RawBinaryFile(raw_fn, param_d, is_empty=True)
     raw_file.allocate(datafile.shape[0])
-    raw_file.set_data(0, data.copy())
+    raw_file.set_data(0, data)
     raw_file.close()
 
 def export_raw(datafile:DataFile):
@@ -1323,7 +1323,7 @@ def export_raw(datafile:DataFile):
     param_d = datafile.get_description()
     raw_file = RawBinaryFile(raw_fn, param_d, is_empty=True)
     raw_file.allocate(datafile.shape)
-    raw_file.set_data(0, data.copy())
+    raw_file.set_data(0, data)
     raw_file.close()
 
 def load_adc_raw(filepath, sampling_rate):
