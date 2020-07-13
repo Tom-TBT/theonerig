@@ -184,7 +184,7 @@ It reads the log it represent and extract the stimuli information from it:</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">logs</span> <span class="o">=</span> <span class="n">get_QDSpy_logs</span><span class="p">(</span><span class="s2">&quot;./files/basic_synchro&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#logs = get_QDSpy_logs(&quot;./files/basic_synchro&quot;)</span>
 </pre></div>
 
     </div>
@@ -223,7 +223,7 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">logs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stimuli</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#logs[0].stimuli</span>
 </pre></div>
 
     </div>
@@ -270,8 +270,8 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">stim</span> <span class="o">=</span> <span class="n">logs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">stimuli</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">stim</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">stim</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span> <span class="n">stim</span><span class="o">.</span><span class="n">frame_delay</span><span class="p">,</span> <span class="n">stim</span><span class="o">.</span><span class="n">md5</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># stim = logs[0].stimuli[5]</span>
+<span class="c1"># print(stim.name, stim.start_time, stim.frame_delay, stim.md5)</span>
 </pre></div>
 
     </div>
@@ -337,7 +337,7 @@ specify informations about a shader when used, like for the moving gratings.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">logs</span> <span class="o">=</span> <span class="n">get_QDSpy_logs</span><span class="p">(</span><span class="s2">&quot;./files/basic_synchro&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># logs = get_QDSpy_logs(&quot;./files/basic_synchro&quot;)</span>
 </pre></div>
 
     </div>
@@ -376,7 +376,7 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">unpacked</span> <span class="o">=</span> <span class="n">unpack_stim_npy</span><span class="p">(</span><span class="s2">&quot;./files/basic_synchro/stimulus_data&quot;</span><span class="p">,</span> <span class="s2">&quot;eed21bda540934a428e93897908d049e&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># unpacked = unpack_stim_npy(&quot;./files/basic_synchro/stimulus_data&quot;, &quot;eed21bda540934a428e93897908d049e&quot;)</span>
 </pre></div>
 
     </div>
@@ -400,7 +400,7 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">unpacked</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># unpacked[0].shape</span>
 </pre></div>
 
     </div>
@@ -440,7 +440,7 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">unpacked</span><span class="p">[</span><span class="mi">1</span><span class="p">][:</span><span class="mi">50</span><span class="p">]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># unpacked[1][:50]</span>
 </pre></div>
 
     </div>
