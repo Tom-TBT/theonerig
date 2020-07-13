@@ -91,11 +91,11 @@ description: "Processing functions to align stimuli, detect frame timings and co
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">theonerig.synchro.io</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">theonerig.core</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">theonerig.utils</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="n">photodiode_data</span> <span class="o">=</span> <span class="n">load_adc_raw</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;files/basic_synchro/photodiode_data&quot;</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">30000</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># from theonerig.synchro.io import *</span>
+<span class="c1"># from theonerig.core import *</span>
+<span class="c1"># from theonerig.utils import *</span>
+<span class="c1"># import matplotlib.pyplot as plt</span>
+<span class="c1"># photodiode_data = load_adc_raw(r&quot;files/basic_synchro/photodiode_data&quot;, sampling_rate=30000)</span>
 </pre></div>
 
     </div>
@@ -108,7 +108,7 @@ description: "Processing functions to align stimuli, detect frame timings and co
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Loading the data... 100%    </pre>
+<pre>Loading the data... 100%      </pre>
 </div>
 </div>
 
@@ -132,7 +132,7 @@ description: "Processing functions to align stimuli, detect frame timings and co
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">get_thresholds</span><span class="p">(</span><span class="n">photodiode_data</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># get_thresholds(photodiode_data)</span>
 </pre></div>
 
     </div>
@@ -203,10 +203,10 @@ description: "Processing functions to align stimuli, detect frame timings and co
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">first_high</span> <span class="o">=</span> <span class="n">get_first_high</span><span class="p">(</span><span class="n">photodiode_data</span><span class="p">,</span> <span class="mi">4000</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">photodiode_data</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">first_high</span><span class="p">,</span> <span class="mi">6500</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># first_high = get_first_high(photodiode_data, 4000)</span>
+<span class="c1"># plt.figure()</span>
+<span class="c1"># plt.plot(photodiode_data)</span>
+<span class="c1"># plt.scatter(first_high, 6500, c=&quot;r&quot;)</span>
 </pre></div>
 
     </div>
@@ -380,10 +380,10 @@ DLP is regular and odd time reveal misdetections.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">frame_timepoints</span><span class="p">,</span> <span class="n">frame_signals</span> <span class="o">=</span> <span class="n">detect_frames</span><span class="p">(</span><span class="n">photodiode_data</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span> <span class="n">increment</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">photodiode_data</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">frame_timepoints</span><span class="p">,</span> <span class="n">frame_signals</span><span class="o">*</span><span class="mi">6000</span><span class="o">+</span><span class="mi">500</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># frame_timepoints, frame_signals = detect_frames(photodiode_data, 400, 5000, increment=500)</span>
+<span class="c1"># plt.figure()</span>
+<span class="c1"># plt.plot(photodiode_data)</span>
+<span class="c1"># plt.scatter(frame_timepoints, frame_signals*6000+500, c=&quot;r&quot;)</span>
 </pre></div>
 
     </div>
@@ -498,7 +498,7 @@ number of cluster can differ. Useful when a record contains stimuli with differe
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">frame_signals</span> <span class="o">=</span> <span class="n">cluster_frame_signals</span><span class="p">(</span><span class="n">photodiode_data</span><span class="p">,</span> <span class="n">frame_timepoints</span><span class="p">,</span> <span class="n">n_cluster</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># frame_signals = cluster_frame_signals(photodiode_data, frame_timepoints, n_cluster=5)</span>
 </pre></div>
 
     </div>
@@ -515,9 +515,9 @@ number of cluster can differ. Useful when a record contains stimuli with differe
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">photodiode_data</span><span class="p">[</span><span class="mi">120000</span><span class="p">:</span><span class="mi">131800</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">frame_timepoints</span><span class="p">[</span><span class="n">frame_timepoints</span><span class="o">&gt;</span><span class="mi">120000</span><span class="p">]</span><span class="o">-</span><span class="mi">120000</span><span class="p">,</span> <span class="n">frame_signals</span><span class="p">[</span><span class="n">frame_timepoints</span><span class="o">&gt;</span><span class="mi">120000</span><span class="p">]</span><span class="o">*</span><span class="mi">1000</span><span class="o">+</span><span class="mi">500</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># plt.figure()</span>
+<span class="c1"># plt.plot(photodiode_data[120000:131800])</span>
+<span class="c1"># plt.scatter(frame_timepoints[frame_timepoints&gt;120000]-120000, frame_signals[frame_timepoints&gt;120000]*1000+500, c=&#39;r&#39;)</span>
 </pre></div>
 
     </div>
@@ -569,9 +569,9 @@ number of cluster can differ. Useful when a record contains stimuli with differe
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ref_timepoints</span><span class="p">,</span> <span class="n">ref_signals</span> <span class="o">=</span> <span class="n">extend_sync_timepoints</span><span class="p">(</span><span class="n">frame_timepoints</span><span class="p">,</span> <span class="n">frame_signals</span><span class="p">,</span> <span class="n">up_bound</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">photodiode_data</span><span class="p">))</span>
-<span class="n">reM</span> <span class="o">=</span> <span class="n">RecordMaster</span><span class="p">([(</span><span class="n">ref_timepoints</span><span class="p">,</span> <span class="n">ref_signals</span><span class="p">)])</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reM</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># ref_timepoints, ref_signals = extend_sync_timepoints(frame_timepoints, frame_signals, up_bound=len(photodiode_data))</span>
+<span class="c1"># reM = RecordMaster([(ref_timepoints, ref_signals)])</span>
+<span class="c1"># print(len(reM[0]))</span>
 </pre></div>
 
     </div>
@@ -609,8 +609,8 @@ number of cluster can differ. Useful when a record contains stimuli with differe
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">reM</span> <span class="o">=</span> <span class="n">import_record</span><span class="p">(</span><span class="s2">&quot;./files/basic_synchro/reM_basic_synchro.h5&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reM</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># reM = import_record(&quot;./files/basic_synchro/reM_basic_synchro.h5&quot;)</span>
+<span class="c1"># print(len(reM[0]))</span>
 </pre></div>
 
     </div>
@@ -700,8 +700,8 @@ number of cluster can differ. Useful when a record contains stimuli with differe
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">record_time</span> <span class="o">=</span> <span class="n">parse_time</span><span class="p">(</span><span class="s2">&quot;200331_170849&quot;</span><span class="p">)</span> <span class="c1">#Starting time of that example record found on the filename of the record</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">record_time</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># record_time = parse_time(&quot;200331_170849&quot;) #Starting time of that example record found on the filename of the record</span>
+<span class="c1"># print(record_time)</span>
 </pre></div>
 
     </div>
@@ -770,8 +770,8 @@ number of cluster can differ. Useful when a record contains stimuli with differe
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">theonerig.synchro.extracting</span> <span class="kn">import</span> <span class="n">get_QDSpy_logs</span><span class="p">,</span> <span class="n">unpack_stim_npy</span>
-<span class="n">log</span> <span class="o">=</span> <span class="n">get_QDSpy_logs</span><span class="p">(</span><span class="s2">&quot;./files/basic_synchro&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># from theonerig.synchro.extracting import get_QDSpy_logs, unpack_stim_npy</span>
+<span class="c1"># log = get_QDSpy_logs(&quot;./files/basic_synchro&quot;)[0]</span>
 </pre></div>
 
     </div>
@@ -803,7 +803,7 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">log</span><span class="o">.</span><span class="n">stimuli</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># print(log.stimuli[2])</span>
 </pre></div>
 
     </div>
@@ -834,9 +834,9 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Unpacking the stimulus printed above</span>
-<span class="n">unpacked_checkerboard</span> <span class="o">=</span> <span class="n">unpack_stim_npy</span><span class="p">(</span><span class="s2">&quot;./files/basic_synchro/stimulus_data&quot;</span><span class="p">,</span> <span class="s2">&quot;eed21bda540934a428e93897908d049e&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">unpacked_checkerboard</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">unpacked_checkerboard</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">unpacked_checkerboard</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># #Unpacking the stimulus printed above</span>
+<span class="c1"># unpacked_checkerboard = unpack_stim_npy(&quot;./files/basic_synchro/stimulus_data&quot;, &quot;eed21bda540934a428e93897908d049e&quot;)</span>
+<span class="c1"># print(unpacked_checkerboard[0].shape, unpacked_checkerboard[1].shape, unpacked_checkerboard[2])</span>
 </pre></div>
 
     </div>
@@ -874,8 +874,8 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">estimate_start</span> <span class="o">=</span> <span class="n">get_position_estimate</span><span class="p">(</span><span class="n">log</span><span class="o">.</span><span class="n">stimuli</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span> <span class="n">record_time</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">30000</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Estimate position in sample points&quot;</span><span class="p">,</span> <span class="n">estimate_start</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># estimate_start = get_position_estimate(log.stimuli[2].start_time, record_time, sampling_rate=30000)</span>
+<span class="c1"># print(&quot;Estimate position in sample points&quot;, estimate_start)</span>
 </pre></div>
 
     </div>
@@ -906,8 +906,8 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">stim_start_frame</span> <span class="o">=</span> <span class="n">match_starting_position</span><span class="p">(</span><span class="n">reM</span><span class="p">[</span><span class="s2">&quot;main_tp&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">reM</span><span class="p">[</span><span class="s2">&quot;signals&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">stim_signals</span><span class="o">=</span><span class="n">unpacked_checkerboard</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">estimate_start</span><span class="o">=</span><span class="n">estimate_start</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">stim_start_frame</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># stim_start_frame = match_starting_position(reM[&quot;main_tp&quot;][0], reM[&quot;signals&quot;][0], stim_signals=unpacked_checkerboard[1], estimate_start=estimate_start)</span>
+<span class="c1"># print(stim_start_frame)</span>
 </pre></div>
 
     </div>
@@ -976,7 +976,7 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">display_match</span><span class="p">(</span><span class="n">stim_start_frame</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="n">unpacked_checkerboard</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">recorded</span><span class="o">=</span><span class="n">reM</span><span class="p">[</span><span class="s2">&quot;signals&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># display_match(stim_start_frame, reference=unpacked_checkerboard[1], recorded=reM[&quot;signals&quot;][0])</span>
 </pre></div>
 
     </div>
@@ -1174,9 +1174,9 @@ size of the sequences to align.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">signals</span> <span class="o">=</span> <span class="n">reM</span><span class="p">[</span><span class="s2">&quot;signals&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">stim_start_frame</span><span class="p">:</span><span class="n">stim_start_frame</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">unpacked_checkerboard</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
-<span class="n">corrected_checkerboard</span><span class="p">,</span> <span class="n">shift_log</span><span class="p">,</span> <span class="n">error_frames</span> <span class="o">=</span> <span class="n">frame_error_correction</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">unpacked_checkerboard</span><span class="p">,</span> <span class="n">algo</span><span class="o">=</span><span class="s2">&quot;nw&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">shift_log</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">error_frames</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># signals = reM[&quot;signals&quot;][0][stim_start_frame:stim_start_frame+len(unpacked_checkerboard[0])]</span>
+<span class="c1"># corrected_checkerboard, shift_log, error_frames = frame_error_correction(signals, unpacked_checkerboard, algo=&quot;nw&quot;)</span>
+<span class="c1"># print(shift_log, len(error_frames))</span>
 </pre></div>
 
     </div>
