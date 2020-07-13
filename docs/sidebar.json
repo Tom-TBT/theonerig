@@ -3,9 +3,14 @@
     "Overview": "/",
     "Core": "/core",
     "Utils": "/utils",
-    "Title": "/testdata",
-    "Synchro.io": "/synchro.io",
-    "Synchro.extracting": "/synchro.extracting",
-    "Synchro.processing": "/synchro.processing"
+    "processing": "/processing",
+    "modelling": "/modelling",
+    "plotting": "/plotting",
+    "database": "/database",
+    "synchro.io": "/synchro.io",
+    "synchro.extracting": "/synchro.extracting",
+    "synchro.processing": "/synchro.processing",
+    "leddome": "/leddome",
+    "Test data loaders": "/testdata"
   }
 }

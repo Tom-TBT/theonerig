@@ -16,17 +16,32 @@ entries:
       title: Utils
       url: /utils
     - output: web,pdf
-      title: Title
-      url: /testdata
+      title: processing
+      url: /processing
     - output: web,pdf
-      title: Synchro.io
+      title: modelling
+      url: /modelling
+    - output: web,pdf
+      title: plotting
+      url: /plotting
+    - output: web,pdf
+      title: database
+      url: /database
+    - output: web,pdf
+      title: synchro.io
       url: /synchro.io
     - output: web,pdf
-      title: Synchro.extracting
+      title: synchro.extracting
       url: /synchro.extracting
     - output: web,pdf
-      title: Synchro.processing
+      title: synchro.processing
       url: /synchro.processing
+    - output: web,pdf
+      title: leddome
+      url: /leddome
+    - output: web,pdf
+      title: Test data loaders
+      url: /testdata
     output: web
     title: theonerig
   output: web
