@@ -217,7 +217,15 @@ def display_match(match_position, reference=None, recorded=None, corrected=None,
 
 # Cell
 def frame_error_correction(signals, unpacked, algo="nw", **kwargs):
+    """Correcting the display stimulus frame values. Shifts are first detected with one of
+    `shift_detection_conv` or `shift_detection_NW` and applied to the stimulus template. Then single frame
+    mismatch are detected and corrected.
+        - signals: true signal values recorded
+        - unpacked: stimulus tuple (inten,marker,shader)
+        - algo: algorithm for shift detection among [nw, conv]
+        - **kwargs: extra parameter for shift detection functions
 
+        returns: stim_tuple_corrected, shift_log, (error_frames_idx, replacement_idx)"""
 
     if algo=="no_shift":
         intensity, marker, shader  = unpacked[0].copy(), unpacked[1].copy(), unpacked[2]
@@ -239,7 +247,6 @@ def frame_error_correction(signals, unpacked, algo="nw", **kwargs):
             shader[error_frames] = shader[replacements]
     return (intensity, marker, shader), shift_log, list(zip(map(int,error_frames), map(int,replacements)))
 
-# Cell
 def error_frame_matches(signals, marker, range_):
     """Find the frames mismatching and finds in the record the closest frame with an identical signal value"""
     error_frames = np.nonzero(signals!=marker)[0]
