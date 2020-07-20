@@ -282,16 +282,18 @@ def plot_spike_amplitudes(ax, cluster, spike_templates, spike_clusters, spike_ti
     mask_cluster = spike_clusters==cluster
     clusters = np.unique(spike_templates[mask_cluster])
     points_per_cluster = n_max_dots//len(clusters)
-    total_spikes = 0
+    total_spikes = np.sum(mask_cluster)
     for templ in clusters:
-        mask_template = spike_templates==templ
+        mask_template    = spike_templates==templ
         n_spike_template = np.sum(mask_template)
-        total_spikes+=n_spike_template
-        mask_selected_spikes = np.linspace(0, n_spike_template, min(n_spike_template, points_per_cluster), dtype=int, endpoint=False)
+        proportion       = n_spike_template/total_spikes
+        n_sp_to_plot     = int(n_max_dots*proportion)
+        mask_selected_spikes = np.linspace(0, n_spike_template, n_sp_to_plot, dtype=int, endpoint=False)
         plt.scatter(spike_times[mask_template][mask_selected_spikes], amplitudes[mask_template][mask_selected_spikes], s=1)
 
     ax.set_xticks([])
     ax.set_title("Spike amplitudes - n°spike: "+str(total_spikes))
+    ax.set_ylim(0,2)
 
 def plot_cell_spatial(ax, cell_spatial):
     ax.imshow(cell_spatial)
@@ -317,7 +319,7 @@ def plot_stim_epochs_to_spikes(ax, reM, y_pos):
         len_dc = seq["main_tp"][dc.idx+len(dc)]-seq["main_tp"][dc.idx]
         start_dc = seq["main_tp"][dc.idx]
         ax.barh(y_pos, len_dc, left=start_dc, height=.1)
-        ax.text(start_dc, y_pos+(.1*pos_text_cursor), stim_name, fontdict={"size":10})
+        ax.text(start_dc, (y_pos-.025)+(.1*pos_text_cursor), stim_name, fontdict={"size":10})
         pos_text_cursor*=-1
 
 def plot_stim_epochs_to_calcium(ax, reM, y_pos):
@@ -512,7 +514,7 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
             sp_amp_ax = fig.add_subplot(gs[0:4,8:])
             plot_spike_amplitudes(sp_amp_ax, cluster, phy_dict["spike_templates"], phy_dict["spike_clusters"],
                                   phy_dict["spike_times"], phy_dict["amplitudes"])
-            plot_stim_epochs_to_spikes(sp_amp_ax, reM, y_pos=0.6)
+            plot_stim_epochs_to_spikes(sp_amp_ax, reM, y_pos=0.2)
 
             #Checkerboard STA
             if checkerboard is not None:
@@ -766,7 +768,7 @@ def plot_recap_vitro_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_
             sp_amp_ax = fig.add_subplot(gs[0:4,10:])
             plot_spike_amplitudes(sp_amp_ax, cluster, phy_dict["spike_templates"], phy_dict["spike_clusters"],
                                   phy_dict["spike_times"], phy_dict["amplitudes"])
-            plot_stim_epochs_to_spikes(sp_amp_ax, reM, y_pos=0.6)
+            plot_stim_epochs_to_spikes(sp_amp_ax, reM, y_pos=0.2)
 
             #Checkerboard STA
             if checkerboard is not None:
@@ -885,7 +887,7 @@ def plot_recap_vivo_ephy_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_id
             sp_amp_ax = fig.add_subplot(gs[0:4,8:])
             plot_spike_amplitudes(sp_amp_ax, cluster, phy_dict["spike_templates"], phy_dict["spike_clusters"],
                                   phy_dict["spike_times"], phy_dict["amplitudes"])
-            plot_stim_epochs_to_spikes(sp_amp_ax, reM, y_pos=0.6)
+            plot_stim_epochs_to_spikes(sp_amp_ax, reM, y_pos=0.2)
 
             #Checkerboard STA
             if checkerboard is not None:
