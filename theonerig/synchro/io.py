@@ -2,8 +2,8 @@
 
 __all__ = ['atoi', 'natural_keys', 'filter_per_extension', 'print_and_log', 'print_info', 'print_error', 'get_offset',
            'logger', 'DataFile', 'read_header', 'get_bytes_per_data_block', 'read_qstring', 'RHDFile', 'H5File',
-           'RawBinaryFile', 'NumpyFile', 'load_all_data', 'load_all_data_adc', 'export_adc_raw', 'export_raw',
-           'export_both_raw', 'load_adc_raw', 'load_sync_raw']
+           'RawBinaryFile', 'NumpyFile', 'load_all_data', 'load_all_data_adc', 'load_all_data_both', 'export_adc_raw',
+           'export_raw', 'export_both_raw', 'load_adc_raw', 'load_sync_raw']
 
 # Cell
 import numpy as np
@@ -515,6 +515,14 @@ class DataFile(object):
         else:
             return self.read_chunk_adc(idx, chunk_size, padding, nodes), self.t_start + idx*chunk_size
 
+    def get_data_both(self, idx, chunk_size, padding=(0, 0), nodes=None):
+
+        if self.is_stream:
+            cidx = np.searchsorted(self._chunks_in_sources, idx, 'right') - 1
+            idx -= self._chunks_in_sources[cidx]
+            return (*self._sources[cidx].read_chunk_both(idx, chunk_size, padding, nodes), self._sources[cidx].t_start + idx*chunk_size)
+        else:
+            return (*self.read_chunk_both(idx, chunk_size, padding, nodes), self.t_start + idx*chunk_size)
 
     def set_data(self, global_time, data):
 
@@ -874,7 +882,6 @@ class RHDFile(DataFile):
 
         return header
 
-
     def _get_slice_(self, t_start, t_stop):
 
         x_beg = np.int64(t_start // self.SAMPLES_PER_RECORD)
@@ -969,6 +976,41 @@ class RHDFile(DataFile):
                 local_chunk = np.take(local_chunk, nodes, axis=1)
 
         return self._scale_data_to_float32(local_chunk)
+
+    def read_chunk_both(self, idx, chunk_size, padding=(0, 0), nodes=None):
+
+        t_start, t_stop = self._get_t_start_t_stop(idx, chunk_size, padding)
+        local_shape     = t_stop - t_start
+
+        local_chunk_adc = np.zeros((self.nb_channels_adc, local_shape), dtype=self.data_dtype)
+        local_chunk     = np.zeros((self.nb_channels, local_shape), dtype=self.data_dtype)
+        data_slice_adc  = self._get_slice_adc_(t_start, t_stop)
+        data_slice      = self._get_slice_(t_start, t_stop)
+
+        self._open()
+        count = 0
+        for s in data_slice_adc:
+            t_slice = len(s)//self.nb_channels_adc
+            local_chunk_adc[:, count:count + t_slice] = self.data[s].reshape(self.nb_channels_adc, len(s)//self.nb_channels_adc)
+            count += t_slice
+
+        count = 0
+        for s in data_slice:
+            t_slice = len(s)//self.nb_channels
+            local_chunk[:, count:count + t_slice] = self.data[s].reshape(self.nb_channels, len(s)//self.nb_channels)
+            count += t_slice
+
+        local_chunk     = local_chunk.T
+        local_chunk_adc = local_chunk_adc.T
+        self._close()
+
+        if nodes is not None:
+            if not np.all(nodes == np.arange(self.nb_channels_adc)):
+                local_chunk_adc = np.take(local_chunk_adc, nodes, axis=1)
+            if not np.all(nodes == np.arange(self.nb_channels)):
+                local_chunk     = np.take(local_chunk, nodes, axis=1)
+
+        return self._scale_data_to_float32(local_chunk), self._scale_data_to_float32(local_chunk_adc)
 
     def write_chunk(self, time, data):
 
@@ -1300,6 +1342,29 @@ def load_all_data_adc(datafile:DataFile):
     datafile.close()
     return data
 
+def load_all_data_both(datafile:DataFile):
+    """Read all the data contained by a file. For rhd and hdf5, correspond to the adc channels. To read the ephy
+    data, see `load_all_data`"""
+    datafile.open()
+    if isinstance(datafile, RHDFile):
+        chunk_size = 1800960
+    else:
+        chunk_size =  datafile.duration
+    n_chunks, _ = datafile.analyze(chunk_size)
+    data_adc = np.zeros(datafile.duration)
+    data     = np.zeros((datafile.duration, datafile._shape[1]))
+    print("Loading the data... "+str(round(0,2))+"%    ",end='\r',flush=True)
+    for idx in range(n_chunks):
+        data_tmp, data_tmp_adc, t_offset = datafile.get_data_both(idx, chunk_size)
+        data[t_offset:t_offset+len(data_tmp)] = data_tmp
+        if data_tmp_adc.ndim == 2:
+            data_tmp_adc = data_tmp_adc[:,0]
+        data_adc[t_offset:t_offset+len(data_tmp)] = data_tmp_adc
+        print("Loading the data... "+str(round(100*(idx+1)/n_chunks,2))+"%    ",end='\r',flush=True)
+    print("Loading the data... "+str(round(100,2))+"%    ",end='\r',flush=True)
+    datafile.close()
+    return data, data_adc
+
 def export_adc_raw(datafile:DataFile):
     """Exports a datafile adc channel to a single raw binary file. Useful to reduce disk usage after that
     spike sorting is done."""
@@ -1307,7 +1372,7 @@ def export_adc_raw(datafile:DataFile):
     raw_fn = os.path.splitext(datafile.file_name)[0]+".dat"
     param_d = {'sampling_rate': datafile.sampling_rate,
                'data_dtype': 'uint16',
-               'gain': 1,
+               'gain': 0.195,
                'nb_channels': 1,
                'dtype_offset': 32768}
     raw_file = RawBinaryFile(raw_fn, param_d, is_empty=True)
@@ -1328,21 +1393,20 @@ def export_raw(datafile:DataFile):
 
 def export_both_raw(datafile:DataFile):
     """Exports a both raw data, adc and ephy."""
-    data = load_all_data_adc(datafile)
+    data, data_adc = load_all_data_both(datafile)
     raw_fn = os.path.splitext(datafile.file_name)[0]+".dat"
     param_d = {'sampling_rate': datafile.sampling_rate,
                'data_dtype': 'uint16',
-               'gain': 1,
+               'gain': 0.195,
                'nb_channels': 1,
                'dtype_offset': 32768}
     raw_file = RawBinaryFile(raw_fn, param_d, is_empty=True)
     raw_file.allocate(datafile.shape[0])
-    raw_file.set_data(0, data)
+    raw_file.set_data(0, data_adc)
     raw_file.close()
 
     os.rename(raw_fn, os.path.splitext(datafile.file_name)[0]+".data")
 
-    data = load_all_data(datafile)
     param_d = datafile.get_description()
     raw_file = RawBinaryFile(raw_fn, param_d, is_empty=True)
     raw_file.allocate(datafile.shape)
@@ -1354,7 +1418,7 @@ def load_adc_raw(filepath, sampling_rate):
     """Loads adc raw data, in the format exported by `export_adc_raw`"""
     param_d = {'sampling_rate': sampling_rate,
                'data_dtype': 'uint16',
-               'gain': 1,
+               'gain': 0.195,
                'nb_channels': 1,
                'dtype_offset': 32768}
     raw_file = RawBinaryFile(filepath, param_d)
