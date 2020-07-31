@@ -442,12 +442,13 @@ def stim_recap_df(reM):
                                "frequency", "n ON", "n OFF", "speeds", "spatial frequencies",
                               "total shift", "total drop"])
     cursor = 0
-    for k, dc_l in reM[0]:
-        dc = dc_l[0]
-        if dc.group == "stim":
-            serie = pd.Series(data=parse_stim(dc), name=cursor)
-            df = df.append(serie, ignore_index=False)
-            cursor+=1
+    for seq in reM._sequences:
+        for k, dc_l in seq:
+            dc = dc_l[0]
+            if dc.group == "stim":
+                serie = pd.Series(data=parse_stim(dc), name=cursor)
+                df = df.append(serie, ignore_index=False)
+                cursor+=1
 
     df = df.fillna("")
     return df
