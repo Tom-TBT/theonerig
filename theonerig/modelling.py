@@ -60,6 +60,17 @@ def gaussian_2D(xz, sigma_x, sigma_z, amp, theta, x0, z0, y0):
 
 def sum_of_gaussian(t, sigma_1, amp_1, x0_1,
                        sigma_2, amp_2, x0_2, y0):
+    """
+    Sum of gaussian, using the gaussian function
+        params:
+        - t: 1D numpy array at which to evaluate the points
+        - sigma_1: width of the 1st gaussian
+        - amp_1: amplitude of the 1st gaussian
+        - x0_1: shift in x of the 1st gaussian
+        - sigma_2: width of the 2nd gaussian
+        - amp_2: amplitude of the 2nd gaussian
+        - x0_2: shift in x of the 2nd gaussian
+        - y0: shift in y of the gaussian"""
     return (gaussian(t, sigma_1, amp_1, x0_1, 0)
             + gaussian(t, sigma_2, amp_2, x0_2, 0) + y0)
 
