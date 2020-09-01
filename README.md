@@ -20,7 +20,7 @@ Some example data are located in the "files" folder. We are gonna use data from 
 
 An experiment is stored in a Record_Master object (called here reM): Each row shows a stream of data aligned to "main_tp". <br><br>Data can be sparse, meaning that you don't necessarly possess data of each row for the total duration of the record, and can be in multiple chuncks.
 
-```
+```python
 reM.plot()
 ```
 
@@ -30,13 +30,13 @@ reM.plot()
 
 Now that we have such dataset, we will use the second main feature of this package, the Data_Pipe. With it, we choose at its creation which rows we want to obtain. In that case, we take "checkerboard" which is a matrix of the stimulus values , the "S_matrix" which is the response of neurons extracted from calcium imaging, and "eye_tracking" to take in account the mouse eye position to compute the response.
 
-```
+```python
 pipe = Data_Pipe(reM, ["checkerboard", "S_matrix", "eye_tracking"])
 ```
 
 Now that the pipe is defined, we can use aritmetic and logic operations to choose which part of the record we want data from:
 
-```
+```python
 pipe += "checkerboard" #Add part of the data where checkerboard is present
 reM.plot()
 pipe.plot()
@@ -46,7 +46,7 @@ pipe.plot()
 ![png](docs/images/output_12_0.png)
 
 
-```
+```python
 #Select all cell responses where there is no stimulus
 
 pipe += "S_matrix" 
@@ -59,7 +59,7 @@ pipe.plot()
 ![png](docs/images/output_13_0.png)
 
 
-```
+```python
 #Select all cell responses where there is a stimulus. Note the darkness stimulus longer 
 #than the corresponding S_matrix
 
@@ -75,7 +75,7 @@ pipe.plot()
 
 Then, the pipe can be iterated and return each separated chunk of data as a dictionnary containg each data selected
 
-```
+```python
 print(pipe[0].keys())
 for data_dict in pipe:
     print(data_dict["checkerboard"].shape, data_dict["S_matrix"].shape, data_dict["eye_tracking"].shape)
