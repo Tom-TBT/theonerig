@@ -97,6 +97,196 @@ description: "Core of this library: DataChunk, RecordMaster, Data_Pipe, and impo
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">theonerig.testdata</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">load_vivo_2p</span><span class="p">(</span><span class="s2">&quot;./files/vivo_2p&quot;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Importing the record master
+
+Returning stim_d, S_matrix, A_matrix, proj_TP, proj_DATA, eye_TP, eye_DATA, treadm_DATA, len_records, rec_TP, reM
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;testdata_dir&#39;: &#39;./files/vivo_2p&#39;,
+ &#39;vivo_2p_dir&#39;: &#39;./files/vivo_2p&#39;,
+ &#39;reM&#39;: [{&#39;signals&#39;: [DataChunk((207634,),27759,sync,0)], &#39;main_tp&#39;: [DataChunk((235994,),0,sync,0)], &#39;S_matrix&#39;: [DataChunk((44687, 2),125746,cell,0), DataChunk((13596, 2),174618,cell,0), DataChunk((11652, 2),194273,cell,0), DataChunk((19425, 2),213032,cell,0), DataChunk((23303, 2),2703,cell,0), DataChunk((38849, 2),38207,cell,0), DataChunk((38855, 2),81695,cell,0)], &#39;checkerboard&#39;: [DataChunk((36000, 15, 20),38786,stim,0)], &#39;chirp_am&#39;: [DataChunk((10200,),174837,stim,0)], &#39;chirp_freq_epoch&#39;: [DataChunk((8680,),195136,stim,0)], &#39;darkness&#39;: [DataChunk((27759,),0,stim,0)], &#39;eye_tracking&#39;: [DataChunk((233326, 5),331,data,0)], &#39;fullfield_flicker&#39;: [DataChunk((18000, 1, 1),213925,stim,0)], &#39;moving_gratings&#39;: [DataChunk((40800, 3),126646,stim,0)], &#39;treadmill&#39;: [DataChunk((235392,),1,data,0)], &#39;water&#39;: [DataChunk((36000, 1, 1, 1),82376,stim,0)]}],
+ &#39;stim_d&#39;: {&#39;0_darkness&#39;: array([0., 0., 0., ..., 0., 0., 0.]),
+  &#39;38786_checkerboard&#39;: array([[[255,   0, 255, ...,   0, 255,   0],
+          [255, 255, 255, ...,   0,   0, 255],
+          [  0,   0, 255, ...,   0,   0,   0],
+          ...,
+          [  0,   0, 255, ..., 128, 128, 128],
+          [  0,   0, 255, ..., 128, 128, 128],
+          [  0, 255,   0, ..., 128, 128, 128]],
+  
+         [[255,   0, 255, ...,   0, 255,   0],
+          [255, 255, 255, ...,   0,   0, 255],
+          [  0,   0, 255, ...,   0,   0,   0],
+          ...,
+          [  0,   0, 255, ..., 128, 128, 128],
+          [  0,   0, 255, ..., 128, 128, 128],
+          [  0, 255,   0, ..., 128, 128, 128]],
+  
+         [[255,   0, 255, ...,   0, 255,   0],
+          [255, 255, 255, ...,   0,   0, 255],
+          [  0,   0, 255, ...,   0,   0,   0],
+          ...,
+          [  0,   0, 255, ..., 128, 128, 128],
+          [  0,   0, 255, ..., 128, 128, 128],
+          [  0, 255,   0, ..., 128, 128, 128]],
+  
+         ...,
+  
+         [[  0,   0, 255, ..., 255,   0, 255],
+          [  0, 255,   0, ..., 255,   0,   0],
+          [  0, 255, 255, ...,   0,   0, 255],
+          ...,
+          [255, 255, 255, ..., 128, 128, 128],
+          [255, 255,   0, ..., 128, 128, 128],
+          [  0, 255, 255, ..., 128, 128, 128]],
+  
+         [[  0,   0, 255, ..., 255,   0, 255],
+          [  0, 255,   0, ..., 255,   0,   0],
+          [  0, 255, 255, ...,   0,   0, 255],
+          ...,
+          [255, 255, 255, ..., 128, 128, 128],
+          [255, 255,   0, ..., 128, 128, 128],
+          [  0, 255, 255, ..., 128, 128, 128]],
+  
+         [[  0,   0, 255, ..., 255,   0, 255],
+          [  0, 255,   0, ..., 255,   0,   0],
+          [  0, 255, 255, ...,   0,   0, 255],
+          ...,
+          [255, 255, 255, ..., 128, 128, 128],
+          [255, 255,   0, ..., 128, 128, 128],
+          [  0, 255, 255, ..., 128, 128, 128]]], dtype=uint8),
+  &#39;82376_water&#39;: array([[[[127]]],
+  
+  
+         [[[127]]],
+  
+  
+         [[[127]]],
+  
+  
+         ...,
+  
+  
+         [[[127]]],
+  
+  
+         [[[127]]],
+  
+  
+         [[[127]]]], dtype=uint8),
+  &#39;126646_moving_gratings&#39;: array([[255,  90,   0],
+         [255,  90,   0],
+         [255,  90,   0],
+         ...,
+         [  0,   0,   0],
+         [  0,   0,   0],
+         [  0,   0,   0]], dtype=uint8),
+  &#39;174837_chirp_am&#39;: array([  0,   0,   0, ..., 127, 127, 127], dtype=uint8),
+  &#39;195136_chirp_freq_epoch&#39;: array([  0,   0,   0, ..., 127, 127, 127], dtype=uint8),
+  &#39;213925_fullfield_flicker&#39;: array([[[255]],
+  
+         [[255]],
+  
+         [[255]],
+  
+         ...,
+  
+         [[255]],
+  
+         [[255]],
+  
+         [[255]]], dtype=uint8)},
+ &#39;S_matrix&#39;: array([[ 0.00000000e+00,  4.68346407e-04,  5.77816274e-04, ...,
+          0.00000000e+00,  0.00000000e+00,  0.00000000e+00],
+        [ 0.00000000e+00,  4.28516651e-04,  0.00000000e+00, ...,
+         -7.27595761e-12,  7.27595761e-12,  0.00000000e+00]]),
+ &#39;A_matrix&#39;: array([[[0., 0., 0., ..., 0., 0., 0.],
+         [0., 0., 0., ..., 0., 0., 0.],
+         [0., 0., 0., ..., 0., 0., 0.],
+         ...,
+         [0., 0., 0., ..., 0., 0., 0.],
+         [0., 0., 0., ..., 0., 0., 0.],
+         [0., 0., 0., ..., 0., 0., 0.]],
+ 
+        [[0., 0., 0., ..., 0., 0., 0.],
+         [0., 0., 0., ..., 0., 0., 0.],
+         [0., 0., 0., ..., 0., 0., 0.],
+         ...,
+         [0., 0., 0., ..., 0., 0., 0.],
+         [0., 0., 0., ..., 0., 0., 0.],
+         [0., 0., 0., ..., 0., 0., 0.]]]),
+ &#39;eye_TP&#39;: array([   55009,    55677,    56346, ..., 38940337, 38941006, 38941675]),
+ &#39;eye_DATA&#39;: array([[272.8059082 , 241.8285675 , 190.8132782 , 254.16410828,
+         116.17079926],
+        [265.58111572, 233.21505737, 183.02998352, 232.25511169,
+          97.21073914],
+        [263.09902954, 232.90026855, 182.26741028, 229.15588379,
+          95.89794159],
+        ...,
+        [262.75646973, 232.33595276, 154.26779175, 183.51026917,
+          84.51060486],
+        [260.6960144 , 230.99435425, 154.36706543, 181.29519653,
+          83.76092529],
+        [244.64651489, 221.68588257, 140.61120605, 184.82339478,
+          72.17115021]]),
+ &#39;proj_TP&#39;: array([ 4626322,  4626489,  4626655, ..., 39230622, 39230789, 39230955],
+       dtype=int64),
+ &#39;proj_DATA&#39;: array([0, 0, 0, ..., 0, 0, 0], dtype=int64),
+ &#39;treadm_DATA&#39;: array([ -1,  -1,  -1, ..., -14, -14, -14], dtype=int8),
+ &#39;len_records&#39;: array([ 6000, 10000, 10000, 11500,  3500,  3000,  5000]),
+ &#39;f&#39;: &lt;_io.BufferedReader name=&#39;./files/vivo_2p\\twoP_frame_timepoints.pkl&#39;&gt;,
+ &#39;rec_TP&#39;: [array([ 450362,  451009,  451655, ..., 4336097, 4336745, 4337393],
+        dtype=int64),
+  array([ 6367536,  6368182,  6368829, ..., 12844173, 12844821, 12845468],
+        dtype=int64),
+  array([13615430, 13616077, 13616724, ..., 20092912, 20093560, 20094208],
+        dtype=int64),
+  array([20957066, 20957713, 20958359, ..., 28406524, 28407171, 28407819],
+        dtype=int64),
+  array([29102207, 29102854, 29103501, ..., 31370033, 31370681, 31371328],
+        dtype=int64),
+  array([32377956, 32378603, 32379250, ..., 34321800, 34322448, 34323096],
+        dtype=int64),
+  array([35504377, 35505024, 35505671, ..., 38743631, 38744279, 38744926],
+        dtype=int64)]}</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -252,49 +442,6 @@ the processing of the data.</p>
 
 </div>
 
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">nbdev.export</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="n">notebook2script</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Converted 00_core.ipynb.
-Converted 01_utils.ipynb.
-Converted 02_processing.ipynb.
-Converted 03_modelling.ipynb.
-Converted 04_plotting.ipynb.
-Converted 05_database.ipynb.
-Converted 10_synchro.io.ipynb.
-Converted 11_synchro.extracting.ipynb.
-Converted 12_synchro.processing.ipynb.
-Converted 13_leddome.ipynb.
-Converted 99_testdata.ipynb.
-Converted index.ipynb.
-</pre>
-</div>
 </div>
 
 </div>
