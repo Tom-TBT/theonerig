@@ -82,7 +82,13 @@ description: "Core of this library: DataChunk, RecordMaster, Data_Pipe, and impo
 <div class="output_markdown rendered_html output_subarea ">
 <h2 id="DataChunk" class="doc_header"><code>class</code> <code>DataChunk</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L15" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DataChunk</code>(<strong><code>data</code></strong>, <strong><code>idx</code></strong>, <strong><code>group</code></strong>, <strong><code>fill</code></strong>=<em><code>0</code></em>) :: <code>ndarray</code></p>
 </blockquote>
-<p>Base brick of data.</p>
+<p>Base brick of data. Derived from np.ndarray
+params:</p>
+
+<pre><code>- data: The ndarray with shape (time, ...)
+- idx: Index of the start of the DataChunk in the record.
+- group: group of the DataChunk in {stim, sync, cell, data}
+- fill: Default filling value.</code></pre>
 
 </div>
 
@@ -302,7 +308,7 @@ Returning stim_d, S_matrix, A_matrix, proj_TP, proj_DATA, eye_TP, eye_DATA, trea
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ContiguousRecord" class="doc_header"><code>class</code> <code>ContiguousRecord</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L55" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ContiguousRecord</code>(<strong><code>length</code></strong>:<code>int</code>, <strong><code>signals</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>, <strong><code>main_tp</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>)</p>
+<h2 id="ContiguousRecord" class="doc_header"><code>class</code> <code>ContiguousRecord</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L60" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ContiguousRecord</code>(<strong><code>length</code></strong>:<code>int</code>, <strong><code>signals</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>, <strong><code>main_tp</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>)</p>
 </blockquote>
 <p>Representation of a contiguous recording session to store DataChunk
 of various sources under a single time reference. DataChunk are stored
@@ -341,10 +347,10 @@ respectively "signals" and "main_tp".</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="RecordMaster" class="doc_header"><code>class</code> <code>RecordMaster</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L204" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>RecordMaster</code>(<strong><code>reference_data_list</code></strong>:<code>Sequence</code>[<code>Tuple</code>[<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>, <a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>]], <strong><code>frame_time</code></strong>=<em><code>0.016666666666666666</code></em>, <strong><code>sep_size</code></strong>=<em><code>1000</code></em>) :: <code>list</code></p>
+<h2 id="RecordMaster" class="doc_header"><code>class</code> <code>RecordMaster</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L209" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>RecordMaster</code>(<strong><code>reference_data_list</code></strong>:<code>Sequence</code>[<code>Tuple</code>[<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>, <a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>]], <strong><code>frame_time</code></strong>=<em><code>0.016666666666666666</code></em>, <strong><code>sep_size</code></strong>=<em><code>1000</code></em>) :: <code>list</code></p>
 </blockquote>
 <p>One Timeserie to rule them all, One Timeserie to find them,
-One Timeserie to bring them all and in the darkness bind them</p>
+One Timeserie to bring them all and in the darkness bind them.</p>
 <p>The RecordMaster class is the top level object managing all
 timeseries. It uses a list of ContiguousRecord to represent
 possible discontinuted data records.</p>
@@ -380,7 +386,7 @@ the processing of the data.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Data_Pipe" class="doc_header"><code>class</code> <code>Data_Pipe</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L318" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Data_Pipe</code>(<strong><code>record_master</code></strong>:<a href="/theonerig/core#RecordMaster"><code>RecordMaster</code></a>, <strong><code>data_names</code></strong>:<code>Union</code>[<code>str</code>, <code>list</code>], <strong><code>target_names</code></strong>:<code>Union</code>[<code>str</code>, <code>list</code>]=<em><code>None</code></em>)</p>
+<h2 id="Data_Pipe" class="doc_header"><code>class</code> <code>Data_Pipe</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L323" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Data_Pipe</code>(<strong><code>record_master</code></strong>:<a href="/theonerig/core#RecordMaster"><code>RecordMaster</code></a>, <strong><code>data_names</code></strong>:<code>Union</code>[<code>str</code>, <code>list</code>], <strong><code>target_names</code></strong>:<code>Union</code>[<code>str</code>, <code>list</code>]=<em><code>None</code></em>)</p>
 </blockquote>
 
 </div>
@@ -411,7 +417,7 @@ the processing of the data.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="export_record" class="doc_header"><code>export_record</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L484" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>export_record</code>(<strong><code>_path</code></strong>, <strong><code>record_master</code></strong>)</p>
+<h4 id="export_record" class="doc_header"><code>export_record</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L489" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>export_record</code>(<strong><code>_path</code></strong>, <strong><code>record_master</code></strong>)</p>
 </blockquote>
 <p>Export a Record_Master object to an h5 file, readable outside of this library.</p>
 
@@ -436,7 +442,7 @@ the processing of the data.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="import_record" class="doc_header"><code>import_record</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L508" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>import_record</code>(<strong><code>_path</code></strong>)</p>
+<h4 id="import_record" class="doc_header"><code>import_record</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L513" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>import_record</code>(<strong><code>_path</code></strong>)</p>
 </blockquote>
 <p>Import a Record_Master from an h5 file saved by the export_record function of this library.</p>
 
