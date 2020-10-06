@@ -163,7 +163,7 @@ def process_sta_batch(stim_inten, spike_counts, Hw=30, Fw=2, return_pval=False):
     for k, cell_sta in enumerate(allCells_sta): #Easy way to do normalization for each cell that works for all possible shapes
         if return_pval:
             z_scores    = cell_sta/ np.sqrt(1/sum_spikes[k]) #Standard score is calculated as (x-mean)/std
-            p_values[k] = sp.stats.norm.sf(abs(z_scores))*2*(len_stim-Hw)
+            p_values[k] = sp.stats.norm.sf(abs(z_scores))*2
 
         allCells_sta[k] = np.nan_to_num(cell_sta/np.max(np.abs(cell_sta)))
 
