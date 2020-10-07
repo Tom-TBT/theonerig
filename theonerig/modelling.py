@@ -2,7 +2,7 @@
 
 __all__ = ['sigmoid', 'gaussian', 'gaussian_2D', 'sum_of_gaussian', 'sum_of_2D_gaussian', 'fit_sigmoid',
            'fit_spatial_sta', 'fit_temporal_sta', 'sin_exponent', 'sinexp_gauss', 'sinexp_sigm', 'fit_chirp_am',
-           'fit_chirp_freq_epoch']
+           'fit_chirp_freq_epoch', 'repetition_quality_index', 'onoff_transient_index']
 
 # Cell
 import math
@@ -157,8 +157,8 @@ def fit_temporal_sta(sta):
     init_fit = (2, sta[argmin], (argmin-len(sta))/60, 2, sta[argmax], (argmax-len(sta))/60, 0)
 
                 #sigma_1,   amp_1,  x0_1,      sigma_2,    amp_2,  x0_2,       y0
-    bounds   = ((0,           -1, -len(sta)/60,        0,  -1,  -len(sta)/60,  -1),
-                (len(sta)*4,  1,    1/60,     len(sta)*4,   1,     1/60,    1 ))
+    bounds   = ((0,           -2, -len(sta)/60,        0,  -2,  -len(sta)/60,  -1),
+                (len(sta)*4,  2,    1/60,     len(sta)*4,   2,     1/60,    1 ))
 
     if np.isnan(sp.sum(sta)): #We check that the sta exists, otherwise return default zero model
         res  = {"sigma_1":1,"amp_1":0,"x0_1":0,
@@ -281,3 +281,39 @@ def fit_chirp_freq_epoch(cell_mean, freqs=[1.875,3.75,7.5,15,30], durations=[2,2
         best_fit_l.append(best_fit)
         cursor += len_fit
     return best_fit_l, qualityidx_l #, best_cov_l
+
+# Cell
+def repetition_quality_index(cell_response):
+    """Return a quality index of cell response to a repeated stimulus.
+    params:
+        - cell_response: response of a cell of shape (n_rep, time)"""
+    tmp1 = np.var(np.mean(cell_response, axis=0)) #VAR(MEAN(C)repeat)time
+    tmp2 = np.mean(np.var(cell_response, axis=1)) #MEAN(VAR(C)time)repeat
+    quality = tmp1/tmp2
+    return quality
+
+def onoff_transient_index(cell_response, start_on=120, stop_on=240, start_off=240, stop_off=360):
+    """Return both on-off and transient indexes of cell response.
+    params:
+        - cell_response: response of a cell of shape (time,...)
+        - start_on:  starting index of ON stimulation
+        - stop_on:   stop index of ON stimulation
+        - start_off: starting index of OFF stimulation
+        - stop_off:  stop index of OFF stimulation"""
+    #ON-OFF index
+    on_response   = cell_response[start_on:stop_on]
+    on_sum        = np.sum(on_response)
+    off_response  = cell_response[start_off:stop_off]
+    off_sum       = np.sum(off_response)
+    onoff_indexes = (on_sum-off_sum)/(on_sum+off_sum)
+
+    #Transient index
+    if onoff_indexes>0: #Main ON response
+        transient_sum   = np.sum(cell_response[start_on:start_on+30])
+        sustained_sum   = np.sum(cell_response[start_on:stop_on])
+    else:
+        transient_sum   = np.sum(cell_response[start_off:start_off+30])
+        sustained_sum   = np.sum(cell_response[start_off:stop_off])
+    transient_index = transient_sum/sustained_sum
+
+    return onoff_indexes, transient_index
