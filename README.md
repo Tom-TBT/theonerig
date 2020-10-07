@@ -12,6 +12,25 @@ So far there is no easy install, just clone the folder form github and within th
 
 Later we will put it on pip so you can install it with `pip install theonerig`
 
+### Install for macOS
+
+Thanks to Anastasiia for sorting this out:
+
+`git clone` <br/><br/>
+`cd theonerig/` <br/><br/>
+`conda create -n tor python=3.6` <br/><br/>
+`conda activate tor` <br/><br/>
+`pip install packaging` <br/><br/>
+`pip install colorama` <br/><br/>
+`pip install -e .` <br/><br/>
+
+Now either get ipykernel 
+`conda install ipykernel` <br/><br/>
+`python -m ipykernel install --user --name tor --display-name "Python [tor]"` <br/><br/>
+
+OR just do
+`conda install jupyter notebook` <br/><br/>
+
 ## How to use
 
 Some example data are located in the "files" folder. We are gonna use data from the subfolder "vivo_2p", acquired by the Asari Lab @ EMBL Rome.<br><br>The main idea behind this library is to use a main timeserie to synchronize other data streams from various source. Once done, it allows easy slicing of the data and apply to it any processing.
