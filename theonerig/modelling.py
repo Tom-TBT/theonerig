@@ -62,7 +62,7 @@ def sum_of_gaussian(t, sigma_1, amp_1, x0_1,
                        sigma_2, amp_2, x0_2, y0):
     """
     Sum of gaussian, using the gaussian function
-        params:
+    params:
         - t: 1D numpy array at which to evaluate the points
         - sigma_1: width of the 1st gaussian
         - amp_1: amplitude of the 1st gaussian
@@ -88,10 +88,12 @@ def fit_sigmoid(nonlin, t=None):
               [np.inf  , np.inf, np.inf, np.max(nonlin)])
     try:
         fit, _ = sp.optimize.curve_fit(sigmoid, t, nonlin, maxfev=10000, bounds=bounds)
-        res  = {"sigma":fit[0],"amp":fit[1],"x0":fit[2],"y0":fit[3]}
+        fit  = {"sigma":fit[0],"amp":fit[1],"x0":fit[2],"y0":fit[3]}
     except RuntimeError:
-        res = {"sigma":1,"amp":0,"x0":0,"y0":0}
-    return res
+        fit = {"sigma":1,"amp":0,"x0":0,"y0":0}
+    model = sigmoid(t, **fit)
+    quality_index =  1 - (np.var(nonlin-model)/np.var(nonlin))
+    return res, quality_index
 
 def fit_spatial_sta(sta):
     shape_y, shape_x = sta.shape
@@ -132,16 +134,17 @@ def fit_spatial_sta(sta):
                             (np.inf, np.inf, np.inf, np.inf, fit_s[4]+eps,fit_s[5]+eps,
                              np.inf,np.inf,np.inf,np.inf,fit_s[4]+eps,fit_s[5]+eps,np.inf))
             fit_sum, _ = sp.optimize.curve_fit(sum_of_2D_gaussian, (x,z), data_tofit, p0=init_fit_sum, bounds=bounds_sum)
-            res  = {"sigma_x_1": fit_sum[0], "sigma_z_1":fit_sum[1], "amp_1":fit_sum[2],
+            fit  = {"sigma_x_1": fit_sum[0], "sigma_z_1":fit_sum[1], "amp_1":fit_sum[2],
                     "theta_1":fit_sum[3], "x0_1":fit_sum[4], "z0_1":fit_sum[5],
                     "sigma_x_2": fit_sum[6], "sigma_z_2":fit_sum[7], "amp_2":fit_sum[8],
                     "theta_2":fit_sum[9], "x0_2":fit_sum[10], "z0_2":fit_sum[11], "y0":fit_sum[12]}
 
         except RuntimeError: #If a model can't be fitted, we get a runtimeError
-            res  = {"sigma_x_1": 1, "sigma_z_1":1, "amp_1":0, "theta_1":0, "x0_1":0, "z0_1":0,
+            fit  = {"sigma_x_1": 1, "sigma_z_1":1, "amp_1":0, "theta_1":0, "x0_1":0, "z0_1":0,
                     "sigma_x_2": 1, "sigma_z_2":1, "amp_2":0, "theta_2":0, "x0_2":0, "z0_2":0, "y0":0}
-
-    return res
+    model = sum_of_2D_gaussian((x,z), **fit)
+    quality_index = 1 - (np.var(data_tofit-model)/np.var(data_tofit))
+    return fit, quality_index
 
 
 # Cell
@@ -150,12 +153,12 @@ def fit_temporal_sta(sta):
     argmin = sta.argmin()
     if sta[argmax] < abs(sta[argmin]):
         argmax, argmin = argmin, argmax
-    t = range(len(sta))
-    init_fit = (2,      sta[argmin],argmin,    2,    sta[argmax],argmax,     0)
+    t = np.linspace((1-len(sta))/60, 0, len(sta))
+    init_fit = (2, sta[argmin], (argmin-len(sta))/60, 2, sta[argmax], (argmax-len(sta))/60, 0)
 
-                #sigma_1,   amp_1,  x0_1,    sigma_2,    amp_2,  x0_2,       y0
-    bounds   = ((0,           -1,     0,        0,         -1,     0,        -1),
-                (len(sta)*4,  1,    len(sta), len(sta)*4,   1,   len(sta),    1 ))
+                #sigma_1,   amp_1,  x0_1,      sigma_2,    amp_2,  x0_2,       y0
+    bounds   = ((0,           -1, -len(sta)/60,        0,  -1,  -len(sta)/60,  -1),
+                (len(sta)*4,  1,    1/60,     len(sta)*4,   1,     1/60,    1 ))
 
     if np.isnan(sp.sum(sta)): #We check that the sta exists, otherwise return default zero model
         res  = {"sigma_1":1,"amp_1":0,"x0_1":0,
@@ -163,13 +166,15 @@ def fit_temporal_sta(sta):
     else:
         try:
             fit, _ = sp.optimize.curve_fit(sum_of_gaussian, t, sta, p0=init_fit, bounds=bounds)
-            res  = {"sigma_1":fit[0],"amp_1":fit[1],"x0_1":fit[2],
+
+            fit  = {"sigma_1":fit[0],"amp_1":fit[1],"x0_1":fit[2],
                     "sigma_2":fit[3],"amp_2":fit[4],"x0_2":fit[5],"y0":fit[6]}
         except RuntimeError: #If a model can't be fitted, we get a runtimeError
-            res  = {"sigma_1":1,"amp_1":0,"x0_1":0,
+            fit  = {"sigma_1":1,"amp_1":0,"x0_1":0,
                     "sigma_2":1,"amp_2":0,"x0_2":0,"y0":0}
-
-    return res
+    model = sum_of_gaussian(t, **fit)
+    quality_index = 1 - (np.var(sta-model)/np.var(sta))
+    return fit, quality_index
 
 # Cell
 def sin_exponent(x, amp, phi, freq, exp):
@@ -188,6 +193,10 @@ def sinexp_sigm(x, sigma, x0, y0, amp, phi, freq, exp):
     return sin_exponent(x, amp, phi, freq, exp) * sigmoid(x, sigma, 1, x0, y0)
 
 def fit_chirp_am(cell_mean, start=420, stop=960, freq=1.5):
+    """Fit a sinexp_sigm to the mean response of a cell to chirp_am.
+    return :
+        - fit, or None if fit not found
+        - quality index (explained variance)"""
 
     to_fit = cell_mean[start:stop]
     t = np.linspace(0, len(to_fit)/60, len(to_fit), endpoint=False)
@@ -195,36 +204,43 @@ def fit_chirp_am(cell_mean, start=420, stop=960, freq=1.5):
     #The iterations fit different exponent/gaussian, and the first in addition fit phi.
     try:
         sinexp_sigm_part = partial(sinexp_sigm, freq=freq, exp=2)
-        fit, cov = sp.optimize.curve_fit(sinexp_sigm_part, t, to_fit,
+        fit, _ = sp.optimize.curve_fit(sinexp_sigm_part, t, to_fit,
                                          bounds=[(-np.inf, -np.inf,0,           0,     0),
                                                 (np.inf,np.inf, np.max(to_fit),np.inf, 2*np.pi)])
-        best_cov = cov[:4,:4]
         best_fit = (*fit, freq, 2)
         tmp_diff = np.sum(np.square(sinexp_sigm_part(t, *fit) - to_fit))
         phi = fit[4] #phi is from now on fixed
     except:
         best_fit = None
-        best_cov = np.zeros((4,4)) + np.inf
-        return best_fit, best_cov
+        return best_fit, 0
 
     for exp in np.exp2(range(2,10)): #Fitting the data with different sin exponents, to narrow the fit
         try:
             sinexp_sigm_part = partial(sinexp_sigm, phi=phi, freq=freq, exp=exp)
-            fit, cov = sp.optimize.curve_fit(sinexp_sigm_part, t, to_fit, bounds=[(-np.inf, -np.inf, 0,           0),
+            fit, _ = sp.optimize.curve_fit(sinexp_sigm_part, t, to_fit, bounds=[(-np.inf, -np.inf, 0,           0),
                                                                                    (np.inf,np.inf, np.max(to_fit),np.inf)])
             mse = np.sum(np.square(sinexp_sigm_part(t, *fit) - to_fit))
             if mse < tmp_diff:
-                best_cov = cov
                 best_fit = (*fit, phi, freq, exp)
                 tmp_diff = mse
         except:
             continue
-
-    return best_fit, best_cov
+    best_fit = dict((k, v) for v, k in zip(best_fit, ["sigma","x0","y0","amp","phi","freq","exp"]))
+    if best_fit is not None:
+        model = sinexp_sigm(t, **best_fit)
+        quality_index = 1 - (np.var(to_fit-model)/np.var(to_fit))
+    else:
+        quality_index = 0
+    return best_fit, quality_index
 
 def fit_chirp_freq_epoch(cell_mean, freqs=[1.875,3.75,7.5,15,30], durations=[2,2,2,1,1]):
+    """Takes the mean response of a cell to chirp_freq_epoch and fit a sine_exponent to
+    each frequency.
+    return :
+        - list of five fit (1 per freq, None if fit not found)
+        - list of five quality index (explained variance)"""
     best_fit_l = []
-    best_cov_l = []
+    qualityidx_l = []
 
     cursor = 360 #Start of the freqs
 
@@ -256,7 +272,12 @@ def fit_chirp_freq_epoch(cell_mean, freqs=[1.875,3.75,7.5,15,30], durations=[2,2
                     tmp_diff = mse
             except:
                 continue
+        if best_fit is not None:
+            best_fit = dict((k, v) for v, k in zip(best_fit, ["amp","phi","freq","exp"]))
+            model = sin_exponent(t, **best_fit)
+            qualityidx_l.append(1 - (np.var(to_fit-model)/np.var(to_fit)))
+        else:
+            qualityidx_l.append(0)
         best_fit_l.append(best_fit)
-        best_cov_l.append(best_cov)
         cursor += len_fit
-    return best_fit_l, best_cov_l
+    return best_fit_l, qualityidx_l #, best_cov_l
