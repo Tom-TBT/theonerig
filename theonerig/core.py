@@ -13,7 +13,12 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
 
 class DataChunk(np.ndarray):
-    """Base brick of data."""
+    """Base brick of data. Derived from np.ndarray
+    params:
+        - data: The ndarray with shape (time, ...)
+        - idx: Index of the start of the DataChunk in the record.
+        - group: group of the DataChunk in {stim, sync, cell, data}
+        - fill: Default filling value."""
     def __new__(cls, data, idx, group, fill=0):
         # See https://docs.scipy.org/doc/numpy-1.11.0/user/basics.subclassing.html#basics-subclassing
         # for explanation on subclassing numpy arrays
@@ -204,7 +209,7 @@ class ContiguousRecord():
 class RecordMaster(list):
     """
     One Timeserie to rule them all, One Timeserie to find them,
-    One Timeserie to bring them all and in the darkness bind them
+    One Timeserie to bring them all and in the darkness bind them.
 
     The RecordMaster class is the top level object managing all
     timeseries. It uses a list of ContiguousRecord to represent

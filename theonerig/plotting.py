@@ -206,10 +206,12 @@ def plot_chirp(ax, stim_inten, spike_bins, smooth=True):
     ax.imshow([stim_inten.reshape(n_repeats,-1)[0]], aspect='auto', cmap="gray", extent=(0,len_/60,(max_val-min_val)*6/5,max_val))
 
 # Cell
-def plot_chirpam_fit(cell_mean, fit, start=390, stop=960):
+def plot_chirpam_fit(cell_mean, fit, start=420, stop=960):
     plt.figure()
     plt.plot(np.linspace(0, len(cell_mean)/60, len(cell_mean), endpoint=False), cell_mean)
-    plt.plot(np.linspace(start/60, stop/60, stop-start, endpoint=False), sinexp_sigm(np.linspace(0, (stop-start)/60, stop-start, endpoint=False), *fit))
+    if fit is not None:
+        plt.plot(np.linspace(start/60, stop/60, stop-start, endpoint=False),
+                 sinexp_sigm(np.linspace(0, (stop-start)/60, stop-start, endpoint=False), **fit))
 
 def plot_chirp_freq_epoch_fit(cell_mean, fit_l, freqs=[1.875,3.75,7.5,15,30], durations=[2,2,2,1,1], start=360):
     plt.figure()
@@ -224,7 +226,7 @@ def plot_chirp_freq_epoch_fit(cell_mean, fit_l, freqs=[1.875,3.75,7.5,15,30], du
             cursor += len_fit
             continue
         t = np.linspace(0, len_fit/60, len_fit*4, endpoint=False)
-        plt.plot(t+(cursor/60), sin_exponent(t, *fit))
+        plt.plot(t+(cursor/60), sin_exponent(t, **fit))
 
         cursor += len_fit
 
