@@ -84,7 +84,7 @@ def sum_of_2D_gaussian(xz, sigma_x_1, sigma_z_1, amp_1, theta_1, x0_1, z0_1,
 def fit_sigmoid(nonlin, t=None):
     if t is None:
         t = range(len(nonlin))
-    bounds = ([0.000001, 0     , 0     , 0],
+    bounds = ([0.000001, -np.inf     , -np.inf     , 0],
               [np.inf  , np.inf, np.inf, np.max(nonlin)])
     try:
         fit, _ = sp.optimize.curve_fit(sigmoid, t, nonlin, maxfev=10000, bounds=bounds)
@@ -93,7 +93,7 @@ def fit_sigmoid(nonlin, t=None):
         fit = {"sigma":1,"amp":0,"x0":0,"y0":0}
     model = sigmoid(t, **fit)
     quality_index =  1 - (np.var(nonlin-model)/np.var(nonlin))
-    return res, quality_index
+    return fit, quality_index
 
 def fit_spatial_sta(sta):
     shape_y, shape_x = sta.shape
@@ -211,7 +211,7 @@ def fit_chirp_am(cell_mean, start=420, stop=960, freq=1.5):
         tmp_diff = np.sum(np.square(sinexp_sigm_part(t, *fit) - to_fit))
         phi = fit[4] #phi is from now on fixed
     except:
-        best_fit = None
+        best_fit = {"sigma":1,"x0":0,"y0":0,"amp":0,"phi":0,"freq":freq,"exp":0}
         return best_fit, 0
 
     for exp in np.exp2(range(2,10)): #Fitting the data with different sin exponents, to narrow the fit
@@ -226,11 +226,9 @@ def fit_chirp_am(cell_mean, start=420, stop=960, freq=1.5):
         except:
             continue
     best_fit = dict((k, v) for v, k in zip(best_fit, ["sigma","x0","y0","amp","phi","freq","exp"]))
-    if best_fit is not None:
-        model = sinexp_sigm(t, **best_fit)
-        quality_index = 1 - (np.var(to_fit-model)/np.var(to_fit))
-    else:
-        quality_index = 0
+#     if best_fit["amp"]!=0:
+    model = sinexp_sigm(t, **best_fit)
+    quality_index = 1 - (np.var(to_fit-model)/np.var(to_fit))
     return best_fit, quality_index
 
 def fit_chirp_freq_epoch(cell_mean, freqs=[1.875,3.75,7.5,15,30], durations=[2,2,2,1,1]):
@@ -258,7 +256,6 @@ def fit_chirp_freq_epoch(cell_mean, freqs=[1.875,3.75,7.5,15,30], durations=[2,2
         to_fit = interp1d(np.linspace(0,len(to_fit)/60, len(to_fit), endpoint=False), to_fit)(t)
 
         best_fit = None
-        best_cov = np.zeros((2,2)) + np.inf
         tmp_diff = np.inf
         for exp in np.exp2(range(1,10)): #Fitting the data with different cos exponents, to narrow the fit
             try:
@@ -274,11 +271,13 @@ def fit_chirp_freq_epoch(cell_mean, freqs=[1.875,3.75,7.5,15,30], durations=[2,2
                 continue
         if best_fit is not None:
             best_fit = dict((k, v) for v, k in zip(best_fit, ["amp","phi","freq","exp"]))
+            best_fit_l.append(best_fit)
             model = sin_exponent(t, **best_fit)
             qualityidx_l.append(1 - (np.var(to_fit-model)/np.var(to_fit)))
         else:
+            best_fit_l.append({"amp":0,"phi":0,"freq":freq,"exp":0})
             qualityidx_l.append(0)
-        best_fit_l.append(best_fit)
+
         cursor += len_fit
     return best_fit_l, qualityidx_l #, best_cov_l
 
