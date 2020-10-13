@@ -394,7 +394,7 @@ def plot_sta_positions(ax, stas):
     for i, sta in enumerate(stas):
         color = DEFAULT_COLORS[i%len(DEFAULT_COLORS)]
         best_frame = np.unravel_index(np.argmax(np.abs(sta)), sta.shape)[0]
-        sfit = fit_spatial_sta(sta[best_frame])
+        sfit, _ = fit_spatial_sta(sta[best_frame])
         e = Ellipse(xy=[sfit["x0_1"], sta.shape[1]-sfit["z0_1"]],
                           width=sfit["sigma_x_1"], height=sfit["sigma_z_1"],
                           angle=sfit["theta_1"]*180*np.pi, fill=False)
