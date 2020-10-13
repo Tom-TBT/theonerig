@@ -205,6 +205,11 @@ class ContiguousRecord():
     def __repr__(self):
         return self._data_dict.__repr__()
 
+    def __delete__(self, instance):
+        for k, l_datachunk in self._data_dict.items():
+            for dc in l_datachunk:
+                del dc
+
 # Cell
 class RecordMaster(list):
     """
@@ -318,6 +323,10 @@ class RecordMaster(list):
 
     def __repr__(self):
         return "["+", ".join([repr(seq) for seq in self._sequences])+"]"
+
+    def __delete__(self, instance):
+        for seq in self._sequences:
+            del seq
 
 # Cell
 class Data_Pipe():
