@@ -230,7 +230,10 @@ def stimulus_ensemble(stim_inten, Hw=30, x=0, y=0, w=None, h=None):
         h = stim_inten.shape[1]
     xmin, xmax = max(0,x-w), min(stim_inten.shape[2], x+w+1)
     ymin, ymax = max(0,y-h), min(stim_inten.shape[1], y+h+1)
-    stim_ensmbl = np.zeros((len(stim_inten)-Hw, (xmax-xmin)*(ymax-ymin)*Hw))
+    dtype = stim_inten.dtype
+    if np.all(np.in1d(stim_inten, [-1,0,1])):
+        dtype = "int8"
+    stim_ensmbl = np.zeros((len(stim_inten)-Hw, (xmax-xmin)*(ymax-ymin)*Hw), dtype=dtype)
     for i in range(Hw, len(stim_inten)):
         flat_stim         = np.ndarray.flatten(stim_inten[i-Hw:i,
                                                           ymin:ymax,

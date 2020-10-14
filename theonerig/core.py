@@ -206,9 +206,9 @@ class ContiguousRecord():
         return self._data_dict.__repr__()
 
     def __delete__(self, instance):
-        for k, l_datachunk in self._data_dict.items():
-            for dc in l_datachunk:
-                del dc
+        for k, v in self._data_dict.items():
+            del v
+            self._data_dict[k] = None
 
 # Cell
 class RecordMaster(list):
