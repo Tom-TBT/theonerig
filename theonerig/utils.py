@@ -3,8 +3,8 @@
 __all__ = ['extend_sync_timepoints', 'align_sync_timepoints', 'resample_to_timepoints', 'flip_stimulus',
            'flip_gratings', 'stim_to_dataChunk', 'spike_to_dataChunk', 'parse_stim_args', 'peak_sta_frame',
            'stim_inten_norm', 'twoP_dataChunks', 'img_2d_fit', 'fill_nan', 'group_direction_response',
-           'group_chirp_bumps', 'limited_stim_ensemble', 'buszaki_shank_channels', 'phy_results_dict', 'format_pval',
-           'get_calcium_stack_lenghts', 'get_chirp_mean_corrected', 'stim_recap_df', 'stim_recap_df_old']
+           'group_chirp_bumps', 'buszaki_shank_channels', 'phy_results_dict', 'format_pval',
+           'get_calcium_stack_lenghts', 'get_repeat_corrected', 'stim_recap_df', 'stim_recap_df_old']
 
 # Cell
 import numpy as np
@@ -305,21 +305,6 @@ def group_chirp_bumps(stim_inten, spike_counts, n_repeat):
     return res_d
 
 # Cell
-def limited_stim_ensemble(stim_inten, cell_sta, Hw=16, window=4):
-    y,x = np.argwhere(np.abs(cell_sta)==1)[0][1:]
-    x_low, x_high = max(0, x-window), min(cell_sta.shape[2]-1, x+window)
-    y_low, y_high = max(0, y-window), min(cell_sta.shape[1]-1, y+window)
-    y, x = np.meshgrid(np.linspace(y_low,y_high,window*2+1, dtype=int),
-                       np.linspace(x_low,x_high,window*2+1, dtype=int))
-    limited_stim = stim_inten[:,y, x]
-
-    stim_ensemble = np.zeros((len(limited_stim)-Hw, limited_stim.shape[-2]*limited_stim.shape[-1]*Hw))
-    for i in range(Hw, len(limited_stim)):
-        flat_stim = np.ndarray.flatten(limited_stim[i-Hw:i]) #,5:11,22:28
-        stim_ensemble[i-Hw] = flat_stim
-    return stim_ensemble
-
-# Cell
 def buszaki_shank_channels(channel_positions):
     shank_1_mask = channel_positions[:,0]<180
     shank_1_idx  = np.argwhere(shank_1_mask)[:,0]
@@ -364,13 +349,10 @@ def get_calcium_stack_lenghts(folder):
     return record_lenghts
 
 # Cell
-def get_chirp_mean_corrected(stim_inten, spike_counts):
+def get_repeat_corrected(stim_inten, spike_counts, n_repeats=10):
     """Correct the stimulus shifts before averaging the spikes"""
     def count_repl_in_range(fr_replaced, _range):
         return sum([repl[0] in _range for repl in fr_replaced])
-
-    conv_res  = np.convolve(stim_inten[360:600].astype(float), stim_inten.astype(float), mode="full")
-    n_repeats = np.sum(conv_res.max()==conv_res)
 
     signal_shifts     = stim_inten.attrs["signal_shifts"]
     frame_replacement = stim_inten.attrs["frame_replacement"]
@@ -387,12 +369,12 @@ def get_chirp_mean_corrected(stim_inten, spike_counts):
             spike_count_corr[-1:] = prev_del
 
     len_epoch = len(stim_inten)//n_repeats
-    good_spike_counts = []
+    spike_counts_corrected = []
+    errors_per_repeat      = []
     for i in range(n_repeats):
-        if count_repl_in_range(frame_replacement, range(len_epoch*i, len_epoch*(i+1)))>20:
-            continue
-        good_spike_counts.append(spike_count_corr[len_epoch*i:len_epoch*(i+1)])
-    return np.mean(good_spike_counts, axis=0)
+        errors_per_repeat.append(count_repl_in_range(frame_replacement, range(len_epoch*i, len_epoch*(i+1))))
+        spike_counts_corrected.append(spike_count_corr[len_epoch*i:len_epoch*(i+1)])
+    return np.array(spike_counts_corrected), np.array(errors_per_repeat)
 
 # Cell
 def stim_recap_df(reM):

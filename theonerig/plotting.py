@@ -206,6 +206,7 @@ def plot_chirp(ax, stim_inten, spike_bins, smooth=True):
     ax.imshow([stim_inten.reshape(n_repeats,-1)[0]], aspect='auto', cmap="gray", extent=(0,len_/60,(max_val-min_val)*6/5,max_val))
 
 # Cell
+<<<<<<< HEAD
 def plot_chirpam_fit(cell_mean, fit, start=390, stop=960):
     plt.figure()
     plt.plot(np.linspace(0, len(cell_mean)/60, len(cell_mean), endpoint=False), cell_mean)
@@ -213,20 +214,50 @@ def plot_chirpam_fit(cell_mean, fit, start=390, stop=960):
 
 def plot_chirp_freq_epoch_fit(cell_mean, fit_l, freqs=[1.875,3.75,7.5,15,30], durations=[2,2,2,1,1], start=360):
     plt.figure()
+=======
+def plot_chirpam_fit(cell_mean, fit, QI=None, start=420, stop=960, figsize=(50,2)):
+    plt.figure(figsize=figsize)
+    plt.plot(np.linspace(0, len(cell_mean)/60, len(cell_mean), endpoint=False), cell_mean)
+    if fit is not None:
+        plt.plot(np.linspace(start/60, stop/60, stop-start, endpoint=False),
+                 sinexp_sigm(np.linspace(0, (stop-start)/60, stop-start, endpoint=False), **fit))
+        if QI is not None:
+            plt.text((start/60), max(cell_mean)*80/100, str(round(QI,3)), fontdict={'size':22})
+    plt.xlim(0, len(cell_mean)/60)
+    fit = {k: round(v,2) for k, v in fit.items()}
+    plt.title(str(fit))
+
+def plot_chirp_freq_epoch_fit(cell_mean, fit_l, QI_l=[None]*5,
+                              freqs=[1.875,3.75,7.5,15,30], durations=[2,2,2,1,1], start=360,
+                              figsize=(50,2)):
+    plt.figure(figsize=figsize)
+>>>>>>> 7c28b7ceb5824d7cf66031bde5678f5642f714de
     plt.plot(np.linspace(0, len(cell_mean)/60, len(cell_mean), endpoint=False), cell_mean)
     len_fits = [int(dur*freq)*int(60/freq) for dur,freq in zip(durations, freqs)]
     cursor = start
     edgecut = 10
-    for len_fit, dur, fit in zip(len_fits, durations, fit_l):
+    bestfit = fit_l[0],0
+    for len_fit, dur, fit, QI in zip(len_fits, durations, fit_l, QI_l):
         cursor  += edgecut
         len_fit -= edgecut
         if fit is None:
             cursor += len_fit
             continue
         t = np.linspace(0, len_fit/60, len_fit*4, endpoint=False)
+<<<<<<< HEAD
         plt.plot(t+(cursor/60), sin_exponent(t, *fit))
+=======
+        plt.plot(t+(cursor/60), sin_exponent(t, **fit))
+        if QI is not None:
+            plt.text((cursor/60), max(cell_mean)*80/100, str(round(QI,3)), fontdict={'size':22})
+            if QI>bestfit[1]:
+                bestfit=fit,QI
+>>>>>>> 7c28b7ceb5824d7cf66031bde5678f5642f714de
 
         cursor += len_fit
+    plt.xlim(0, len(cell_mean)/60)
+    bestfit = {k: round(v,2) for k, v in bestfit[0].items()}
+    plt.title(str(bestfit))
 
 # Cell
 def plot_spike_template(ax, cluster_composition, templates, shanks_idx, channel_positions):
@@ -376,7 +407,7 @@ def plot_sta_positions(ax, stas):
     for i, sta in enumerate(stas):
         color = DEFAULT_COLORS[i%len(DEFAULT_COLORS)]
         best_frame = np.unravel_index(np.argmax(np.abs(sta)), sta.shape)[0]
-        sfit = fit_spatial_sta(sta[best_frame])
+        sfit, _ = fit_spatial_sta(sta[best_frame])
         e = Ellipse(xy=[sfit["x0_1"], sta.shape[1]-sfit["z0_1"]],
                           width=sfit["sigma_x_1"], height=sfit["sigma_z_1"],
                           angle=sfit["theta_1"]*180*np.pi, fill=False)
