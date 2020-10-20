@@ -110,10 +110,10 @@ def plot_ds_wheel(ax, ds_dict, cell_idx):
         if best_oi is None:
             best_oi, best_di = (ori_mod, ori_phase, ori_pval), (dir_mod, dir_phase, dir_pval)
         else:
-            if best_oi[2]<ori_pval:
+            if best_oi[2]>ori_pval:
                 best_oi=(ori_mod, ori_phase, ori_pval)
                 idx_best_oi = j
-            if best_di[2]<dir_pval:
+            if best_di[2]>dir_pval:
                 best_di=(dir_mod, dir_phase, dir_pval)
                 idx_best_di = j
 
