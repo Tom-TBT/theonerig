@@ -458,7 +458,7 @@ class Data_Pipe():
             seq_idx, _slice = self._slices[self._n]
             self.record_master[seq_idx].set_slice(_slice)
             for i, name in enumerate(self.data_names):
-                res[self.target_names[i]] = self.record_master[seq_idx][name]#[_slice]
+                res[self.target_names[i]] = self.record_master[seq_idx][name]
             self.record_master[seq_idx].set_slice(None)
             self._n += 1
             return res
@@ -474,7 +474,7 @@ class Data_Pipe():
             self.record_master[seq_idx].set_slice(_slice)
             res = {}
             for i, name in enumerate(self.data_names):
-                res[self.target_names[i]] = self.record_master[seq_idx][name]#[_slice]
+                res[self.target_names[i]] = self.record_master[seq_idx][name]
             self.record_master[seq_idx].set_slice(None)
             return res
         elif isinstance(key, slice):

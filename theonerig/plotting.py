@@ -120,10 +120,10 @@ def plot_ds_wheel(ax, ds_dict, cell_idx):
         to_plot.append((key, spike_counts, dir_mod, dir_pval, ori_mod, ori_pval))
 
     for j, (key, spike_counts, dir_mod, dir_pval, ori_mod, ori_pval) in enumerate(to_plot):
-        label = key+"   DI:"+str(round(dir_mod,2))+" / p"+str(round(1-dir_pval,2))
+        label = key+"   DI:"+str(round(dir_mod,2))+" / p"+str(round(dir_pval,2))
         if j==idx_best_di:
             label += " *"
-        label += "    OI:"+str(round(ori_mod,2))+" / p"+str(round(1-ori_pval,2))
+        label += "    OI:"+str(round(ori_mod,2))+" / p"+str(round(ori_pval,2))
         if j==idx_best_oi:
             label += " *"
 

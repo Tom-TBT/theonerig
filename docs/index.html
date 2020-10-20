@@ -193,6 +193,39 @@ description: "Theonerig (read 'the one rig') is a package to align and filter da
 
 <div class="inner_cell">
     <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pipe</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;S_matrix&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(36000, 2)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Select all cell responses where there is no stimulus</span>
 
 <span class="n">pipe</span> <span class="o">+=</span> <span class="s2">&quot;S_matrix&quot;</span> 
@@ -321,6 +354,60 @@ description: "Theonerig (read 'the one rig') is a package to align and filter da
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Export-your-synchronise-records-or-import-the-records-of-your-friends">Export your synchronise records or import the records of your friends<a class="anchor-link" href="#Export-your-synchronise-records-or-import-the-records-of-your-friends"> </a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Once the reM is in its final state, export it as such</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">export_record</span><span class="p">(</span><span class="s2">&quot;path/for/my/record/reM_coolname.h5&quot;</span><span class="p">,</span> <span class="n">reM</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As you can see, the record is in a .h5 format, so it can be explored and imported with any other H5 solution.<br> But the best way is still to open it with theonerig!</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">import_record</span><span class="p">(</span><span class="s2">&quot;path/for/my/record/reM_coolname.h5&quot;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
 </div>
  
 

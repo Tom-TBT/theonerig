@@ -373,8 +373,8 @@ def direction_selectivity(grouped_spikes_d):
             rand_ori_idx_l[i] = abs(rand_ori_pref)
 
         #Same calculation of pval as in Baden et al 2016
-        p_val_dir = np.sum(rand_dir_idx_l<dir_pref, axis=0)/n_shuffle
-        p_val_ori = np.sum(rand_ori_idx_l<ori_pref, axis=0)/n_shuffle
+        p_val_dir = 1 - (np.sum(rand_dir_idx_l<dir_pref, axis=0)/n_shuffle)
+        p_val_ori = 1 - (np.sum(rand_ori_idx_l<ori_pref, axis=0)/n_shuffle)
 
         #Finally we have to transform the orientation selectivity vectors to put them back in their
         # original orientation, by divinding the phase of the vector by two
