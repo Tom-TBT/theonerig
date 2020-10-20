@@ -67,6 +67,17 @@ pipe.plot()
 
 
 ```
+pipe[0]["S_matrix"].shape
+```
+
+
+
+
+    (36000, 2)
+
+
+
+```
 #Select all cell responses where there is no stimulus
 
 pipe += "S_matrix" 
@@ -76,7 +87,7 @@ pipe.plot()
 ```
 
 
-![png](docs/images/output_13_0.png)
+![png](docs/images/output_14_0.png)
 
 
 ```
@@ -90,7 +101,7 @@ pipe.plot()
 ```
 
 
-![png](docs/images/output_14_0.png)
+![png](docs/images/output_15_0.png)
 
 
 Then, the pipe can be iterated and return each separated chunk of data as a dictionnary containg each data selected
@@ -112,3 +123,17 @@ for data_dict in pipe:
     
 
 Note here the checkerboard. We possess actual data for only one chunk, but because default values are set for each dataset, the pipe is able to return a dataset for each part of the record. This allows to easily workaround records with missing data without crashing.
+
+# Export your synchronise records or import the records of your friends
+
+Once the reM is in its final state, export it as such
+
+```
+export_record("path/for/my/record/reM_coolname.h5", reM)
+```
+
+As you can see, the record is in a .h5 format, so it can be explored and imported with any other H5 solution.<br> But the best way is still to open it with theonerig!
+
+```
+import_record("path/for/my/record/reM_coolname.h5")
+```

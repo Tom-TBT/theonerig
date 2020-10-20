@@ -110,20 +110,20 @@ def plot_ds_wheel(ax, ds_dict, cell_idx):
         if best_oi is None:
             best_oi, best_di = (ori_mod, ori_phase, ori_pval), (dir_mod, dir_phase, dir_pval)
         else:
-            if best_oi[2]<ori_pval:
+            if best_oi[2]>ori_pval:
                 best_oi=(ori_mod, ori_phase, ori_pval)
                 idx_best_oi = j
-            if best_di[2]<dir_pval:
+            if best_di[2]>dir_pval:
                 best_di=(dir_mod, dir_phase, dir_pval)
                 idx_best_di = j
 
         to_plot.append((key, spike_counts, dir_mod, dir_pval, ori_mod, ori_pval))
 
     for j, (key, spike_counts, dir_mod, dir_pval, ori_mod, ori_pval) in enumerate(to_plot):
-        label = key+"   DI:"+str(round(dir_mod,2))+" / p"+str(round(1-dir_pval,2))
+        label = key+"   DI:"+str(round(dir_mod,2))+" / p"+str(round(dir_pval,2))
         if j==idx_best_di:
             label += " *"
-        label += "    OI:"+str(round(ori_mod,2))+" / p"+str(round(1-ori_pval,2))
+        label += "    OI:"+str(round(ori_mod,2))+" / p"+str(round(ori_pval,2))
         if j==idx_best_oi:
             label += " *"
 
