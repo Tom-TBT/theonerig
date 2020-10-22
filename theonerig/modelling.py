@@ -80,6 +80,8 @@ def sum_of_2D_gaussian(xz, sigma_x_1, sigma_z_1, amp_1, theta_1, x0_1, z0_1,
             + gaussian_2D(xz, sigma_x_2, sigma_z_2, amp_2, theta_2, x0_2, z0_2, 0) + y0)
 
 
+
+
 # Cell
 def fit_sigmoid(nonlin, t=None):
     if t is None:
@@ -190,7 +192,7 @@ def sinexp_gauss(x, sigma, x0, amp, phi, freq, exp):
     return sin_exponent(x, amp, phi, freq, exp) * gaussian(x, sigma, 1, x0, 0)
 
 def sinexp_sigm(x, sigma, x0, y0, amp, phi, freq, exp):
-    return sin_exponent(x, amp, phi, freq, exp) * sigmoid(x, sigma, 1, x0, y0)
+    return sin_exponent(x, amp, phi, freq, exp) * sigmoid(x, sigma, 1, x0, 0) + y0
 
 def fit_chirp_am(cell_mean, start=420, stop=960, freq=1.5):
     """Fit a sinexp_sigm to the mean response of a cell to chirp_am.
@@ -198,35 +200,49 @@ def fit_chirp_am(cell_mean, start=420, stop=960, freq=1.5):
         - fit, or None if fit not found
         - quality index (explained variance)"""
 
-    to_fit = cell_mean[start:stop]
+    to_fit = np.convolve([1/5]*5,cell_mean, mode="same")[start:stop]  #Smoothing
     t = np.linspace(0, len(to_fit)/60, len(to_fit), endpoint=False)
+
+    #If suppressed by contrast cell, the firing should be higher in first part of chirp
+    fit_positive = np.mean(to_fit[:len(to_fit)//2]) < np.mean(to_fit[len(to_fit)//2:])
 
     #The iterations fit different exponent/gaussian, and the first in addition fit phi.
     try:
-        sinexp_sigm_part = partial(sinexp_sigm, freq=freq, exp=2)
-        fit, _ = sp.optimize.curve_fit(sinexp_sigm_part, t, to_fit,
-                                         bounds=[(-np.inf, -np.inf,0,           0,     0),
-                                                (np.inf,np.inf, np.max(to_fit),np.inf, 2*np.pi)])
-        best_fit = (*fit, freq, 2)
-        tmp_diff = np.sum(np.square(sinexp_sigm_part(t, *fit) - to_fit))
-        phi = fit[4] #phi is from now on fixed
-    except:
-        best_fit = {"sigma":1,"x0":0,"y0":0,"amp":0,"phi":0,"freq":freq,"exp":0}
-        return best_fit, 0
+        sinexp_part = partial(sin_exponent, freq=freq, exp=2)
+        fit, _ = sp.optimize.curve_fit(sinexp_part, t, to_fit,
+                                         bounds=[( 0            , 0),
+                                                 (np.max(to_fit), 2*np.pi)],
+                                            p0 = (np.max(to_fit), 0))
 
-    for exp in np.exp2(range(2,10)): #Fitting the data with different sin exponents, to narrow the fit
+        best_fit = (50, 0, 0, *fit, freq, 2)
+        tmp_diff = np.sum(np.square(sinexp_sigm(t, *best_fit) - to_fit))
+        phi = fit[1]
+    except:
+        best_fit = (1, 0, 0, 0, 0, freq, 0)
+        tmp_diff = np.inf
+
+    for exp in np.exp2(range(1,10)): #Fitting the data with different sin exponents, to narrow the fit
         try:
-            sinexp_sigm_part = partial(sinexp_sigm, phi=phi, freq=freq, exp=exp)
-            fit, _ = sp.optimize.curve_fit(sinexp_sigm_part, t, to_fit, bounds=[(-np.inf, -np.inf, 0,           0),
-                                                                                   (np.inf,np.inf, np.max(to_fit),np.inf)])
+            sinexp_sigm_part = partial(sinexp_sigm, freq=freq, exp=exp)
+            if fit_positive:
+                fit, _ = sp.optimize.curve_fit(sinexp_sigm_part, t, to_fit,
+                                               bounds=[(  0,    0          ,        0       ,      0        , 0),
+                                                        (50, len(to_fit)/60,  np.max(to_fit), np.max(to_fit), 2*np.pi)],
+                                               p0 =      (1, len(to_fit)/120,       0       , np.max(to_fit), phi))
+            else:
+                fit, _ = sp.optimize.curve_fit(sinexp_sigm_part, t, to_fit,
+                                               bounds=[(  0,    0          ,        0       ,-np.max(to_fit), 0),
+                                                        (50, len(to_fit)/60,  np.max(to_fit),     0         , 2*np.pi)],
+                                               p0 =     (1, len(to_fit)/120,  np.max(to_fit) ,-np.max(to_fit),(phi+np.pi)%(2*np.pi)))
+
             mse = np.sum(np.square(sinexp_sigm_part(t, *fit) - to_fit))
             if mse < tmp_diff:
-                best_fit = (*fit, phi, freq, exp)
+                best_fit = (*fit, freq, exp)
                 tmp_diff = mse
         except:
             continue
     best_fit = dict((k, v) for v, k in zip(best_fit, ["sigma","x0","y0","amp","phi","freq","exp"]))
-#     if best_fit["amp"]!=0:
+
     model = sinexp_sigm(t, **best_fit)
     quality_index = 1 - (np.var(to_fit-model)/np.var(to_fit))
     return best_fit, quality_index
