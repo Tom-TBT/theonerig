@@ -200,27 +200,15 @@ def fit_chirp_am(cell_mean, start=420, stop=960, freq=1.5):
         - fit, or None if fit not found
         - quality index (explained variance)"""
 
-    to_fit = np.convolve([1/5]*5,cell_mean, mode="same")[start:stop]  #Smoothing
+    to_fit = cell_mean[start:stop]
     t = np.linspace(0, len(to_fit)/60, len(to_fit), endpoint=False)
 
     #If suppressed by contrast cell, the firing should be higher in first part of chirp
-    fit_positive = np.mean(to_fit[:len(to_fit)//2]) < np.mean(to_fit[len(to_fit)//2:])
+    fit_positive = np.mean(to_fit[:len(to_fit)//3]) < np.mean(to_fit[len(to_fit)*2//3:])
 
-    #The iterations fit different exponent/gaussian, and the first in addition fit phi.
-    try:
-        sinexp_part = partial(sin_exponent, freq=freq, exp=2)
-        fit, _ = sp.optimize.curve_fit(sinexp_part, t, to_fit,
-                                         bounds=[( 0            , 0),
-                                                 (np.max(to_fit), 2*np.pi)],
-                                            p0 = (np.max(to_fit), 0))
-
-        best_fit = (50, 0, 0, *fit, freq, 2)
-        tmp_diff = np.sum(np.square(sinexp_sigm(t, *best_fit) - to_fit))
-        phi = fit[1]
-    except:
-        best_fit = (1, 0, 0, 0, 0, freq, 0)
-        tmp_diff = np.inf
-
+    tmp_diff = np.inf
+    best_fit = (1, 0, 0, 0, 0, freq, 0)
+    phi      = np.pi
     for exp in np.exp2(range(1,10)): #Fitting the data with different sin exponents, to narrow the fit
         try:
             sinexp_sigm_part = partial(sinexp_sigm, freq=freq, exp=exp)
@@ -228,14 +216,17 @@ def fit_chirp_am(cell_mean, start=420, stop=960, freq=1.5):
                 fit, _ = sp.optimize.curve_fit(sinexp_sigm_part, t, to_fit,
                                                bounds=[(  0,    0          ,        0       ,      0        , 0),
                                                         (50, len(to_fit)/60,  np.max(to_fit), np.max(to_fit), 2*np.pi)],
-                                               p0 =      (1, len(to_fit)/120,       0       , np.max(to_fit), phi))
+                                               p0 =      (1, len(to_fit)/120,       0       , np.max(to_fit), phi),
+                                              maxfev=100000)
             else:
                 fit, _ = sp.optimize.curve_fit(sinexp_sigm_part, t, to_fit,
                                                bounds=[(  0,    0          ,        0       ,-np.max(to_fit), 0),
                                                         (50, len(to_fit)/60,  np.max(to_fit),     0         , 2*np.pi)],
-                                               p0 =     (1, len(to_fit)/120,  np.max(to_fit) ,-np.max(to_fit),(phi+np.pi)%(2*np.pi)))
+                                               p0 =     (1, len(to_fit)/120,  np.max(to_fit) ,-np.max(to_fit),phi),
+                                              maxfev=100000)
 
             mse = np.sum(np.square(sinexp_sigm_part(t, *fit) - to_fit))
+            phi = fit[4]
             if mse < tmp_diff:
                 best_fit = (*fit, freq, exp)
                 tmp_diff = mse
@@ -243,7 +234,8 @@ def fit_chirp_am(cell_mean, start=420, stop=960, freq=1.5):
             continue
     best_fit = dict((k, v) for v, k in zip(best_fit, ["sigma","x0","y0","amp","phi","freq","exp"]))
 
-    model = sinexp_sigm(t, **best_fit)
+    model  = sinexp_sigm(t, **best_fit)
+    to_fit = cell_mean[start:stop]
     quality_index = 1 - (np.var(to_fit-model)/np.var(to_fit))
     return best_fit, quality_index
 

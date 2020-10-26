@@ -246,6 +246,12 @@ class RecordMaster(list):
         cs = ContiguousRecord(len(ref_timepoints), ref_signals, ref_timepoints)
         self._sequences.insert(idx, cs)
 
+    def keys(self):
+        keys = []
+        for seq in self._sequences:
+            keys.extend(list(seq.keys()))
+        return set(keys)
+
     def __setitem__(self, key, value:DataChunk):
         """Setting an item directly to the record_master place it in the first sequence"""
         if isinstance(key, str):
