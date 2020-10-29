@@ -287,7 +287,7 @@ def plot_spike_template_MEA(ax, cluster_composition, templates, channel_position
 def plot_autocorrelogram(ax, cluster, spike_times, spike_clusters, bin_ms=.001, sampling_rate=30000, tails=30):
     cluster_mask = spike_clusters==cluster
     cluster_times = spike_times[cluster_mask]
-    hist = np.histogram(cluster_times, bins=np.linspace(0,cluster_times[-1], cluster_times[-1]/(bin_ms*sampling_rate)))[0]
+    hist = np.histogram(cluster_times, bins=np.linspace(0,cluster_times[-1], int(cluster_times[-1]/(bin_ms*sampling_rate)))[0]
     hist_tails = np.concatenate(([0]*tails, hist, [0]*tails))
     corr = np.correlate(hist_tails, hist, mode="valid")
     corr[tails]=0
