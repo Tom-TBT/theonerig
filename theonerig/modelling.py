@@ -84,12 +84,13 @@ def sum_of_2D_gaussian(xz, sigma_x_1, sigma_z_1, amp_1, theta_1, x0_1, z0_1,
 
 # Cell
 def fit_sigmoid(nonlin, t=None):
+    assert np.mean(nonlin[:20])<np.mean(nonlin[-20:]) #nonlinearity must be oriented the right way
     if t is None:
         t = range(len(nonlin))
-    bounds = ([0.000001, -np.inf     , -np.inf     , 0],
-              [np.inf  , np.inf, np.inf, np.max(nonlin)])
+    bounds = ([0.000001, 0.000001, -np.inf, 0],
+              [np.inf  , np.inf,    np.inf, np.max(nonlin)])
     try:
-        fit, _ = sp.optimize.curve_fit(sigmoid, t, nonlin, maxfev=10000, bounds=bounds)
+        fit, _ = sp.optimize.curve_fit(sigmoid, t, nonlin, bounds=bounds)
         fit  = {"sigma":fit[0],"amp":fit[1],"x0":fit[2],"y0":fit[3]}
     except RuntimeError:
         fit = {"sigma":1,"amp":0,"x0":0,"y0":0}
