@@ -241,7 +241,7 @@ def stimulus_ensemble(stim_inten, Hw=30, x=0, y=0, w=None, h=None):
         stim_ensmbl[i-Hw] = flat_stim
     return stim_ensmbl
 
-def process_nonlinearity(stim_ensemble, spike_bins):
+def process_nonlinearity(stim_ensemble, spike_bins, nbins=100):
     """Stimulus must already have been converted to the stim_ensemble, so spike_bins must also
     not include the history window a the beggining."""
     assert len(stim_ensemble)==len(spike_bins)
@@ -264,7 +264,7 @@ def process_nonlinearity(stim_ensemble, spike_bins):
     stim_ensembl_transfo    = stim_ensemble@spike_ensmbl_mean #Projecting stimulus ensemble to the STA
     stim_ensembl_sp_transfo = stim_ensembl_spk@spike_ensmbl_mean
 
-    xaxis      = np.linspace(np.min(stim_ensembl_transfo),np.max(stim_ensembl_transfo),101)
+    xaxis      = np.linspace(np.min(stim_ensembl_transfo),np.max(stim_ensembl_transfo),nbins+1)
     hist_all   = np.histogram(stim_ensembl_transfo, bins=xaxis)[0]
     hist_trigg = np.histogram(stim_ensembl_sp_transfo, bins=xaxis)[0]
 
