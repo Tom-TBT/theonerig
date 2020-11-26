@@ -241,37 +241,34 @@ def stimulus_ensemble(stim_inten, Hw=30, x=0, y=0, w=None, h=None):
         stim_ensmbl[i-Hw] = flat_stim
     return stim_ensmbl
 
-def process_nonlinearity(stim_ensemble, spike_bins, nbins=100):
+def process_nonlinearity(stim_ensemble, spike_bins):
     """Stimulus must already have been converted to the stim_ensemble, so spike_bins must also
     not include the history window a the beggining."""
     assert len(stim_ensemble)==len(spike_bins)
-    spike_ensmbl_mean = np.average(stim_ensemble, axis=0, weights=spike_bins) #Computes the STA, not normalised
+    stim_ensmbl_mean  = np.mean(stim_ensemble,axis=0)#np.mean(spike_triggering_stimuli,axis=0)
+    spike_ensmbl_mean = np.average(stim_ensemble, axis=0, weights=spike_bins)
+    middle_vec = np.mean(np.stack((stim_ensmbl_mean, spike_ensmbl_mean)), axis=0)
+
+    pca = PCA(n_components=2)
+    fit = pca.fit(np.stack((stim_ensmbl_mean,
+                            spike_ensmbl_mean,
+                            middle_vec)))
+    stim_ensemble_tranfo = fit.transform(stim_ensemble)
 
     if np.min(spike_bins)<1:#We have probabilities, not spike counts. Need to make it integers
         mask        = np.where(spike_bins > 0)[0]
         nonzero_min = np.min(spike_bins[mask])
         discretized = spike_bins/nonzero_min
-        spike_bins  = ((10*discretized)/(np.max(discretized)))
+        spike_bins  = ((10*discretized)/(np.max(discretized))).astype(int)
+    spike_ensembl = stim_ensemble_tranfo[np.where(spike_bins)[0]]
 
-    spike_bins = spike_bins.astype(int)
-
-    stim_ensembl_spk = []
-    for j, sp_count in enumerate(spike_bins):
-        if sp_count>0:
-            stim_ensembl_spk.extend([stim_ensemble[j]]*int(sp_count))
-    stim_ensembl_spk = np.array(stim_ensembl_spk)
-
-    stim_ensembl_transfo    = stim_ensemble@spike_ensmbl_mean #Projecting stimulus ensemble to the STA
-    stim_ensembl_sp_transfo = stim_ensembl_spk@spike_ensmbl_mean
-
-    xaxis      = np.linspace(np.min(stim_ensembl_transfo),np.max(stim_ensembl_transfo),nbins+1)
-    hist_all   = np.histogram(stim_ensembl_transfo, bins=xaxis)[0]
-    hist_trigg = np.histogram(stim_ensembl_sp_transfo, bins=xaxis)[0]
+    xaxis      = np.linspace(np.min(stim_ensemble_tranfo),np.max(stim_ensemble_tranfo),101)
+    hist_all   = np.histogram(stim_ensemble_tranfo, bins=xaxis)[0]
+    hist_trigg = np.histogram(spike_ensembl, bins=xaxis)[0]
 
     nonlin = hist_trigg/hist_all
 
     nonlin = fill_nan(nonlin)
-
     return nonlin
 
 
