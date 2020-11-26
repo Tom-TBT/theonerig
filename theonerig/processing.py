@@ -324,7 +324,7 @@ def paired_distances_sta(sta_fits_1, sta_fits_2, sta_shape, f):
     return paired_distances(sta_masks_1, sta_masks_2)
 
 # Cell
-def direction_selectivity(grouped_spikes_d):
+def direction_selectivity(grouped_spikes_d, n_bootstrap=1000):
     """Compute the direction selectivity index of cells in the given dict containing for each condition as
     the keys, an array of shape (n_angle, n_repeat, trial_len, n_cell). Such dictionnary can be obtained
     by using utils.group_direction_response
@@ -336,42 +336,41 @@ def direction_selectivity(grouped_spikes_d):
     res_d = {}
     for cond, sp_count in grouped_spikes_d.items():
         n_angle = sp_count.shape[0]
-        mean_n_spike = np.sum(sp_count, axis=(1,2)).T
+        sum_rep_spike = np.sum(sp_count, axis=(1,2)).T
 
         x         = np.linspace(0, (n_angle-1)/4*np.pi, num=n_angle)
 
         #Direction selectivity
         vect_dir  = np.exp(x*1j)#np.array([np.cos(x) + np.sin(x)*1j])
-        dir_pref  = np.nan_to_num((vect_dir * mean_n_spike).sum(axis=1) / mean_n_spike.sum(axis=1))
+        dir_pref  = np.nan_to_num((vect_dir * sum_rep_spike).sum(axis=1) / sum_rep_spike.sum(axis=1))
         ds_idx    = abs(dir_pref)
 
         #Orientation selectivity
         vect_ori  = np.exp(x*1j*2)#np.concatenate((vect_dir[:,:n_angle//2], vect_dir[:,:n_angle//2]), axis=1)
-        ori_pref  = np.nan_to_num((vect_ori * mean_n_spike).sum(axis=1) / mean_n_spike.sum(axis=1))
+        ori_pref  = np.nan_to_num((vect_ori * sum_rep_spike).sum(axis=1) / sum_rep_spike.sum(axis=1))
         ori_idx   = abs(ori_pref)
 
         #Generating direction and orientation index from shuffled trials
         axtup_l = list(itertools.product(range(sp_count.shape[0]), range(sp_count.shape[1])))
         random.seed(1)
-        n_shuffle = 1000
         axtup_l_shuffled = axtup_l.copy()
-        rand_ori_idx_l = np.empty((n_shuffle, sp_count.shape[3]))
-        rand_dir_idx_l = np.empty((n_shuffle, sp_count.shape[3]))
-        for i in range(n_shuffle):
+        rand_ori_idx_l = np.empty((n_bootstrap, sp_count.shape[3]))
+        rand_dir_idx_l = np.empty((n_bootstrap, sp_count.shape[3]))
+        for i in range(n_bootstrap):
             random.shuffle(axtup_l_shuffled)
             shuffled_sp_count = np.empty(sp_count.shape)
             for axtup, axtup_shuff in zip(axtup_l, axtup_l_shuffled):
                 shuffled_sp_count[axtup] = sp_count[axtup_shuff]
-            rand_mean_n_spike      = np.sum(shuffled_sp_count, axis=(1,2)).T
-            rand_dir_pref     = np.nan_to_num((vect_dir * rand_mean_n_spike).sum(axis=1) / rand_mean_n_spike.sum(axis=1))
+            rand_sum_rep_spike      = np.sum(shuffled_sp_count, axis=(1,2)).T
+            rand_dir_pref     = np.nan_to_num((vect_dir * rand_sum_rep_spike).sum(axis=1) / rand_sum_rep_spike.sum(axis=1))
             rand_dir_idx_l[i] = abs(rand_dir_pref)
 
-            rand_ori_pref     = np.nan_to_num((vect_ori * rand_mean_n_spike).sum(axis=1) / rand_mean_n_spike.sum(axis=1))
+            rand_ori_pref     = np.nan_to_num((vect_ori * rand_sum_rep_spike).sum(axis=1) / rand_sum_rep_spike.sum(axis=1))
             rand_ori_idx_l[i] = abs(rand_ori_pref)
 
         #Same calculation of pval as in Baden et al 2016
-        p_val_dir = 1 - (np.sum(rand_dir_idx_l<dir_pref, axis=0)/n_shuffle)
-        p_val_ori = 1 - (np.sum(rand_ori_idx_l<ori_pref, axis=0)/n_shuffle)
+        p_val_dir = 1 - (np.sum(rand_dir_idx_l<ds_idx, axis=0)/n_bootstrap)
+        p_val_ori = 1 - (np.sum(rand_ori_idx_l<ori_idx, axis=0)/n_bootstrap)
 
         #Finally we have to transform the orientation selectivity vectors to put them back in their
         # original orientation, by divinding the phase of the vector by two
@@ -380,7 +379,7 @@ def direction_selectivity(grouped_spikes_d):
         polar_ori_pref[:,1] = ((polar_ori_pref[:,1]+tau)%tau)/2 #Convert to positive radian angle and divide by two
         ori_pref = np.array([rect(pol[0], pol[1]) for pol in polar_ori_pref])
 
-        res_d[cond] = (mean_n_spike, dir_pref, ds_idx, ori_pref, ori_idx, p_val_dir, p_val_ori)
+        res_d[cond] = (sum_rep_spike, dir_pref, ds_idx, ori_pref, ori_idx, p_val_dir, p_val_ori)
 
     return res_d
 
