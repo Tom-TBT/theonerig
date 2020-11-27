@@ -2,7 +2,8 @@
 
 __all__ = ['sigmoid', 'gaussian', 'gaussian_2D', 'sum_of_gaussian', 'sum_of_2D_gaussian', 'fit_sigmoid',
            'fit_spatial_sta', 'fit_temporal_sta', 'sin_exponent', 'sinexp_gauss', 'sinexp_sigm', 'fit_chirp_am',
-           'fit_chirp_freq_epoch', 'repetition_quality_index', 'onoff_transient_index']
+           'fit_chirp_freq_epoch', 'repetition_quality_index', 'onoff_transient_index', 'exponential_decay',
+           'fit_transiency']
 
 # Cell
 import math
@@ -325,3 +326,24 @@ def onoff_transient_index(cell_response, start_on=120, stop_on=240, start_off=24
     transient_index = transient_sum/sustained_sum
 
     return onoff_indexes, transient_index
+
+# Cell
+def exponential_decay(x, tau, baseline, amplitude):
+    return np.exp(-x*tau)*amplitude + baseline
+
+def fit_transiency(pref_response):
+    peak_position = np.argmax(pref_response)
+    pref_response = pref_response[peak_position:]
+
+    t = np.linspace(0,(len(pref_response))*1/60, len(pref_response), endpoint=False)
+    bounds = ([0.000001, 0, 0.000001],
+              [np.inf  , pref_response[0], pref_response[0]])
+    try:
+        fit, _ = sp.optimize.curve_fit(exponential_decay, t, pref_response, maxfev=1000000, bounds=bounds)
+        fit  = {"tau":fit[0],"baseline":fit[1],"amplitude":fit[2]}
+    except RuntimeError:
+        fit = {"tau":1,"baseline":0,"amplitude":0}
+    model = exponential_decay(t, **fit)
+    quality_index =  1 - (np.var(pref_response-model)/np.var(pref_response))
+
+    return fit, quality_index, peak_position
