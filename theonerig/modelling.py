@@ -329,20 +329,24 @@ def onoff_transient_index(cell_response, start_on=120, stop_on=240, start_off=24
 
 # Cell
 def exponential_decay(x, tau, baseline, amplitude):
-    return np.exp(-x*tau)*amplitude + baseline
+    return np.exp(-x*tau)*(amplitude-baseline) + baseline
 
 def fit_transiency(pref_response):
     peak_position = np.argmax(pref_response)
     pref_response = pref_response[peak_position:]
 
-    t = np.linspace(0,(len(pref_response))*1/60, len(pref_response), endpoint=False)
-    bounds = ([0.000001, 0, 0.000001],
-              [np.inf  , pref_response[0], pref_response[0]])
-    try:
-        fit, _ = sp.optimize.curve_fit(exponential_decay, t, pref_response, maxfev=1000000, bounds=bounds)
-        fit  = {"tau":fit[0],"baseline":fit[1],"amplitude":fit[2]}
-    except RuntimeError:
+    t = np.linspace(0, len(pref_response)/60, len(pref_response), endpoint=False)
+    bounds = ([0.000001, 0],
+              [np.inf  , pref_response[0]])
+    if np.all(pref_response==0):
         fit = {"tau":1,"baseline":0,"amplitude":0}
+    else:
+        try:
+            decay_part = partial(exponential_decay, amplitude=pref_response[0])
+            fit, _ = sp.optimize.curve_fit(decay_part, t, pref_response, maxfev=1000000, bounds=bounds)
+            fit  = {"tau":fit[0],"baseline":fit[1],"amplitude":pref_response[0]}
+        except RuntimeError:
+            fit = {"tau":1,"baseline":0,"amplitude":0}
     model = exponential_decay(t, **fit)
     quality_index =  1 - (np.var(pref_response-model)/np.var(pref_response))
 
