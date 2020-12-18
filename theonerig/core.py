@@ -530,8 +530,8 @@ def export_record(path, record_master):
     """Export a Record_Master object to an h5 file, readable outside of this library.
 
     params:
-        path: path of the file to be saved
-        record_master: RecordMaster to save
+        - path: path of the file to be saved
+        - record_master: RecordMaster to save
     """
     print("Exporting the record master")
     with h5py.File(path, mode="w") as h5_f:
@@ -559,7 +559,7 @@ def import_record(path):
     """Import a Record_Master from an h5 file saved by the export_record function of this library.
 
     params:
-        path: path of the RecordMaster to import
+        - path: path of the RecordMaster to import
     """
     print("Importing the record master")
     with h5py.File(path, mode="r") as h5_f:
