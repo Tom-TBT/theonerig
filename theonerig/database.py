@@ -13,12 +13,36 @@ import json
 
 # Cell
 def get_db_engine(username, password, ip_adress, model_name, rdbms="mysql"):
+    """
+    Creates a sqlalchemy engine to query a database.
+
+    params:
+        - username: Username used to connect
+        - password: Password of the user
+        - ip_adress: IP adress of the database
+        - model_name: Name of the model of the database to connect to
+        - rdbms: Backend engine of the database
+
+    return:
+        - A sqlalchemy engine connected to the database
+    """
     engine = create_engine("%s://%s:%s@%s/%s" % (rdbms, username, password, ip_adress, model_name),echo = False)
     test_query = "SELECT * FROM Project"
     pd.read_sql_query(test_query, engine)
     return engine
 
 def prompt_credentials(user=None, db_adress=None):
+    """
+    Helper function to make a prompt for the password, and additonally the user and the database IP adress
+    if left to None.
+
+    params:
+        - user: None to prompt or name of the user.
+        - db_adress: None to prompt or database adress
+
+    return:
+        - username, password and database IP adress
+    """
     if user is None:
         user = input(prompt='Username: ')
     passwd = getpass.getpass(prompt='Password: ')
@@ -28,6 +52,16 @@ def prompt_credentials(user=None, db_adress=None):
 
 # Cell
 def get_record_essentials(engine, record_id):
+    """
+    Retrieves the essential informations about a record.
+
+    params:
+        - engine: Database engine
+        - record_id: ID of the record
+
+    return:
+        - Pandas Dataframe of record essential informations
+    """
     q_select_record = "SELECT * FROM Record WHERE id = %d" % record_id
     q_select_cell = "SELECT * FROM Cell WHERE record_id = %d" % record_id
 
@@ -56,6 +90,16 @@ def get_record_essentials(engine, record_id):
 
 # Cell
 def get_stim_params(engine, stim_hashes):
+    """
+    Retrieves the parameters of a stimulus specified by its hash key.
+
+    params:
+        - engine: Database engine
+        - stim_hashes: Stimulus hash
+
+    return:
+        - Pandas Dataframe of stimulus parameters
+    """
     #Writting the query speed up the function rather than querying all individual tables
     # and filtering them all
     if not isinstance(stim_hashes, list):
@@ -76,6 +120,16 @@ def get_stim_params(engine, stim_hashes):
 
 # Cell
 def get_table(engine, table_name):
+    """
+    Return the entire content of a table in a pandas Dataframe.
+
+    params:
+        - engine: Database engine
+        - table_name: Name of the table
+
+    return:
+        - Pandas Dataframe of the whole table
+    """
     query = """SELECT * FROM """+str(table_name)
     df_table = pd.read_sql_query(query, engine)
     return df_table
