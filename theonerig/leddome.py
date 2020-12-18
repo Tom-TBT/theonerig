@@ -10,12 +10,16 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 # Cell
-
 def get_dome_positions(mode="cartesian"):
-    """Generates positions of all LEDs of the dome. Position of first and last LED of each stripe was estimated
-    in Blender, and other LEDs position are interpolated.
+    """
+    Generates positions of all LEDs of the dome. Position of first and last LED of each stripe
+    were estimated in Blender, and other in between LEDs position are interpolated from those two.
 
-    mode: ["cartesian", "spherical"]"""
+    params:
+        - mode: What coordinates to obtain in set ["cartesian", "spherical"]
+    return:
+        - LED position of the LED dome, in shape (4, 237)
+    """
     stripe_dict = {}
     stripe = np.array([[-0.44162,0.46045,10.07932], [-0.03378,10.07122,0.72211]])*10
     stripe_dict["A"] = _slerp(stripe, 23)
@@ -77,6 +81,9 @@ def get_dome_positions(mode="cartesian"):
     return res
 
 def _symetry_stripes(stripe):
+    """
+    Generates the 90° symetry of three stripes from the given stripe.
+    """
     all_stripes = np.stack([stripe]*4, axis=0)
     tmp = all_stripes[1,:,0]*-1
     all_stripes[1,:,0] = all_stripes[1,:,1]
@@ -93,8 +100,12 @@ def _symetry_stripes(stripe):
 def _slerp(leds_xyz, n_led):
     """Interpolate positions from the xyz positon of the first and last LED
 
-    leds_xyz: np.array of shape(2,3)
-    n_led   : total n LED on the stripe"""
+    params:
+        -leds_xyz: np.array of shape(2,3)
+        -n_led: total n LED on the stripe
+    return:
+        - interpolated positions
+    """
     p0, p1 = leds_xyz[0], leds_xyz[1]
 
     omega = math.acos(np.dot(p0/np.linalg.norm(p0), p1/np.linalg.norm(p1)))
@@ -102,28 +113,42 @@ def _slerp(leds_xyz, n_led):
     return [math.sin((1.0-t)*omega) / so * p0 + math.sin(t*omega)/so * p1 for t in np.linspace(0.0, 1.0, n_led)]
 
 def as_cartesian(rthetaphi):
-    #takes list rthetaphi (single coord)
-    r       = rthetaphi[0]
-    theta   = rthetaphi[1]* pi/180 # to radian
-    phi     = rthetaphi[2]* pi/180
-    x = r * math.sin( theta ) * math.cos( phi )
-    y = r * math.sin( theta ) * math.sin( phi )
-    z = r * math.cos( theta )
-    return np.array([x,y,z])
+    """
+    Convert 3D polar coordinate tuple into cartesian coordinates.
+
+    params:
+        - rthetaphi: Single or list of (r, theta, phi) iterable
+    return:
+        - Single or list of converted (x, y, z) array.
+    """
+    r, theta, phi = tuple(np.array(rthetaphi).T)
+    theta   = theta*np.pi/180 # to radian
+    phi     = phi*np.pi/180
+    x = r * np.sin( theta ) * np.cos( phi )
+    y = r * np.sin( theta ) * np.sin( phi )
+    z = r * np.cos( theta )
+    return np.stack([x,y,z], axis=-1)
 
 def as_spherical(xyz):
-    #takes list xyz (single coord)
-    x       = xyz[0]
-    y       = xyz[1]
-    z       = xyz[2]
-    r       =  math.sqrt(x*x + y*y + z*z)
-    theta   =  math.acos(z/r)
-    phi     =  math.atan2(y,x)
-    return np.array([r,theta,phi])
+    """
+    Convert 3D cartesian coordinates tuple into polar coordinate.
+
+    params:
+        - xyz: Single or list of (x, y, z) iterable
+    return:
+        - Single or list of converted (r, theta, phi) array.
+    """
+    x, y, z = tuple(np.array(xyz).T)
+    r       =  np.sqrt(x*x + y*y + z*z)
+    theta   =  np.arccos(z/r)
+    phi     =  np.arctan2(y,x)
+    return np.stack([r,theta,phi], axis=-1)
 
 def _chain_stripes(stripe_dict):
-    """Chain the stripes to create a one-dimensional array were LED idx correspond to their index on the stripe,
-    with left side first"""
+    """
+    Chain the stripes to create a one-dimensional array were LED idx correspond to their index on the stripe,
+    with left side first.
+    """
     res = []
     UP,DOWN = -1,1
     ori = UP
