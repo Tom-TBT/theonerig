@@ -349,7 +349,7 @@ def stim_inten_norm(stim_inten):
     stim_inten -= np.min(stim_inten)
     stim_inten -= np.max(stim_inten)/2
     stim_inten /= np.max(np.abs(stim_inten))
-    return np.round(stim_inten, 2)
+    return np.round(stim_inten, 5)
 
 # Cell
 def group_direction_response(stim_prop, spike_counts, n_repeat, n_cond=32):
