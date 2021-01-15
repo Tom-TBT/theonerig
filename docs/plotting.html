@@ -70,8 +70,99 @@ description: "All the plotting"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_2d_sta" class="doc_header"><code>plot_2d_sta</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L31" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_2d_sta</code>(<strong><code>sta</code></strong>, <strong><code>grid</code></strong>=<em><code>None</code></em>, <strong><code>pval</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_2d_fit" class="doc_header"><code>plot_2d_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L30" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_2d_fit</code>(<strong><code>sta</code></strong>, <strong><code>param_d</code></strong>, <strong><code>fit_f</code></strong>=<em><code>'sum_of_2D_gaussian'</code></em>, <strong><code>imshow_args</code></strong>=<em><code>{'vmin': -1, 'vmax': 1, 'cmap': 'gray'}</code></em>)</p>
 </blockquote>
+<p>2D STA plotting helper function to quickly check results.</p>
+<p>params:</p>
+
+<pre><code>- sta: Frame fitted containing the 2D STA
+- param_d: Parameter dictionary of the fit with the function in fit_f
+- fit_f: Function used for the fit
+- imshow_args: Parameters for imshow
+</code></pre>
+<p>return:</p>
+
+<pre><code>- the two axes list</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="plot_chirpam_fit" class="doc_header"><code>plot_chirpam_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L48" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_chirpam_fit</code>(<strong><code>cell_mean</code></strong>, <strong><code>param_d</code></strong>, <strong><code>fit_f</code></strong>=<em><code>'sinexp_sigm'</code></em>, <strong><code>QI</code></strong>=<em><code>None</code></em>, <strong><code>start</code></strong>=<em><code>420</code></em>, <strong><code>stop</code></strong>=<em><code>960</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Helper funciton to visualize the fit of a cell response to a chirp_am stimulus.</p>
+<p>params:</p>
+
+<pre><code>- cell_mean: Cell's mean response to the stimulus
+- param_d: Parameter dictionary of the fit with the function in fit_f
+- fit_f: Function used for the fit
+- QI: Quality index of the fit
+- start: Where the fit started in index of cell_mean
+- stop: Where the fit stopped in index of cell_mean
+- ax: Axis where to plot the figure. If None, a new figure of size (50,2) is created
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The axis of the figure</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="plot_chirp_freq_epoch_fit" class="doc_header"><code>plot_chirp_freq_epoch_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L79" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_chirp_freq_epoch_fit</code>(<strong><code>cell_mean</code></strong>, <strong><code>param_d_l</code></strong>, <strong><code>fit_f</code></strong>=<em><code>'sin_exponent'</code></em>, <strong><code>QI_l</code></strong>=<em><code>[None, None, None, None, None]</code></em>, <strong><code>freqs</code></strong>=<em><code>[1.875, 3.75, 7.5, 15, 30]</code></em>, <strong><code>durations</code></strong>=<em><code>[2, 2, 2, 1, 1]</code></em>, <strong><code>start</code></strong>=<em><code>360</code></em>, <strong><code>sampling_rate</code></strong>=<em><code>60</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Helper funciton to visualize the fit of a cell response to a chirp_freq_epoch stimulus.</p>
+<p>params:</p>
+
+<pre><code>- cell_mean: Cell's mean response to the stimulus
+- param_d_l: Parameters dictionary list of the fits with the function in fit_f
+- fit_f: Function used for the fit
+- QI_l: Quality index list of the fits
+- freqs: Frequency list of the epochs in Hz
+- durations: Duration list of the epochs
+- start: Where the fit started in index of cell_mean
+- sampling_rate: Sampling rate of the response in Hz
+- ax: Axis where to plot the figure. If None, a new figure of size (50,2) is created
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The axis of the figure</code></pre>
 
 </div>
 
@@ -101,8 +192,20 @@ description: "All the plotting"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_cross_correlation" class="doc_header"><code>plot_cross_correlation</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L59" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_cross_correlation</code>(<strong><code>correlation_array</code></strong>, <strong><code>threshold</code></strong>=<em><code>0.1</code></em>, <strong><code>two_sided</code></strong>=<em><code>True</code></em>)</p>
+<h4 id="plot_ds_wheel" class="doc_header"><code>plot_ds_wheel</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L128" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_ds_wheel</code>(<strong><code>ds_dict</code></strong>, <strong><code>cell_idx</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>, <strong><code>arrow_params</code></strong>=<em><code>{'width': 0.13, 'head_length': 10, 'length_includes_head': True, 'lw': 2, 'zorder': 5, 'alpha': 0.5, 'edgecolor': 'black'}</code></em>)</p>
 </blockquote>
+<p>Polar plot for direction and orientation response of a cell processed by <code>processing.direction_selectivity</code>.</p>
+<p>params:</p>
+
+<pre><code>- ds_dict: The dictionary containing the cells DS and OS
+- cell_idx: The index of the cell in the response
+- ax: The axis for the plot. If None, a new plot is created
+- arrow_params: Parameters for the arrow of the preferred orientation and direction (from the p_values)
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The axis of the plot</code></pre>
 
 </div>
 
@@ -132,8 +235,20 @@ description: "All the plotting"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_2d_fit" class="doc_header"><code>plot_2d_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L83" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_2d_fit</code>(<strong><code>sta</code></strong>, <strong><code>param_d</code></strong>)</p>
+<h4 id="plot_fl_bars" class="doc_header"><code>plot_fl_bars</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L203" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_fl_bars</code>(<strong><code>sta</code></strong>, <strong><code>pval</code></strong>=<em><code>None</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>, <strong><code>imshow_params</code></strong>=<em><code>{'cmap': 'gray', 'vmin': -1, 'vmax': 1, 'aspect': 'auto', 'interpolation': 'nearest'}</code></em>)</p>
 </blockquote>
+<p>Plot the response to a 1D spatial stimulus like Flickering_bars.</p>
+<p>params:</p>
+
+<pre><code>- sta: The STA to the 1D stimulus
+- pval: p-value of the response (float)
+- ax: The axis for the plot. If None, a new plot is created
+- imshow_params: Parameters for the plotted image
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The axis of the figure</code></pre>
 
 </div>
 
@@ -163,8 +278,19 @@ description: "All the plotting"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_ds_wheel" class="doc_header"><code>plot_ds_wheel</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L91" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_ds_wheel</code>(<strong><code>ax</code></strong>, <strong><code>ds_dict</code></strong>, <strong><code>cell_idx</code></strong>)</p>
+<h4 id="plot_t_sta" class="doc_header"><code>plot_t_sta</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L233" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_t_sta</code>(<strong><code>sta</code></strong>, <strong><code>pval</code></strong>=<em><code>None</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
+<p>Plot the STA response of a cell to a fullfield stimulus.</p>
+<p>params:</p>
+
+<pre><code>- sta: The t-STA of the cell
+- pval: p-value of the response (float)
+- ax: The axis for the plot. If None, a new plot is created
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The axis of the plot</code></pre>
 
 </div>
 
@@ -194,10 +320,21 @@ description: "All the plotting"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_dark_white_response" class="doc_header"><code>plot_dark_white_response</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L144" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_dark_white_response</code>(<strong><code>ax</code></strong>, <strong><code>spike_bins</code></strong>)</p>
+<h4 id="plot_chirp" class="doc_header"><code>plot_chirp</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L263" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_chirp</code>(<strong><code>stim_inten</code></strong>, <strong><code>spike_bins</code></strong>, <strong><code>smooth</code></strong>=<em><code>True</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
-<p>spike_bins must be of shape (2, n_cell, trial_len), the dark beeing at idx 0 and white at idx 1
-of the first dimension.</p>
+<p>Plot the response to a chirp stimulus (but could be any repeated stimulus, non-shuffled).
+The response is plotted with seaborn's lineplot.</p>
+<p>params:</p>
+
+<pre><code>- stim_inten: The whole stimulus intensity
+- spike_bins: The cell's response to the whole stimulus
+- smooth: Flag to smooth or not the cell's response
+- ax: The axis for the plot. If None, a new plot is created
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The axis of the plot</code></pre>
 
 </div>
 
@@ -227,8 +364,273 @@ of the first dimension.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_fl_bars" class="doc_header"><code>plot_fl_bars</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L154" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_fl_bars</code>(<strong><code>ax</code></strong>, <strong><code>sta</code></strong>, <strong><code>pval</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_spike_template" class="doc_header"><code>plot_spike_template</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L305" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_spike_template</code>(<strong><code>cluster_composition</code></strong>, <strong><code>templates</code></strong>, <strong><code>shanks_idx</code></strong>, <strong><code>channel_positions</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
+<p>Plot the spike template obtained with phy for a silicone probe.</p>
+<p>params:</p>
+
+<pre><code>- cluster_composition: List of phy format clusters corresponding to that cell
+- templates: All templates of phy format
+- shanks_idx: Idx of shanks for the channels obtained with `utils.buszaki_shank_channels`
+- channel_positions: Positions of the channels by idx from phy format
+- ax: The axis for the plot. If None, a new plot is created
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The axis of the plot</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="plot_spike_template_MEA" class="doc_header"><code>plot_spike_template_MEA</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L344" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_spike_template_MEA</code>(<strong><code>cluster_composition</code></strong>, <strong><code>templates</code></strong>, <strong><code>channel_positions</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Plot the spike template obtained with phy for a micro electrode array.</p>
+<p>params:</p>
+
+<pre><code>- cluster_composition: List of phy format clusters corresponding to that cell
+- templates: All templates of phy format
+- channel_positions: Positions of the channels by idx from phy format
+- ax: The axis for the plot. If None, a new plot is created
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The axis of the plot</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="plot_autocorrelogram" class="doc_header"><code>plot_autocorrelogram</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L380" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_autocorrelogram</code>(<strong><code>cluster</code></strong>, <strong><code>spike_times</code></strong>, <strong><code>spike_clusters</code></strong>, <strong><code>bin_ms</code></strong>=<em><code>0.001</code></em>, <strong><code>sampling_rate</code></strong>=<em><code>30000</code></em>, <strong><code>tails</code></strong>=<em><code>30</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Plot the cell's response autocorrelogram</p>
+<p>params:</p>
+
+<pre><code>- cluster: Cluster id of the cell
+- spike_times: Times of all spikes in phy format
+- spike_clusters: cluster associated to the spikes in phy format
+- bin_ms: Size of the autocorrelogram bin in ms
+- sampling_rate: Sampling rate of the electrophysiology
+- tails: Size of the tails for the autocorrelogram
+- ax: The axis for the plot. If None, a new plot is created
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The axis of the plot</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="plot_spike_amplitudes" class="doc_header"><code>plot_spike_amplitudes</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L412" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_spike_amplitudes</code>(<strong><code>cluster</code></strong>, <strong><code>spike_templates</code></strong>, <strong><code>spike_clusters</code></strong>, <strong><code>spike_times</code></strong>, <strong><code>amplitudes</code></strong>, <strong><code>n_max_dots</code></strong>=<em><code>5000</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Plot a subset of all spikes amplitudes of a cell.</p>
+<p>params:</p>
+
+<pre><code>- cluster: Cluster id of the cell
+- spike_templates: Original templates id in phy format
+- spike_times: Times of all spikes in phy format
+- spike_clusters: cluster associated to the spikes in phy format
+- amplitudes: Spike amplitudes in phy format
+- n_max_dots: Max limit for the number of spikes to not overload the plot
+- ax: The axis for the plot. If None, a new plot is created
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The axis of the plot</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="plot_calcium_trace" class="doc_header"><code>plot_calcium_trace</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L450" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_calcium_trace</code>(<strong><code>cell_trace</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Plot the calcium trace of a cell.</p>
+<p>params:</p>
+
+<pre><code>- cell_trace: Calcium trace of a cell
+- ax: The axis for the plot. If None, a new plot is created
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The axis of the plot</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="plot_stim_epochs_to_ephy" class="doc_header"><code>plot_stim_epochs_to_ephy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L470" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_stim_epochs_to_ephy</code>(<strong><code>reM</code></strong>, <strong><code>y_pos</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Add the stimulus epochs to a spike response of a cell.</p>
+<p>params:</p>
+
+<pre><code>- reM: The Record_Master containing the synchronized stimuli
+- y_pos: The y position of the stimuli
+- ax: The axis for the plot. If None, a new plot is created
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The axis of the plot</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="plot_stim_epochs_to_calcium" class="doc_header"><code>plot_stim_epochs_to_calcium</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L505" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_stim_epochs_to_calcium</code>(<strong><code>reM</code></strong>, <strong><code>y_pos</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Add the stimulus epochs to a calcium response of a cell.</p>
+<p>params:</p>
+
+<pre><code>- reM: The Record_Master containing the synchronized stimuli
+- y_pos: The y position of the stimuli
+- ax: The axis for the plot. If None, a new plot is created
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The axis of the plot</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="plot_cell_spatial" class="doc_header"><code>plot_cell_spatial</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L539" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_cell_spatial</code>(<strong><code>cell_spatial</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Plot the cell spatial mask obtained with CaImAn.</p>
+<p>params:</p>
+
+<pre><code>- cell_spatial: The 2D image of the cell
+- ax: The axis for the plot. If None, a new plot is created
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The axis of the plot</code></pre>
 
 </div>
 
@@ -258,8 +660,87 @@ of the first dimension.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_t_sta" class="doc_header"><code>plot_t_sta</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L166" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_t_sta</code>(<strong><code>ax</code></strong>, <strong><code>sta</code></strong>, <strong><code>pval</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_stim_recap_table" class="doc_header"><code>plot_stim_recap_table</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L560" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_stim_recap_table</code>(<strong><code>df</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
+<p>Plot the recap table obtained with <code>utils.stim_recap_df</code></p>
+<p>params:</p>
+
+<pre><code>- df: the dataframe of the stim recap
+- ax: The axis for the plot. If None, a new plot is created
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The axis of the plot</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="plot_composed_A_masks" class="doc_header"><code>plot_composed_A_masks</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L589" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_composed_A_masks</code>(<strong><code>A_matrix</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Plot in a single image the spatial mask of all cell of a record, obtained with CaImAn.</p>
+<p>params:</p>
+
+<pre><code>- A_matrix: the A matrix given by CaImAn
+- ax: The axis for the plot. If None, a new plot is created
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The axis of the plot</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="plot_sta_positions" class="doc_header"><code>plot_sta_positions</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L623" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_sta_positions</code>(<strong><code>stas</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Plot in a single image all 2D STAs of a single record. The STA are fitted with a gaussian,
+and plotted as ellipses.</p>
+<p>params:</p>
+
+<pre><code>- stas: All STAs of the cells of shape (n_cell, t, height, width)
+- ax: The axis for the plot. If None, a new plot is created
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The axis of the plot</code></pre>
 
 </div>
 
@@ -289,63 +770,20 @@ of the first dimension.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_chirp" class="doc_header"><code>plot_chirp</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L180" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_chirp</code>(<strong><code>ax</code></strong>, <strong><code>stim_inten</code></strong>, <strong><code>spike_bins</code></strong>, <strong><code>smooth</code></strong>=<em><code>True</code></em>)</p>
+<h4 id="plot_2d_sta" class="doc_header"><code>plot_2d_sta</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L659" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_2d_sta</code>(<strong><code>sta</code></strong>, <strong><code>gs</code></strong>=<em><code>None</code></em>, <strong><code>pval</code></strong>=<em><code>None</code></em>, <strong><code>title</code></strong>=<em><code>'Checkerboard'</code></em>)</p>
 </blockquote>
+<p>Plot a single 2D STA or an iterable of 2D STAs</p>
+<p>params:</p>
 
-</div>
+<pre><code>- sta: Array of shape (h, w) or of shape (n_sta, h, w)
+- gs: GridSpec for the plotting. If None, defined automatically
+- pval: Minimal p-value of the whole
+- title: Title to give to the GridSpec
 
-</div>
+</code></pre>
+<p>return:</p>
 
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_chirpam_fit" class="doc_header"><code>plot_chirpam_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L209" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_chirpam_fit</code>(<strong><code>cell_mean</code></strong>, <strong><code>fit</code></strong>, <strong><code>QI</code></strong>=<em><code>None</code></em>, <strong><code>start</code></strong>=<em><code>420</code></em>, <strong><code>stop</code></strong>=<em><code>960</code></em>, <strong><code>figsize</code></strong>=<em><code>(50, 2)</code></em>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_chirp_freq_epoch_fit" class="doc_header"><code>plot_chirp_freq_epoch_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L221" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_chirp_freq_epoch_fit</code>(<strong><code>cell_mean</code></strong>, <strong><code>fit_l</code></strong>, <strong><code>QI_l</code></strong>=<em><code>[None, None, None, None, None]</code></em>, <strong><code>freqs</code></strong>=<em><code>[1.875, 3.75, 7.5, 15, 30]</code></em>, <strong><code>durations</code></strong>=<em><code>[2, 2, 2, 1, 1]</code></em>, <strong><code>start</code></strong>=<em><code>360</code></em>, <strong><code>figsize</code></strong>=<em><code>(50, 2)</code></em>)</p>
-</blockquote>
+<pre><code>- the GridSpec</code></pre>
 
 </div>
 
@@ -364,7 +802,9 @@ of the first dimension.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">type</span><span class="p">(</span><span class="mf">1.2</span><span class="p">)</span><span class="o">==</span><span class="nb">float</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">to_plot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">32</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span>
+<span class="n">gs</span> <span class="o">=</span> <span class="n">plot_2d_sta</span><span class="p">(</span><span class="n">to_plot</span><span class="p">,</span> <span class="n">gs</span><span class="o">=</span><span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">pval</span><span class="o">=</span><span class="mf">0.008</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -378,8 +818,10 @@ of the first dimension.</p>
 
 
 
-<div class="output_text output_subarea output_execute_result">
-<pre>True</pre>
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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5ZdvJcPbfvvtgbwx/OEPf6jb+KG6YMSFfuutt26cZz9eeumldRv7wMn25JNPAnkcAYYNawUXbrRRK1DSBRfgG9/4BgBHHnkkkCf5SiutVLc544wzADjiiCMAOOyww+pjLl7bbLMNAN/5zncAOP744+s2P/lJK95l2WWXnVJY+EQxYMAA1l9//cZH9pvf/AbI/TV06FAALrvssrqNm6DzNvab5333u98F4MQTTwTg2GOPrdtcffXVAPzwhz8E4LrrrgPg29/+dt3G+5111llAXkwB9t57bwDWWKOV2M9Fb4sttqjb+J2cdtppADz9dE5c+IUvfKHRfuWVVwbg3nvvrdv86Ec/AmDYsGFt9S20NolVV1217i+AESNGALD//vsDWfByDgCsssoq3htoCl5+z84j3y+OoQKLC7PryiKLLFK3caHeZZddAHjxxfyaBx54IJDn9V//+legKWTeddddAKy3Xiuod6+9crCuc+inP22Z9pwnd955Z91m0UUXZXLoCvUxmmZ47zzk8N4aVVWdVlXV8lVVLa/UUFBQUFAw7ejKQn0PrbDUBVJKMwGbA5dP38cqKCgoKBBddc9bj1au3560woGPnFz7IUOGVBtuuCHPPPNM/ZuqwSabbAJkFTbyaKpcqj+q5JDVF/lDVUj5J6C+n2qLXNBFF11Ut1Fllms++eST62NSFfLXqizLLLNM3Ub1UjojvqNqvXzVE088AcBBBx1Utxk0aBDHHXccL7/8clsc9TzzzFPtueeeDbVYtU2VSjV38803r9vst1+rjoA8W6RjVAF9l9tvb+VPUo0DOPTQQ4HMkapeX3vttXUbKSfpEPsYMm8q1bXVVlsB8KUvfaluI7/4+9//3netj8mtv/HGG41rP/jgg3UbqY8TTjjhvqqq6uIIXcVCCy1U/fSnP2X33Xevf/vlL1vFVaTevO9VV11Vt3nooYeAPBcjLfLII48AWV1XJY99Iy0iLeU36VgBfPnLXwayrcDxANh5552BTFk53++55566zbnnngvA1772tcb/4/nOe8dqhRVWqNvIUZ944olt9S1Av379quWWW46XX84mr4svvhjI1NhSSy0FNCmxY45ppa1xPu+5Z13boubctVn99re/BfIcBjjllFOAPOek5OI4SVEdddRRQKYTAdZZZx0g99mss84KwPzzz1+3ka664IILGs8DmfK4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mZjU7PsaphzDw3UrU+q0j2MovGNqm2hoVkvQvczAKbUvaBrx2kGPHj3o27dvHbADeU6qialtRUOnz2mGyGhEP/zww4EsqWnwjBKXrn8a0+0T/w8TBlJEI7iSsxkVdTVzjkOW6A2UiiHWfkO+q0FRUVuJKWvbxejRo9lvv/0a2oDfn26WuiEaLAY5fF4JOAbiqKEb5KWxU+0YstuskrhjF11rDYZRc4xzV0O633Hn7w2yFuLY+73F+ymROyeiIf68886r3Ssnhq5QH7MDl3QsVjMA51VVdc3kTykoKCgo+LwwxYW6qqrngKWn1C7izTff5IILLpho3mVdieRn5Isg839KVDEU111R7slkN4ZPQ5YkDOVVwo0BL/J5uuHEfNaep2Tu7q4UDzko48orrwSaiW/8TWnPsNTolnP55ZfXSYfawRJLLMEll1xShwJD5tDsE8Pso9N95xDymBTevjXxkbxzdJ2TW5Y/VeqO0o1udfLnsXCB3LaakS5TkftU25LDjME0Pr+Si2NiMANk98p28corr3DYYYfVgTuQOV25U983hpDb/0q9MfWBkrjPa1h/1LJ0NfUeanCRs1QDUbJVCocczKJtwWsbgAOZ055YMi21IqVJJfoYih+1m3bRq1cvFl544Qa/73jKNWuDisEoSqC63sXwcCVf5448dmxjAis5fzl85xRkPt75FHNFK4mrjTreMQ2A5zl3Yz5qNUW1PyXxGJD20EMPTbQwgijueQUFBQXdHGWhLigoKOjm6FI+6qlF7969q/nmm68R0Se5rsudallUwSXpVYcj2W+ODlUcKYcYPaWqb64EqZeYX1i3KFWraGhULTevr6pnjDLyWqpG0h2QqRpVLKPJomHhww8/5IADDphk3tkpoUePHlWvXr3qXBmQXZLMw23OE41bkI0s9lesx6eroeqb7xhdH43C0uBq7o5YjkgjnFngYj1En00Ds+q1qirkaDSNY9HYolub0aca02JOiOAW2VbO5KFDh1abbLIJN954Y/2bxjuf27qakd5wnhnFGMuzSZVItWngjfmkncvSItJLMTJUtVgDrwZbyBn1zNTnWPuskA2FzvdI2fm9GDWqoTzSgs7tDTfcsO181EOGDKn++7//u0EZWEbMftboGsvf+R5SCDobQHaBlaZzDYnvrpFVWsJ3j3UVpXacl44l5Hw09r10Taz96Bxw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
+"
+>
 </div>
 
 </div>
@@ -408,8 +850,19 @@ of the first dimension.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_spike_template" class="doc_header"><code>plot_spike_template</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L249" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_spike_template</code>(<strong><code>ax</code></strong>, <strong><code>cluster_composition</code></strong>, <strong><code>templates</code></strong>, <strong><code>shanks_idx</code></strong>, <strong><code>channel_positions</code></strong>)</p>
+<h4 id="plot_dome_flat" class="doc_header"><code>plot_dome_flat</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L707" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_dome_flat</code>(<strong><code>sph_pos</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>, <strong>**<code>scatter_args</code></strong>)</p>
 </blockquote>
+<p>Plot the dome LED as flat.</p>
+<p>params:</p>
+
+<pre><code>- sph_pos: Spherical coordinates of the LED (e.g. obtained with `leddome.get_dome_positions`)
+- ax: The axis for the plot. Needs to be polar projection. If None, a new plot is created
+- scatter_args: Args for the scatter plot, such as the dots individual colors
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The axis of the plot</code></pre>
 
 </div>
 
@@ -432,176 +885,21 @@ of the first dimension.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_spike_template_MEA" class="doc_header"><code>plot_spike_template_MEA</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L269" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_spike_template_MEA</code>(<strong><code>ax</code></strong>, <strong><code>cluster_composition</code></strong>, <strong><code>templates</code></strong>, <strong><code>channel_positions</code></strong>)</p>
+<h4 id="plot_dome_checker" class="doc_header"><code>plot_dome_checker</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L731" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_dome_checker</code>(<strong><code>sta</code></strong>, <strong><code>s</code></strong>=<em><code>20</code></em>, <strong><code>gs</code></strong>=<em><code>None</code></em>, <strong><code>pval</code></strong>=<em><code>None</code></em>, <strong><code>title</code></strong>=<em><code>'Checkerboard'</code></em>)</p>
 </blockquote>
+<p>Plot a single 2D STA or an iterable of 2D STAs for the LED dome</p>
+<p>params:</p>
 
-</div>
+<pre><code>- sta: Array of shape (h, w) or of shape (n_sta, h, w)
+- s: The dot size
+- gs: GridSpec for the plotting. If None, defined automatically
+- pval: Minimal p-value of the whole
+- title: Title to give to the GridSpec
 
-</div>
+</code></pre>
+<p>return:</p>
 
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_autocorrelogram" class="doc_header"><code>plot_autocorrelogram</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L287" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_autocorrelogram</code>(<strong><code>ax</code></strong>, <strong><code>cluster</code></strong>, <strong><code>spike_times</code></strong>, <strong><code>spike_clusters</code></strong>, <strong><code>bin_ms</code></strong>=<em><code>0.001</code></em>, <strong><code>sampling_rate</code></strong>=<em><code>30000</code></em>, <strong><code>tails</code></strong>=<em><code>30</code></em>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_spike_amplitudes" class="doc_header"><code>plot_spike_amplitudes</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L298" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_spike_amplitudes</code>(<strong><code>ax</code></strong>, <strong><code>cluster</code></strong>, <strong><code>spike_templates</code></strong>, <strong><code>spike_clusters</code></strong>, <strong><code>spike_times</code></strong>, <strong><code>amplitudes</code></strong>, <strong><code>n_max_dots</code></strong>=<em><code>5000</code></em>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_cell_spatial" class="doc_header"><code>plot_cell_spatial</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L315" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_cell_spatial</code>(<strong><code>ax</code></strong>, <strong><code>cell_spatial</code></strong>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_calcium_trace" class="doc_header"><code>plot_calcium_trace</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L318" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_calcium_trace</code>(<strong><code>ax</code></strong>, <strong><code>cell_trace</code></strong>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_stim_epochs_to_spikes" class="doc_header"><code>plot_stim_epochs_to_spikes</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L323" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_stim_epochs_to_spikes</code>(<strong><code>ax</code></strong>, <strong><code>reM</code></strong>, <strong><code>y_pos</code></strong>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_stim_epochs_to_calcium" class="doc_header"><code>plot_stim_epochs_to_calcium</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L342" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_stim_epochs_to_calcium</code>(<strong><code>ax</code></strong>, <strong><code>reM</code></strong>, <strong><code>y_pos</code></strong>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_stim_recap_table" class="doc_header"><code>plot_stim_recap_table</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L361" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_stim_recap_table</code>(<strong><code>ax</code></strong>, <strong><code>df</code></strong>)</p>
-</blockquote>
+<pre><code>- the GridSpec</code></pre>
 
 </div>
 
@@ -631,32 +929,10 @@ of the first dimension.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_composed_A_masks" class="doc_header"><code>plot_composed_A_masks</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L375" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_composed_A_masks</code>(<strong><code>ax</code></strong>, <strong><code>A_matrix</code></strong>)</p>
+<h4 id="configure_pyplot_recap" class="doc_header"><code>configure_pyplot_recap</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L767" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_pyplot_recap</code>(<strong><code>small_size</code></strong>=<em><code>14</code></em>, <strong><code>medium_size</code></strong>=<em><code>18</code></em>, <strong><code>bigger_size</code></strong>=<em><code>24</code></em>)</p>
 </blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_sta_positions" class="doc_header"><code>plot_sta_positions</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L393" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_sta_positions</code>(<strong><code>ax</code></strong>, <strong><code>stas</code></strong>)</p>
-</blockquote>
+<p>Set the fontsize and other style of matplotlib and seaborn for the recap plots.
+Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
 
 </div>
 
@@ -686,33 +962,24 @@ of the first dimension.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_dome_flat" class="doc_header"><code>plot_dome_flat</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L412" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_dome_flat</code>()</p>
+<h4 id="plot_recap_vivo_ephy" class="doc_header"><code>plot_recap_vivo_ephy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L791" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
 </blockquote>
-<p>axis needs to be polar projection</p>
+<p>Plot the recap pdf of in vivo electrophy records.</p>
+<p>params:</p>
 
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_dome_checker" class="doc_header"><code>plot_dome_checker</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L424" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_dome_checker</code>(<strong><code>sta</code></strong>, <strong><code>s</code></strong>=<em><code>20</code></em>, <strong><code>grid</code></strong>=<em><code>None</code></em>, <strong><code>pval</code></strong>=<em><code>None</code></em>)</p>
-</blockquote>
+<pre><code>- title_dict: A dictionnary containing the str info for the title: keys(condition, date, record_name, record_id)
+- reM: The record master object of the record
+- phy_dict: A dictionnary containing the results from phy (see utils.phy_results_dict())
+- cluster_ids: A list of the cluster id used by phy, to plot. Usually the cells classified as good.
+- df_stim: Stimulus dataframe recap of their syncronisation obtained with `utils.stim_recap_df`
+- cell_db_ids: A list of the database ids of the cells corresponding to cluster_ids.
+- checkerboard: A matrix of STA of cells to the checkerboard stimulus of shape (n_cell, 16, height, width)
+- fullfield_fl: A matrix of STA of cells to the fullfield_flicker stimulus of shape (n_cell, 16)
+- fl_bars: A matrix of STA of cells to the flickering_bars stimulus of shape (n_cell, 16, height, width)
+- chirp_am: A tuple of the chirp_am obtained from a pipe, where [0] is the stimulus and [1] the cells response
+- chirp_fm: Same as chirp_am but for a chirp_fm stimulus
+- moving_gratings: The dict of response obtained from `utils.group_direction_response`
+- export_path: The path for a pdf file to be exported. If None, the plot is displayed.</code></pre>
 
 </div>
 
@@ -742,8 +1009,25 @@ of the first dimension.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_pyplot_recap" class="doc_header"><code>configure_pyplot_recap</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L443" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_pyplot_recap</code>(<strong><code>small_size</code></strong>=<em><code>14</code></em>, <strong><code>medium_size</code></strong>=<em><code>18</code></em>, <strong><code>bigger_size</code></strong>=<em><code>24</code></em>)</p>
+<h4 id="plot_recap_vivo_calcium" class="doc_header"><code>plot_recap_vivo_calcium</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L917" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_calcium</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>A_matrix</code></strong>, <strong><code>cell_traces</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_indexes</code></strong>=<em><code>None</code></em>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>water</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
 </blockquote>
+<p>Plot the recap pdf of in vivo calcium records.</p>
+<p>params:</p>
+
+<pre><code>- title_dict: A dictionnary containing the str info for the title: keys(condition, date, record_name, record_id)
+- reM: The record master object of the record
+- A_matrix: A matrix of the cell spatial components obtained from CaImAn
+- cell_traces: Cells raw traces (C or S_matrix from CaImAn)
+- df_stim: Stimulus dataframe recap of their syncronisation obtained with `utils.stim_recap_df`
+- cell_indexes: A list of the indexes of the cell to plot. Leave to None for plotting all of them.
+- cell_db_ids: A list of the database ids of the cells corresponding to cluster_ids.
+- checkerboard: A matrix of STA of cells to the checkerboard stimulus of shape (n_cell, 64, height, width)
+- fullfield_fl: A matrix of STA of cells to the fullfield_flicker stimulus of shape (n_cell, 64)
+- chirp_am: A tuple of the chirp_am obtained from a pipe, where [0] is the stimulus and [1] the cells response
+- chirp_fm: Same as chirp_am but for a chirp_fm stimulus
+- moving_gratings: The dict of response obtained from `utils.group_direction_response`
+- water: A matrix of STA of cells to the water stimulus of shape (n_cell, 16, height, width)
+- export_path: The path for a pdf file to be exported. If None, the plot is displayed.</code></pre>
 
 </div>
 
@@ -773,21 +1057,24 @@ of the first dimension.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_vivo_ephy" class="doc_header"><code>plot_recap_vivo_ephy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L463" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
+<h4 id="plot_recap_vitro_ephy" class="doc_header"><code>plot_recap_vitro_ephy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1066" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vitro_ephy</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
 </blockquote>
-<p>Plot the recapitulating form of in vivo electrophy records
-title_dict -&gt; A dictionnary containing the str info for the title: keys(condition, date, record_name, record_id)
-reM -&gt; The record master object of the record
-phy_dict -&gt; A dictionnary containing the matrix obtained from phy (see utils.phy_results_dict())
-cluster_ids -&gt; A list of the cluster id used by phy corresponding to the good cells analysed
-cell_db_ids -&gt; A list of the database ids of the cells corresponding to cluster_ids
-checkerboard -&gt; A matrix of STA of cells to the checkerboard stimulus of shape (n_cell, 16, height, width)
-fullfield_fl -&gt; A matrix of STA of cells to the fullfield_flicker stimulus of shape (n_cell, 16)
-fl_bars -&gt; A matrix of STA of cells to the flickering_bars stimulus of shape (n_cell, 16, height, width)
-chirp_am -&gt; A tuple of the chirp_am obtained from a pipe, where [0] is the stimulus and [1] the cells response
-chirp_fm -&gt; Same as chirp_am but for a chirp_fm stimulus
-moving_gratings -&gt; The dict of response obtained from utils.group_direction_response
-export_path -&gt; The path for a pdf file to be exported. If None, the plot is displayed.</p>
+<p>Plot the recap pdf of in vitro electrophy records.</p>
+<p>params:</p>
+
+<pre><code>- title_dict: A dictionnary containing the str info for the title: keys(condition, date, record_name, record_id)
+- reM: The record master object of the record
+- phy_dict: A dictionnary containing the results from phy (see utils.phy_results_dict())
+- cluster_ids: A list of the cluster id used by phy, to plot. Usually the cells classified as good.
+- df_stim: Stimulus dataframe recap of their syncronisation obtained with `utils.stim_recap_df`
+- cell_db_ids: A list of the database ids of the cells corresponding to cluster_ids.
+- checkerboard: A matrix of STA of cells to the checkerboard stimulus of shape (n_cell, 16, height, width)
+- fullfield_fl: A matrix of STA of cells to the fullfield_flicker stimulus of shape (n_cell, 16)
+- fl_bars: A matrix of STA of cells to the flickering_bars stimulus of shape (n_cell, 16, height, width)
+- chirp_am: A tuple of the chirp_am obtained from a pipe, where [0] is the stimulus and [1] the cells response
+- chirp_fm: Same as chirp_am but for a chirp_fm stimulus
+- moving_gratings: The dict of response obtained from `utils.group_direction_response`
+- export_path: The path for a pdf file to be exported. If None, the plot is displayed.</code></pre>
 
 </div>
 
@@ -817,108 +1104,24 @@ export_path -&gt; The path for a pdf file to be exported. If None, the plot is d
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_vivo_calcium" class="doc_header"><code>plot_recap_vivo_calcium</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L585" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_calcium</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>A_matrix</code></strong>, <strong><code>cell_traces</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_indexes</code></strong>=<em><code>None</code></em>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
+<h4 id="plot_recap_vivo_ephy_dome" class="doc_header"><code>plot_recap_vivo_ephy_dome</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1192" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy_dome</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
 </blockquote>
-<p>Plot the recapitulating form of in vivo electrophy records
-title_dict -&gt; A dictionnary containing the str info for the title: keys(condition, date, record_name, record_id)
-reM -&gt; The record master object of the record
-A_matrix -&gt; A matrix of the cell spatial components obtained from CaImAn
-cell_indexes -&gt; A list of the indexes of the cell to plot. Leave to None for plotting all of them.
-cell_db_ids -&gt; A list of the database ids of the cells in the order of the cells data index.
-checkerboard -&gt; A matrix of STA of cells to the checkerboard stimulus of shape (n_cell, 16, height, width)
-fullfield_fl -&gt; A matrix of STA of cells to the fullfield_flicker stimulus of shape (n_cell, 16)
-fl_bars -&gt; A matrix of STA of cells to the flickering_bars stimulus of shape (n_cell, 16, height, width)
-chirp_am -&gt; A tuple of the chirp_am obtained from a pipe, where [0] is the stimulus and [1] the cells response
-chirp_fm -&gt; Same as chirp_am but for a chirp_fm stimulus
-moving_gratings -&gt; The dict of response obtained from utils.group_direction_response
-export_path -&gt; The path for a pdf file to be exported. If None, the plot is displayed.</p>
+<p>Plot the recap pdf of in vivo electrophy records with the LED dome as stimuluation device.</p>
+<p>params:</p>
 
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_vitro_ephy" class="doc_header"><code>plot_recap_vitro_ephy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L718" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vitro_ephy</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
-</blockquote>
-<p>Plot the recapitulating form of in vitro electrophy records
-title_dict -&gt; A dictionnary containing the str info for the title: keys(condition, date, record_name, record_id)
-reM -&gt; The record master object of the record
-phy_dict -&gt; A dictionnary containing the matrix obtained from phy (see utils.phy_results_dict())
-cluster_ids -&gt; A list of the cluster id used by phy corresponding to the good cells analysed
-cell_db_ids -&gt; A list of the database ids of the cells corresponding to cluster_ids
-checkerboard -&gt; A matrix of STA of cells to the checkerboard stimulus of shape (n_cell, 16, height, width)
-fullfield_fl -&gt; A matrix of STA of cells to the fullfield_flicker stimulus of shape (n_cell, 16)
-fl_bars -&gt; A matrix of STA of cells to the flickering_bars stimulus of shape (n_cell, 16, height, width)
-chirp_am -&gt; A tuple of the chirp_am obtained from a pipe, where [0] is the stimulus and [1] the cells response
-chirp_fm -&gt; Same as chirp_am but for a chirp_fm stimulus
-moving_gratings -&gt; The dict of response obtained from utils.group_direction_response
-export_path -&gt; The path for a pdf file to be exported. If None, the plot is displayed.</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_vivo_ephy_dome" class="doc_header"><code>plot_recap_vivo_ephy_dome</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L839" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy_dome</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
-</blockquote>
-<p>Plot the recapitulating form of in vivo electrophy records
-title_dict -&gt; A dictionnary containing the str info for the title: keys(condition, date, record_name, record_id)
-reM -&gt; The record master object of the record
-phy_dict -&gt; A dictionnary containing the matrix obtained from phy (see utils.phy_results_dict())
-cluster_ids -&gt; A list of the cluster id used by phy corresponding to the good cells analysed
-cell_db_ids -&gt; A list of the database ids of the cells corresponding to cluster_ids
-checkerboard -&gt; A matrix of STA of cells to the checkerboard stimulus of shape (n_cell, 16, height, width)
-fl_bars -&gt; A matrix of STA of cells to the flickering_bars stimulus of shape (n_cell, 16, height, width)
-chirp_am -&gt; A tuple of the chirp_am obtained from a pipe, where [0] is the stimulus and [1] the cells response
-chirp_fm -&gt; Same as chirp_am but for a chirp_fm stimulus
-moving_gratings -&gt; The dict of response obtained from utils.group_direction_response
-export_path -&gt; The path for a pdf file to be exported. If None, the plot is displayed.</p>
+<pre><code>- title_dict: A dictionnary containing the str info for the title: keys(condition, date, record_name, record_id)
+- reM: The record master object of the record
+- phy_dict: A dictionnary containing the results from phy (see utils.phy_results_dict())
+- cluster_ids: A list of the cluster id used by phy, to plot. Usually the cells classified as good.
+- df_stim: Stimulus dataframe recap of their syncronisation obtained with `utils.stim_recap_df`
+- cell_db_ids: A list of the database ids of the cells corresponding to cluster_ids.
+- checkerboard: A matrix of STA of cells to the checkerboard stimulus of shape (n_cell, 16, height, width)
+- fullfield_fl: A matrix of STA of cells to the fullfield_flicker stimulus of shape (n_cell, 16)
+- fl_bars: A matrix of STA of cells to the flickering_bars stimulus of shape (n_cell, 16, height, width)
+- chirp_am: A tuple of the chirp_am obtained from a pipe, where [0] is the stimulus and [1] the cells response
+- chirp_fm: Same as chirp_am but for a chirp_fm stimulus
+- moving_gratings: The dict of response obtained from `utils.group_direction_response`
+- export_path: The path for a pdf file to be exported. If None, the plot is displayed.</code></pre>
 
 </div>
 
