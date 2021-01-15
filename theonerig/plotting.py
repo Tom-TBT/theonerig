@@ -2,10 +2,10 @@
 
 __all__ = ['DEFAULT_COLORS', 'plot_2d_fit', 'plot_chirpam_fit', 'plot_chirp_freq_epoch_fit', 'plot_ds_wheel',
            'plot_fl_bars', 'plot_t_sta', 'plot_chirp', 'plot_spike_template', 'plot_spike_template_MEA',
-           'plot_autocorrelogram', 'plot_spike_amplitudes', 'plot_calcium_trace', 'plot_stim_epochs_to_response',
-           'plot_cell_spatial', 'plot_stim_recap_table', 'plot_composed_A_masks', 'plot_sta_positions', 'plot_2d_sta',
-           'plot_dome_flat', 'plot_dome_checker', 'configure_pyplot_recap', 'plot_recap_vivo_ephy',
-           'plot_recap_vivo_calcium', 'plot_recap_vitro_ephy', 'plot_recap_vivo_ephy_dome']
+           'plot_autocorrelogram', 'plot_spike_amplitudes', 'plot_calcium_trace', 'plot_stim_epochs_to_ephy',
+           'plot_stim_epochs_to_calcium', 'plot_cell_spatial', 'plot_stim_recap_table', 'plot_composed_A_masks',
+           'plot_sta_positions', 'plot_2d_sta', 'plot_dome_flat', 'plot_dome_checker', 'configure_pyplot_recap',
+           'plot_recap_vivo_ephy', 'plot_recap_vivo_calcium', 'plot_recap_vitro_ephy', 'plot_recap_vivo_ephy_dome']
 
 # Cell
 import matplotlib.pyplot as plt
@@ -127,7 +127,7 @@ def plot_chirp_freq_epoch_fit(cell_mean, param_d_l, fit_f=sin_exponent, QI_l=[No
 # Cell
 def plot_ds_wheel(ds_dict, cell_idx, ax=None, arrow_params={"width":.13,
                         "head_length":10, "length_includes_head":True, "lw":2, "zorder":5,
-                        "alpha":0.5, "edgecolor":'black', "facecolor":'tab:purple'}):
+                        "alpha":0.5, "edgecolor":'black'}):
     """
     Polar plot for direction and orientation response of a cell processed by `processing.direction_selectivity`.
 
@@ -189,8 +189,8 @@ def plot_ds_wheel(ds_dict, cell_idx, ax=None, arrow_params={"width":.13,
                 label=label)
 
     x_uplim = ax.get_ylim()[1]
-    ds_arrow = ax.arrow(best_di[1], x_uplim/500, 0,  best_di[0]*x_uplim, label="Best DI", **arrow_params)
-    os_arrow = ax.arrow(best_oi[1], x_uplim/500, 0,  best_oi[0]*x_uplim, label="Best OI", **arrow_params)
+    ds_arrow = ax.arrow(best_di[1], x_uplim/500, 0,  best_di[0]*x_uplim, label="Best DI", facecolor='tab:purple', **arrow_params)
+    os_arrow = ax.arrow(best_oi[1], x_uplim/500, 0,  best_oi[0]*x_uplim, label="Best OI", facecolor='tab:green', **arrow_params)
     legend_obj, legend_label = ax.get_legend_handles_labels()
     #For double legend box, need to add manually the artist for the first legend
     first_legend = ax.legend(legend_obj, legend_label, loc=(-.1,-.16))
@@ -467,9 +467,9 @@ def plot_calcium_trace(cell_trace, ax=None):
 
     return ax
 
-def plot_stim_epochs_to_response(reM, y_pos, ax=None):
+def plot_stim_epochs_to_ephy(reM, y_pos, ax=None):
     """
-    Add the stimulus epochs to a spike or calcium trace response of a cell.
+    Add the stimulus epochs to a spike response of a cell.
 
     params:
         - reM: The Record_Master containing the synchronized stimuli
@@ -498,6 +498,40 @@ def plot_stim_epochs_to_response(reM, y_pos, ax=None):
         len_dc = seq["main_tp"][dc.idx+len(dc)]-seq["main_tp"][dc.idx]
         start_dc = seq["main_tp"][dc.idx]
         ax.barh(y_pos, len_dc, left=start_dc, height=.1)
+        ax.text(start_dc, y_pos+(.1*pos_text_cursor), stim_name, fontdict={"size":10})
+        pos_text_cursor*=-1
+    return ax
+
+def plot_stim_epochs_to_calcium(reM, y_pos, ax=None):
+    """
+    Add the stimulus epochs to a calcium response of a cell.
+
+    params:
+        - reM: The Record_Master containing the synchronized stimuli
+        - y_pos: The y position of the stimuli
+        - ax: The axis for the plot. If None, a new plot is created
+
+    return:
+        - The axis of the plot
+    """
+    if ax is None:
+        fig, ax = plt.subplots()
+
+    pos_text_cursor = 1
+    seq = reM._sequences[0]
+    stim_names = seq.get_names_group("stim")
+    idx_l = []
+    for stim_name in stim_names:
+        dc = seq._data_dict[stim_name][0]
+        idx_l.append(dc.idx)
+    idx_l = np.array(idx_l)
+    order_stim = np.argsort(idx_l)
+    for stim_idx in order_stim:
+        stim_name = stim_names[stim_idx]
+        dc = seq._data_dict[stim_name][0]
+        len_dc = len(dc)
+        start_dc = dc.idx
+        ax.barh(y_pos, width=len_dc, left=start_dc, height=.1)
         ax.text(start_dc, y_pos+(.1*pos_text_cursor), stim_name, fontdict={"size":10})
         pos_text_cursor*=-1
     return ax
@@ -829,7 +863,7 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
             sp_amp_ax = fig.add_subplot(gs[0:4,8:])
             plot_spike_amplitudes(cluster, phy_dict["spike_templates"], phy_dict["spike_clusters"],
                                   phy_dict["spike_times"], phy_dict["amplitudes"], ax=sp_amp_ax)
-            plot_stim_epochs_to_response(reM, y_pos=-0.05, ax=sp_amp_ax)
+            plot_stim_epochs_to_ephy(reM, y_pos=-0.05, ax=sp_amp_ax)
 
             #Checkerboard STA
             if checkerboard is not None:
@@ -844,7 +878,7 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
                 pval_fffl = fullfield_fl[1][reM_cell_idx]
                 pval_fffl = np.min(pval_fffl[pval_fffl!=0])
                 sp_amp_ax = fig.add_subplot(gs[5:12,13:])
-                plot_t_sta(sp_amp_ax, fullfield_fl[0][reM_cell_idx], pval=pval_fffl)
+                plot_t_sta(fullfield_fl[0][reM_cell_idx], pval=pval_fffl, ax=sp_amp_ax)
 
             #Chirp_FM
             if chirp_fm is not None:
@@ -855,7 +889,7 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
             #Chirp_AM
             if chirp_am is not None:
                 chirpam_ax = fig.add_subplot(gs[17:20,:])
-                plot_chirp(chirp_am[0], chirp_am[1][:,reM_cell_idx], smooth=False, ax=chirpfm_ax)
+                plot_chirp(chirp_am[0], chirp_am[1][:,reM_cell_idx], smooth=False, ax=chirpam_ax)
                 chirpam_ax.set_title("Chirp AM")
 
             #Flickering bars
@@ -882,7 +916,7 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
 # Cell
 def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, df_stim, cell_indexes=None, cell_db_ids=None,
                          checkerboard=None, fullfield_fl=None, fl_bars=None, chirp_am=None,
-                         chirp_fm=None, moving_gratings=None, export_path="./recap_plot.pdf"):
+                         chirp_fm=None, moving_gratings=None, water=None, export_path="./recap_plot.pdf"):
     """
     Plot the recap pdf of in vivo calcium records.
 
@@ -894,12 +928,12 @@ def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, df_stim, cel
         - df_stim: Stimulus dataframe recap of their syncronisation obtained with `utils.stim_recap_df`
         - cell_indexes: A list of the indexes of the cell to plot. Leave to None for plotting all of them.
         - cell_db_ids: A list of the database ids of the cells corresponding to cluster_ids.
-        - checkerboard: A matrix of STA of cells to the checkerboard stimulus of shape (n_cell, 16, height, width)
-        - fullfield_fl: A matrix of STA of cells to the fullfield_flicker stimulus of shape (n_cell, 16)
-        - fl_bars: A matrix of STA of cells to the flickering_bars stimulus of shape (n_cell, 16, height, width)
+        - checkerboard: A matrix of STA of cells to the checkerboard stimulus of shape (n_cell, 64, height, width)
+        - fullfield_fl: A matrix of STA of cells to the fullfield_flicker stimulus of shape (n_cell, 64)
         - chirp_am: A tuple of the chirp_am obtained from a pipe, where [0] is the stimulus and [1] the cells response
         - chirp_fm: Same as chirp_am but for a chirp_fm stimulus
         - moving_gratings: The dict of response obtained from `utils.group_direction_response`
+        - water: A matrix of STA of cells to the water stimulus of shape (n_cell, 16, height, width)
         - export_path: The path for a pdf file to be exported. If None, the plot is displayed.
     """
 
@@ -926,11 +960,21 @@ def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, df_stim, cel
         ax_stim_recap  = fig.add_subplot(gs[11:16,:])
         plot_stim_recap_table(df_stim, ax=ax_stim_recap)
 
-        ax_axon_terminals  = fig.add_subplot(gs[17:27,1:10])
+        #Flipping the A_matrix to correspond to the STA orientation
+        A_matrix = np.rot90(A_matrix[:,::-1], axes=(1,2))
+        ax_axon_terminals  = fig.add_subplot(gs[17:28,1:10])
         plot_composed_A_masks(A_matrix, ax=ax_axon_terminals)
+        ax_axon_terminals.set_title("Axon terminals (Flipped + Rot90)")
 
-        ax_sta_pos = fig.add_subplot(gs[20:25,11:])
-        plot_sta_positions(checkerboard[0], ax_sta_pos)
+        if checkerboard is not None:
+            ax_checkersta_pos = fig.add_subplot(gs[17:22,11:])
+            plot_sta_positions(checkerboard[0], ax_checkersta_pos)
+            ax_checkersta_pos.set_title("Checkerboard STA fits")
+
+        if water is not None:
+            ax_watersta_pos = fig.add_subplot(gs[23:28,11:])
+            plot_sta_positions(water[0], ax_watersta_pos)
+            ax_watersta_pos.set_title("Water STA fits")
 
         suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id)])
         plt.suptitle(suptitle)
@@ -956,7 +1000,7 @@ def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, df_stim, cel
             #Spike amplitude across time
             calcium_trace_ax = fig.add_subplot(gs[0:4,5:])
             plot_calcium_trace(cell_traces[:, cell_idx], ax=calcium_trace_ax)
-            plot_stim_epochs_to_response(reM, y_pos=-0.3, ax=calcium_trace_ax)
+            plot_stim_epochs_to_calcium(reM, y_pos=-0.3, ax=calcium_trace_ax)
 
             #Checkerboard STA
             if checkerboard is not None:
@@ -964,14 +1008,14 @@ def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, df_stim, cel
                 pval_checker = np.min(pval_checker[pval_checker!=0])
                 inner_grid = gridspec.GridSpecFromSubplotSpec(4, 4,
                             subplot_spec=gs[5:12,0:12], wspace=.09, hspace=.13)
-                plot_2d_sta(checkerboard[0][cell_idx][::4], pval=pval_checker, gs=inner_grid)
+                plot_2d_sta(checkerboard[0][cell_idx][::4], pval=pval_checker, gs=inner_grid, title="Checkerboard")
 
             #Fullfield flickering STA
             if fullfield_fl is not None:
                 pval_fffl = fullfield_fl[1][cell_idx]
                 pval_fffl = np.min(pval_fffl[pval_fffl!=0])
                 sp_amp_ax = fig.add_subplot(gs[5:12,13:])
-                plot_t_sta(sp_amp_ax, fullfield_fl[0][cell_idx], pval=pval_fffl)
+                plot_t_sta(fullfield_fl[0][cell_idx], pval=pval_fffl, ax=sp_amp_ax)
 
             #Chirp_FM
             if chirp_fm is not None:
@@ -982,16 +1026,16 @@ def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, df_stim, cel
             #Chirp_AM
             if chirp_am is not None:
                 chirpam_ax = fig.add_subplot(gs[17:20,:])
-                plot_chirp(chirp_am[0], chirp_am[1][:,cell_idx], ax=chirpfm_ax)
+                plot_chirp(chirp_am[0], chirp_am[1][:,cell_idx], ax=chirpam_ax)
                 chirpam_ax.set_title("Chirp AM")
 
-            #Flickering bars
-            if fl_bars is not None:
-                pval_bars = fl_bars[1][cell_idx]
-                pval_bars = np.min(pval_bars[pval_bars!=0])
-                fl_bars_ax = fig.add_subplot(gs[21:,:12])
-                plot_fl_bars(fl_bars[0][cell_idx], pval=pval_bars, ax=fl_bars_ax)
-                fl_bars_ax.set_title("Flickering_bars")
+            #Water
+            if water is not None:
+                pval_water = water[1][cell_idx]
+                pval_water = np.min(pval_water[pval_water!=0])
+                inner_grid = gridspec.GridSpecFromSubplotSpec(4, 4,
+                            subplot_spec=gs[21:,:12], wspace=.09, hspace=.13)
+                plot_2d_sta(water[0][cell_idx][::4], pval=pval_water, gs=inner_grid, title="Water")
 
             #Moving gratings
             if moving_gratings is not None:
@@ -1094,7 +1138,7 @@ def plot_recap_vitro_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_
             sp_amp_ax = fig.add_subplot(gs[0:4,10:])
             plot_spike_amplitudes(cluster, phy_dict["spike_templates"], phy_dict["spike_clusters"],
                                   phy_dict["spike_times"], phy_dict["amplitudes"], ax=sp_amp_ax)
-            plot_stim_epochs_to_response(reM, y_pos=0.2, ax=sp_amp_ax)
+            plot_stim_epochs_to_ephy(reM, y_pos=0.2, ax=sp_amp_ax)
 
             #Checkerboard STA
             if checkerboard is not None:
@@ -1109,7 +1153,7 @@ def plot_recap_vitro_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_
                 pval_fffl = fullfield_fl[1][reM_cell_idx]
                 pval_fffl = np.min(pval_fffl[pval_fffl!=0])
                 sp_amp_ax = fig.add_subplot(gs[5:12,13:])
-                plot_t_sta(sp_amp_ax, fullfield_fl[0][reM_cell_idx], pval=pval_fffl)
+                plot_t_sta(fullfield_fl[0][reM_cell_idx], pval=pval_fffl, ax=sp_amp_ax)
 
             #Chirp_FM
             if chirp_fm is not None:
@@ -1120,7 +1164,7 @@ def plot_recap_vitro_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_
             #Chirp_AM
             if chirp_am is not None:
                 chirpam_ax = fig.add_subplot(gs[17:20,:])
-                plot_chirp(chirp_am[0], chirp_am[1][:,reM_cell_idx], smooth=False, ax=chirpfm_ax)
+                plot_chirp(chirp_am[0], chirp_am[1][:,reM_cell_idx], smooth=False, ax=chirpam_ax)
                 chirpam_ax.set_title("Chirp AM")
 
             #Flickering bars
@@ -1219,7 +1263,7 @@ def plot_recap_vivo_ephy_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_id
             sp_amp_ax = fig.add_subplot(gs[0:4,8:])
             plot_spike_amplitudes(cluster, phy_dict["spike_templates"], phy_dict["spike_clusters"],
                                   phy_dict["spike_times"], phy_dict["amplitudes"], ax=sp_amp_ax)
-            plot_stim_epochs_to_response(reM, y_pos=0.2, ax=sp_amp_ax)
+            plot_stim_epochs_to_ephy(reM, y_pos=0.2, ax=sp_amp_ax)
 
             #Checkerboard STA
             if checkerboard is not None:
@@ -1235,7 +1279,7 @@ def plot_recap_vivo_ephy_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_id
                 pval_fffl = np.min(pval_fffl[pval_fffl!=0])
 #                 sp_amp_ax = fig.add_subplot(gs[5:12,13:])
                 sp_amp_ax = fig.add_subplot(gs[21:,:12])
-                plot_t_sta(sp_amp_ax, fullfield_fl[0][reM_cell_idx], pval=pval_fffl)
+                plot_t_sta(fullfield_fl[0][reM_cell_idx], pval=pval_fffl, ax=sp_amp_ax)
 
             #Chirp_FM
             if chirp_fm is not None:
@@ -1246,7 +1290,7 @@ def plot_recap_vivo_ephy_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_id
             #Chirp_AM
             if chirp_am is not None:
                 chirpam_ax = fig.add_subplot(gs[17:20,:])
-                plot_chirp(chirp_am[0], chirp_am[1][:,reM_cell_idx], smooth=False, ax=chirpfm_ax)
+                plot_chirp(chirp_am[0], chirp_am[1][:,reM_cell_idx], smooth=False, ax=chirpam_ax)
                 chirpam_ax.set_title("Chirp AM")
 
             #Moving gratings
