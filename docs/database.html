@@ -72,6 +72,19 @@ description: "helpers to get and query a sqlalchemy engine for DB containing met
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="get_db_engine" class="doc_header"><code>get_db_engine</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/database.py#L15" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_db_engine</code>(<strong><code>username</code></strong>, <strong><code>password</code></strong>, <strong><code>ip_adress</code></strong>, <strong><code>model_name</code></strong>, <strong><code>rdbms</code></strong>=<em><code>'mysql'</code></em>)</p>
 </blockquote>
+<p>Creates a sqlalchemy engine to query a database.</p>
+<p>params:</p>
+
+<pre><code>- username: Username used to connect
+- password: Password of the user
+- ip_adress: IP adress of the database
+- model_name: Name of the model of the database to connect to
+- rdbms: Backend engine of the database
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- A sqlalchemy engine connected to the database</code></pre>
 
 </div>
 
@@ -94,8 +107,19 @@ description: "helpers to get and query a sqlalchemy engine for DB containing met
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="prompt_credentials" class="doc_header"><code>prompt_credentials</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/database.py#L21" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>prompt_credentials</code>(<strong><code>user</code></strong>=<em><code>None</code></em>, <strong><code>db_adress</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="prompt_credentials" class="doc_header"><code>prompt_credentials</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/database.py#L34" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>prompt_credentials</code>(<strong><code>user</code></strong>=<em><code>None</code></em>, <strong><code>db_adress</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
+<p>Helper function to make a prompt for the password, and additonally the user and the database IP adress
+if left to None.</p>
+<p>params:</p>
+
+<pre><code>- user: None to prompt or name of the user.
+- db_adress: None to prompt or database adress
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- username, password and database IP adress</code></pre>
 
 </div>
 
@@ -125,8 +149,18 @@ description: "helpers to get and query a sqlalchemy engine for DB containing met
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_record_essentials" class="doc_header"><code>get_record_essentials</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/database.py#L30" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_record_essentials</code>(<strong><code>engine</code></strong>, <strong><code>record_id</code></strong>)</p>
+<h4 id="get_record_essentials" class="doc_header"><code>get_record_essentials</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/database.py#L54" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_record_essentials</code>(<strong><code>engine</code></strong>, <strong><code>record_id</code></strong>)</p>
 </blockquote>
+<p>Retrieves the essential informations about a record.</p>
+<p>params:</p>
+
+<pre><code>- engine: Database engine
+- record_id: ID of the record
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- Pandas Dataframe of record essential informations</code></pre>
 
 </div>
 
@@ -156,8 +190,18 @@ description: "helpers to get and query a sqlalchemy engine for DB containing met
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_stim_params" class="doc_header"><code>get_stim_params</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/database.py#L58" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_stim_params</code>(<strong><code>engine</code></strong>, <strong><code>stim_hashes</code></strong>)</p>
+<h4 id="get_stim_params" class="doc_header"><code>get_stim_params</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/database.py#L92" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_stim_params</code>(<strong><code>engine</code></strong>, <strong><code>stim_hashes</code></strong>)</p>
 </blockquote>
+<p>Retrieves the parameters of a stimulus specified by its hash key.</p>
+<p>params:</p>
+
+<pre><code>- engine: Database engine
+- stim_hashes: Stimulus hash
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- Pandas Dataframe of stimulus parameters</code></pre>
 
 </div>
 
@@ -187,8 +231,18 @@ description: "helpers to get and query a sqlalchemy engine for DB containing met
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_table" class="doc_header"><code>get_table</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/database.py#L78" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_table</code>(<strong><code>engine</code></strong>, <strong><code>table_name</code></strong>)</p>
+<h4 id="get_table" class="doc_header"><code>get_table</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/database.py#L122" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_table</code>(<strong><code>engine</code></strong>, <strong><code>table_name</code></strong>)</p>
 </blockquote>
+<p>Return the entire content of a table in a pandas Dataframe.</p>
+<p>params:</p>
+
+<pre><code>- engine: Database engine
+- table_name: Name of the table
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- Pandas Dataframe of the whole table</code></pre>
 
 </div>
 
@@ -218,7 +272,7 @@ description: "helpers to get and query a sqlalchemy engine for DB containing met
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="stim_param_to_dict" class="doc_header"><code>stim_param_to_dict</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/database.py#L84" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stim_param_to_dict</code>(<strong><code>param_df</code></strong>, <strong><code>md5</code></strong>)</p>
+<h4 id="stim_param_to_dict" class="doc_header"><code>stim_param_to_dict</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/database.py#L138" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stim_param_to_dict</code>(<strong><code>param_df</code></strong>, <strong><code>md5</code></strong>)</p>
 </blockquote>
 
 </div>

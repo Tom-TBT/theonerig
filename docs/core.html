@@ -48,23 +48,6 @@ description: "Core of this library: DataChunk, RecordMaster, Data_Pipe, and impo
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">nbdev.showdoc</span> <span class="kn">import</span> <span class="o">*</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -90,196 +73,6 @@ params:</p>
 - group: group of the DataChunk in {stim, sync, cell, data}
 - fill: Default filling value.</code></pre>
 
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">theonerig.testdata</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="n">load_vivo_2p</span><span class="p">(</span><span class="s2">&quot;./files/vivo_2p&quot;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Importing the record master
-
-Returning stim_d, S_matrix, A_matrix, proj_TP, proj_DATA, eye_TP, eye_DATA, treadm_DATA, len_records, rec_TP, reM
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>{&#39;testdata_dir&#39;: &#39;./files/vivo_2p&#39;,
- &#39;vivo_2p_dir&#39;: &#39;./files/vivo_2p&#39;,
- &#39;reM&#39;: [{&#39;signals&#39;: [DataChunk((207634,),27759,sync,0)], &#39;main_tp&#39;: [DataChunk((235994,),0,sync,0)], &#39;S_matrix&#39;: [DataChunk((44687, 2),125746,cell,0), DataChunk((13596, 2),174618,cell,0), DataChunk((11652, 2),194273,cell,0), DataChunk((19425, 2),213032,cell,0), DataChunk((23303, 2),2703,cell,0), DataChunk((38849, 2),38207,cell,0), DataChunk((38855, 2),81695,cell,0)], &#39;checkerboard&#39;: [DataChunk((36000, 15, 20),38786,stim,0)], &#39;chirp_am&#39;: [DataChunk((10200,),174837,stim,0)], &#39;chirp_freq_epoch&#39;: [DataChunk((8680,),195136,stim,0)], &#39;darkness&#39;: [DataChunk((27759,),0,stim,0)], &#39;eye_tracking&#39;: [DataChunk((233326, 5),331,data,0)], &#39;fullfield_flicker&#39;: [DataChunk((18000, 1, 1),213925,stim,0)], &#39;moving_gratings&#39;: [DataChunk((40800, 3),126646,stim,0)], &#39;treadmill&#39;: [DataChunk((235392,),1,data,0)], &#39;water&#39;: [DataChunk((36000, 1, 1, 1),82376,stim,0)]}],
- &#39;stim_d&#39;: {&#39;0_darkness&#39;: array([0., 0., 0., ..., 0., 0., 0.]),
-  &#39;38786_checkerboard&#39;: array([[[255,   0, 255, ...,   0, 255,   0],
-          [255, 255, 255, ...,   0,   0, 255],
-          [  0,   0, 255, ...,   0,   0,   0],
-          ...,
-          [  0,   0, 255, ..., 128, 128, 128],
-          [  0,   0, 255, ..., 128, 128, 128],
-          [  0, 255,   0, ..., 128, 128, 128]],
-  
-         [[255,   0, 255, ...,   0, 255,   0],
-          [255, 255, 255, ...,   0,   0, 255],
-          [  0,   0, 255, ...,   0,   0,   0],
-          ...,
-          [  0,   0, 255, ..., 128, 128, 128],
-          [  0,   0, 255, ..., 128, 128, 128],
-          [  0, 255,   0, ..., 128, 128, 128]],
-  
-         [[255,   0, 255, ...,   0, 255,   0],
-          [255, 255, 255, ...,   0,   0, 255],
-          [  0,   0, 255, ...,   0,   0,   0],
-          ...,
-          [  0,   0, 255, ..., 128, 128, 128],
-          [  0,   0, 255, ..., 128, 128, 128],
-          [  0, 255,   0, ..., 128, 128, 128]],
-  
-         ...,
-  
-         [[  0,   0, 255, ..., 255,   0, 255],
-          [  0, 255,   0, ..., 255,   0,   0],
-          [  0, 255, 255, ...,   0,   0, 255],
-          ...,
-          [255, 255, 255, ..., 128, 128, 128],
-          [255, 255,   0, ..., 128, 128, 128],
-          [  0, 255, 255, ..., 128, 128, 128]],
-  
-         [[  0,   0, 255, ..., 255,   0, 255],
-          [  0, 255,   0, ..., 255,   0,   0],
-          [  0, 255, 255, ...,   0,   0, 255],
-          ...,
-          [255, 255, 255, ..., 128, 128, 128],
-          [255, 255,   0, ..., 128, 128, 128],
-          [  0, 255, 255, ..., 128, 128, 128]],
-  
-         [[  0,   0, 255, ..., 255,   0, 255],
-          [  0, 255,   0, ..., 255,   0,   0],
-          [  0, 255, 255, ...,   0,   0, 255],
-          ...,
-          [255, 255, 255, ..., 128, 128, 128],
-          [255, 255,   0, ..., 128, 128, 128],
-          [  0, 255, 255, ..., 128, 128, 128]]], dtype=uint8),
-  &#39;82376_water&#39;: array([[[[127]]],
-  
-  
-         [[[127]]],
-  
-  
-         [[[127]]],
-  
-  
-         ...,
-  
-  
-         [[[127]]],
-  
-  
-         [[[127]]],
-  
-  
-         [[[127]]]], dtype=uint8),
-  &#39;126646_moving_gratings&#39;: array([[255,  90,   0],
-         [255,  90,   0],
-         [255,  90,   0],
-         ...,
-         [  0,   0,   0],
-         [  0,   0,   0],
-         [  0,   0,   0]], dtype=uint8),
-  &#39;174837_chirp_am&#39;: array([  0,   0,   0, ..., 127, 127, 127], dtype=uint8),
-  &#39;195136_chirp_freq_epoch&#39;: array([  0,   0,   0, ..., 127, 127, 127], dtype=uint8),
-  &#39;213925_fullfield_flicker&#39;: array([[[255]],
-  
-         [[255]],
-  
-         [[255]],
-  
-         ...,
-  
-         [[255]],
-  
-         [[255]],
-  
-         [[255]]], dtype=uint8)},
- &#39;S_matrix&#39;: array([[ 0.00000000e+00,  4.68346407e-04,  5.77816274e-04, ...,
-          0.00000000e+00,  0.00000000e+00,  0.00000000e+00],
-        [ 0.00000000e+00,  4.28516651e-04,  0.00000000e+00, ...,
-         -7.27595761e-12,  7.27595761e-12,  0.00000000e+00]]),
- &#39;A_matrix&#39;: array([[[0., 0., 0., ..., 0., 0., 0.],
-         [0., 0., 0., ..., 0., 0., 0.],
-         [0., 0., 0., ..., 0., 0., 0.],
-         ...,
-         [0., 0., 0., ..., 0., 0., 0.],
-         [0., 0., 0., ..., 0., 0., 0.],
-         [0., 0., 0., ..., 0., 0., 0.]],
- 
-        [[0., 0., 0., ..., 0., 0., 0.],
-         [0., 0., 0., ..., 0., 0., 0.],
-         [0., 0., 0., ..., 0., 0., 0.],
-         ...,
-         [0., 0., 0., ..., 0., 0., 0.],
-         [0., 0., 0., ..., 0., 0., 0.],
-         [0., 0., 0., ..., 0., 0., 0.]]]),
- &#39;eye_TP&#39;: array([   55009,    55677,    56346, ..., 38940337, 38941006, 38941675]),
- &#39;eye_DATA&#39;: array([[272.8059082 , 241.8285675 , 190.8132782 , 254.16410828,
-         116.17079926],
-        [265.58111572, 233.21505737, 183.02998352, 232.25511169,
-          97.21073914],
-        [263.09902954, 232.90026855, 182.26741028, 229.15588379,
-          95.89794159],
-        ...,
-        [262.75646973, 232.33595276, 154.26779175, 183.51026917,
-          84.51060486],
-        [260.6960144 , 230.99435425, 154.36706543, 181.29519653,
-          83.76092529],
-        [244.64651489, 221.68588257, 140.61120605, 184.82339478,
-          72.17115021]]),
- &#39;proj_TP&#39;: array([ 4626322,  4626489,  4626655, ..., 39230622, 39230789, 39230955],
-       dtype=int64),
- &#39;proj_DATA&#39;: array([0, 0, 0, ..., 0, 0, 0], dtype=int64),
- &#39;treadm_DATA&#39;: array([ -1,  -1,  -1, ..., -14, -14, -14], dtype=int8),
- &#39;len_records&#39;: array([ 6000, 10000, 10000, 11500,  3500,  3000,  5000]),
- &#39;f&#39;: &lt;_io.BufferedReader name=&#39;./files/vivo_2p\\twoP_frame_timepoints.pkl&#39;&gt;,
- &#39;rec_TP&#39;: [array([ 450362,  451009,  451655, ..., 4336097, 4336745, 4337393],
-        dtype=int64),
-  array([ 6367536,  6368182,  6368829, ..., 12844173, 12844821, 12845468],
-        dtype=int64),
-  array([13615430, 13616077, 13616724, ..., 20092912, 20093560, 20094208],
-        dtype=int64),
-  array([20957066, 20957713, 20958359, ..., 28406524, 28407171, 28407819],
-        dtype=int64),
-  array([29102207, 29102854, 29103501, ..., 31370033, 31370681, 31371328],
-        dtype=int64),
-  array([32377956, 32378603, 32379250, ..., 34321800, 34322448, 34323096],
-        dtype=int64),
-  array([35504377, 35505024, 35505671, ..., 38743631, 38744279, 38744926],
-        dtype=int64)]}</pre>
 </div>
 
 </div>
@@ -347,16 +140,22 @@ respectively "signals" and "main_tp".</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="RecordMaster" class="doc_header"><code>class</code> <code>RecordMaster</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L214" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>RecordMaster</code>(<strong><code>reference_data_list</code></strong>:<code>Sequence</code>[<code>Tuple</code>[<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>, <a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>]], <strong><code>frame_time</code></strong>=<em><code>0.016666666666666666</code></em>, <strong><code>sep_size</code></strong>=<em><code>1000</code></em>) :: <code>list</code></p>
+<h2 id="RecordMaster" class="doc_header"><code>class</code> <code>RecordMaster</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L214" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>RecordMaster</code>(<strong><code>reference_data_list</code></strong>:<code>Sequence</code>[<code>Tuple</code>[<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>, <a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>]], <strong><code>frame_rate</code></strong>=<em><code>60</code></em>) :: <code>list</code></p>
 </blockquote>
-<p>One Timeserie to rule them all, One Timeserie to find them,
-One Timeserie to bring them all and in the darkness bind them.</p>
 <p>The RecordMaster class is the top level object managing all
 timeseries. It uses a list of ContiguousRecord to represent
 possible discontinuted data records.</p>
 <p>The main aim of the RecordMaster is to store the various data
 stream of an experiment under a unique time reference, to ease
 the processing of the data.</p>
+<p>A RecordMaster is created by providing to it a list of (timepoints, signals) arrays of
+identical lenght. This serves as reference to align other DataChunks with the signals
+at the given timepoints. Multiple tuples represent uncontiguous sequences of data in
+a same record. The timepoints must be evenly spaced (regular).</p>
+<p>params:</p>
+
+<pre><code>- reference_data_list: list of (timepoints, signals) arrays.
+- frame_rate: Frame rate in Hz</code></pre>
 
 </div>
 
@@ -386,8 +185,16 @@ the processing of the data.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Data_Pipe" class="doc_header"><code>class</code> <code>Data_Pipe</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L338" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Data_Pipe</code>(<strong><code>record_master</code></strong>:<a href="/theonerig/core#RecordMaster"><code>RecordMaster</code></a>, <strong><code>data_names</code></strong>:<code>Union</code>[<code>str</code>, <code>list</code>], <strong><code>target_names</code></strong>:<code>Union</code>[<code>str</code>, <code>list</code>]=<em><code>None</code></em>)</p>
+<h2 id="Data_Pipe" class="doc_header"><code>class</code> <code>Data_Pipe</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L344" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Data_Pipe</code>(<strong><code>record_master</code></strong>:<a href="/theonerig/core#RecordMaster"><code>RecordMaster</code></a>, <strong><code>data_names</code></strong>:<code>Union</code>[<code>str</code>, <code>list</code>], <strong><code>target_names</code></strong>:<code>Union</code>[<code>str</code>, <code>list</code>]=<em><code>None</code></em>)</p>
 </blockquote>
+<p>A Data_Pipe is used to query data from a RecordMaster. By adding/substracting portions
+of the record using DataChunk names, it creates a mask over which specified DataChunks
+are retrivied as a dictionary from the Data_Pipe.</p>
+<p>params:</p>
+
+<pre><code>- record_master: the RecordMaster from which to retrieve data
+- data_names: Name, or list of names of the DataChunk to retrieve once the masking process is done.
+- target_names: Alias, or list of alias to give to the DataChunk in the retrieved dictionnary.</code></pre>
 
 </div>
 
@@ -417,9 +224,13 @@ the processing of the data.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="export_record" class="doc_header"><code>export_record</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L504" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>export_record</code>(<strong><code>_path</code></strong>, <strong><code>record_master</code></strong>)</p>
+<h4 id="export_record" class="doc_header"><code>export_record</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L529" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>export_record</code>(<strong><code>path</code></strong>, <strong><code>record_master</code></strong>)</p>
 </blockquote>
 <p>Export a Record_Master object to an h5 file, readable outside of this library.</p>
+<p>params:</p>
+
+<pre><code>- path: path of the file to be saved
+- record_master: RecordMaster to save</code></pre>
 
 </div>
 
@@ -442,9 +253,12 @@ the processing of the data.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="import_record" class="doc_header"><code>import_record</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L528" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>import_record</code>(<strong><code>_path</code></strong>)</p>
+<h4 id="import_record" class="doc_header"><code>import_record</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L558" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>import_record</code>(<strong><code>path</code></strong>)</p>
 </blockquote>
 <p>Import a Record_Master from an h5 file saved by the export_record function of this library.</p>
+<p>params:</p>
+
+<pre><code>- path: path of the RecordMaster to import</code></pre>
 
 </div>
 

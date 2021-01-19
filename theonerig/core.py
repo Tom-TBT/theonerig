@@ -213,9 +213,6 @@ class ContiguousRecord():
 # Cell
 class RecordMaster(list):
     """
-    One Timeserie to rule them all, One Timeserie to find them,
-    One Timeserie to bring them all and in the darkness bind them.
-
     The RecordMaster class is the top level object managing all
     timeseries. It uses a list of ContiguousRecord to represent
     possible discontinuted data records.
@@ -223,12 +220,21 @@ class RecordMaster(list):
     The main aim of the RecordMaster is to store the various data
     stream of an experiment under a unique time reference, to ease
     the processing of the data.
+
+    A RecordMaster is created by providing to it a list of (timepoints, signals) arrays of
+    identical lenght. This serves as reference to align other DataChunks with the signals
+    at the given timepoints. Multiple tuples represent uncontiguous sequences of data in
+    a same record. The timepoints must be evenly spaced (regular).
+
+    params:
+        - reference_data_list: list of (timepoints, signals) arrays.
+        - frame_rate: Frame rate in Hz
     """
 
-    def __init__(self, reference_data_list: Sequence[Tuple[DataChunk, DataChunk]], frame_time=1/60, sep_size=1000):
+    def __init__(self, reference_data_list: Sequence[Tuple[DataChunk, DataChunk]], frame_rate=60):
 
-        self.frame_time = frame_time
-        self.sep_size   = sep_size
+        self._frame_time = 1/frame_rate
+        self._sep_size   = 1000 #Used for the plotting of multiple sequences
         self._sequences = []
         for ref_timepoints, ref_signals in reference_data_list:
             cs = ContiguousRecord(len(ref_timepoints), ref_signals, ref_timepoints)
@@ -305,7 +311,7 @@ class RecordMaster(list):
                         y_count+=1
                     y_pos = y_pos_dict[name]
                     ax.text(x, y_pos, text, ha='center', va='center')
-            cursor += len(seq) + self.sep_size
+            cursor += len(seq) + self._sep_size
 
         legend_elements = [Patch(facecolor=colors["sync"],label='Synchro'),
                            Patch(facecolor=colors["data"],label='Data'),
@@ -316,7 +322,7 @@ class RecordMaster(list):
         ax.set_xlim(-100,cursor)
 
     def to_s(self, n_frame):
-        return round(self.frame_time*n_frame,2)
+        return round(self._frame_time*n_frame,2)
 
     def to_time_str(self, n_frame):
         s = int(self.to_s(n_frame))
@@ -336,6 +342,16 @@ class RecordMaster(list):
 
 # Cell
 class Data_Pipe():
+    """
+    A Data_Pipe is used to query data from a RecordMaster. By adding/substracting portions
+    of the record using DataChunk names, it creates a mask over which specified DataChunks
+    are retrivied as a dictionary from the Data_Pipe.
+
+    params:
+        - record_master: the RecordMaster from which to retrieve data
+        - data_names: Name, or list of names of the DataChunk to retrieve once the masking process is done.
+        - target_names: Alias, or list of alias to give to the DataChunk in the retrieved dictionnary.
+    """
     def __init__(self, record_master:RecordMaster, data_names:Union[str,list], target_names:Union[str,list]=None):
         self.record_master = record_master
         if isinstance(data_names, str):
@@ -355,6 +371,12 @@ class Data_Pipe():
         self._slices    = []
 
     def plot(self, newfig=False):
+        """
+        Add the mask of the Pipe to a RecordMaster plot.
+        Usage:
+            reM.plot()
+            pipe.plot()
+        """
         factor = -1
         if newfig:
             plt.figure()
@@ -365,6 +387,9 @@ class Data_Pipe():
             cursor += len(seq) + self.record_master.sep_size
 
     def copy(self):
+        """
+        Duplicate the Pipe and its mask, and return the new pipe.
+        """
         new_pipe =  Data_Pipe(record_master=self.record_master,
                          data_names=self.data_names,
                          target_names=self.target_names)
@@ -501,12 +526,17 @@ class Data_Pipe():
         return "Pipe(%s)"%(repr(self.data_names)+", "+repr(self.target_names)+", "+repr(self._slices))
 
 # Cell
-def export_record(_path, record_master):
-    """Export a Record_Master object to an h5 file, readable outside of this library."""
+def export_record(path, record_master):
+    """Export a Record_Master object to an h5 file, readable outside of this library.
+
+    params:
+        - path: path of the file to be saved
+        - record_master: RecordMaster to save
+    """
     print("Exporting the record master")
-    with h5py.File(_path, mode="w") as h5_f:
-        h5_f.attrs["frame_time"] = record_master.frame_time
-        h5_f.attrs["sep_size"]   = record_master.sep_size
+    with h5py.File(path, mode="w") as h5_f:
+        h5_f.attrs["_frame_time"] = record_master._frame_time
+        h5_f.attrs["_sep_size"]   = record_master._sep_size
         for i, contig in enumerate(record_master):
             #create contig
             print("Contiguous sequence",i)
@@ -525,10 +555,14 @@ def export_record(_path, record_master):
                     dset.attrs["__group"] = datachunk.group
     print()
 
-def import_record(_path):
-    """Import a Record_Master from an h5 file saved by the export_record function of this library."""
+def import_record(path):
+    """Import a Record_Master from an h5 file saved by the export_record function of this library.
+
+    params:
+        - path: path of the RecordMaster to import
+    """
     print("Importing the record master")
-    with h5py.File(_path, mode="r") as h5_f:
+    with h5py.File(path, mode="r") as h5_f:
         record_master = None
         for j, key_contig in enumerate(h5_f.keys()):
             ref_contig = h5_f[key_contig]
