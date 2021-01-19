@@ -27,6 +27,37 @@ from .leddome import *
 
 DEFAULT_COLORS = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
+
+#Cell
+def crosscorr(datax, datay, lag, wrap=False):
+    """ Lag-N cross correlation. 
+    Shifted data filled with NaNs 
+
+    """
+    if wrap:
+        shiftedy = datay.shift(lag)
+        shiftedy.iloc[:lag] = datay.iloc[-lag:].values
+        return datax.corr(shiftedy)
+    else: 
+        return datax.corr(datay.shift(lag))
+    
+#Cell
+def plot_crosscorr_treadmill_spikes(ax, filtered_treadmill, filtered_spike_counts, null_dist, cluster_id, fps):
+    seconds=30
+    d1 = pd.Series(filtered_treadmill)
+    d2 = pd.Series(filtered_spike_counts[cluster_id])
+    rs = [crosscorr(d1,d2,lag) for lag in range(-int(seconds*fps),int(seconds*fps+1))]
+    offset = np.around((np.ceil(len(rs)/2)-np.argmax(abs(np.array(rs))))/fps, decimals=3)
+    ax.plot(rs)
+    ax.axvline(np.ceil(len(rs)/2),color='k',linestyle='--',label='Center')
+    ax.axvline(np.argmax(abs(np.array(rs))),color='r',linestyle='--',label='Peak synchrony')
+    ax.axhspan(np.percentile(null_dist[cluster_id], 2.5), np.percentile(null_dist[cluster_id], 97.5), facecolor='grey', alpha=0.5, label='2.5th-97.5th percentile of null dist')
+    ax.set(title=f'Cross-correlation between treadmill and spiking signal \n \n Offset = {offset} seconds\n Treadmill signal leads <> Spiking signal leads',ylim=[min(rs),max(rs)], xlabel='Offset (s)',ylabel='Pearson r')
+    ax.set_xticks([0, 1800, 3600])
+    ax.set_xticklabels([-30, 0, 30])
+    ax.legend(loc=0)
+    plt.legend()
+
 # Cell
 def plot_2d_sta(sta, grid=None, pval=None):
     sta = np.array(sta)
@@ -460,10 +491,10 @@ def configure_pyplot_recap(small_size=14, medium_size=18, bigger_size=24):
     sns.set_style("ticks")
 
 # Cell
-def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_db_ids=None,
-                         checkerboard=None, fullfield_fl=None, fl_bars=None, chirp_am=None,
+def plot_recap_vitro_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_db_ids=None,
+                         checkerboard=None, fullfield_fl=None, fl_bars=None, chirp_am=None, 
                          chirp_fm=None, moving_gratings=None, export_path="./recap_plot.pdf"):
-    """Plot the recapitulating form of in vivo electrophy records
+    """Plot the recapitulating form of in vitro electrophy records
     title_dict -> A dictionnary containing the str info for the title: keys(condition, date, record_name, record_id)
     reM -> The record master object of the record
     phy_dict -> A dictionnary containing the matrix obtained from phy (see utils.phy_results_dict())
@@ -479,18 +510,17 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
     """
     print("Generating the recap plot")
     configure_pyplot_recap()
-
-    shanks_idx = buszaki_shank_channels(phy_dict["channel_positions"])
+    
     cond = title_dict["condition"]
     date = title_dict["date"]
     record_name = title_dict["record_name"]
     record_id = title_dict["record_id"]
-
+    
     if cell_db_ids is None:
         cell_db_ids = [-1]*len(cluster_ids)
-
+    
     with PdfPages(export_path) as pp:
-
+        
         #Plotting Cover
         fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
         gs  = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
@@ -509,7 +539,7 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
             reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][cluster]#np.where(cluster==cluster_ids)[0][0]
 
             fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
-            suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id),
+            suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id), 
                                    "Cluster n°"+str(cluster), "Cell id n°"+str(cell_id)])
             plt.suptitle(suptitle)
 
@@ -519,17 +549,17 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
             gs = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
 
             #Template on electrodes
-            cell_loc_ax = fig.add_subplot(gs[0:4,0:2])
-            plot_spike_template(cell_loc_ax, cluster_composition, phy_dict["templates"], shanks_idx, phy_dict["channel_positions"])
+            cell_loc_ax = fig.add_subplot(gs[0:4,0:4])
+            plot_spike_template_MEA(cell_loc_ax, cluster_composition, phy_dict["templates"], phy_dict["channel_positions"])
 
             #Autocorrelogram
-            autocorr_ax = fig.add_subplot(gs[0:4,3:7])
-            plot_autocorrelogram(autocorr_ax, cluster, phy_dict["spike_times"], phy_dict["spike_clusters"],
+            autocorr_ax = fig.add_subplot(gs[0:4,5:9])
+            plot_autocorrelogram(autocorr_ax, cluster, phy_dict["spike_times"], phy_dict["spike_clusters"], 
                                  bin_ms=.001, sampling_rate=30000, tails=30)
 
             #Spike amplitude across time
-            sp_amp_ax = fig.add_subplot(gs[0:4,8:])
-            plot_spike_amplitudes(sp_amp_ax, cluster, phy_dict["spike_templates"], phy_dict["spike_clusters"],
+            sp_amp_ax = fig.add_subplot(gs[0:4,10:])
+            plot_spike_amplitudes(sp_amp_ax, cluster, phy_dict["spike_templates"], phy_dict["spike_clusters"], 
                                   phy_dict["spike_times"], phy_dict["amplitudes"])
             plot_stim_epochs_to_spikes(sp_amp_ax, reM, y_pos=0.2)
 
@@ -715,10 +745,11 @@ def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, df_stim, cel
 
 
 # Cell
-def plot_recap_vitro_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_db_ids=None,
+def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_db_ids=None,
                          checkerboard=None, fullfield_fl=None, fl_bars=None, chirp_am=None,
-                         chirp_fm=None, moving_gratings=None, export_path="./recap_plot.pdf"):
-    """Plot the recapitulating form of in vitro electrophy records
+                         chirp_fm=None, moving_gratings=None, filtered_spike_counts=None, filtered_treadmill=None, null_dist_corr=None,
+                         export_path="./recap_plot.pdf"):
+    """Plot the recapitulating form of in vivo electrophy records
     title_dict -> A dictionnary containing the str info for the title: keys(condition, date, record_name, record_id)
     reM -> The record master object of the record
     phy_dict -> A dictionnary containing the matrix obtained from phy (see utils.phy_results_dict())
@@ -735,6 +766,7 @@ def plot_recap_vitro_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_
     print("Generating the recap plot")
     configure_pyplot_recap()
 
+    shanks_idx = buszaki_shank_channels(phy_dict["channel_positions"])
     cond = title_dict["condition"]
     date = title_dict["date"]
     record_name = title_dict["record_name"]
@@ -773,16 +805,16 @@ def plot_recap_vitro_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_
             gs = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
 
             #Template on electrodes
-            cell_loc_ax = fig.add_subplot(gs[0:4,0:4])
-            plot_spike_template_MEA(cell_loc_ax, cluster_composition, phy_dict["templates"], phy_dict["channel_positions"])
+            cell_loc_ax = fig.add_subplot(gs[0:4,0:2])
+            plot_spike_template(cell_loc_ax, cluster_composition, phy_dict["templates"], shanks_idx, phy_dict["channel_positions"])
 
             #Autocorrelogram
-            autocorr_ax = fig.add_subplot(gs[0:4,5:9])
+            autocorr_ax = fig.add_subplot(gs[0:4,3:7])
             plot_autocorrelogram(autocorr_ax, cluster, phy_dict["spike_times"], phy_dict["spike_clusters"],
                                  bin_ms=.001, sampling_rate=30000, tails=30)
 
             #Spike amplitude across time
-            sp_amp_ax = fig.add_subplot(gs[0:4,10:])
+            sp_amp_ax = fig.add_subplot(gs[0:4,8:])
             plot_spike_amplitudes(sp_amp_ax, cluster, phy_dict["spike_templates"], phy_dict["spike_clusters"],
                                   phy_dict["spike_times"], phy_dict["amplitudes"])
             plot_stim_epochs_to_spikes(sp_amp_ax, reM, y_pos=0.2)
@@ -820,10 +852,15 @@ def plot_recap_vitro_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_
                 pval_bars = np.min(pval_bars[pval_bars!=0])
                 fl_bars_ax = fig.add_subplot(gs[21:,:12])
                 plot_fl_bars(fl_bars_ax, fl_bars[0][reM_cell_idx], pval=pval_bars)
+                
+            #Treadmill-spiking signal correlation plots
+            if fl_bars is None:
+                corr_ax = fig.add_subplot(gs[22:,:11])
+                plot_crosscorr_treadmill_spikes(corr_ax, filtered_treadmill, filtered_spike_counts, null_dist_corr, reM_cell_idx, 60)
 
             #Moving gratings
             if moving_gratings is not None:
-                ds_ax = fig.add_subplot(gs[21:,13:], projection="polar")
+                ds_ax = fig.add_subplot(gs[22:,13:], projection="polar")
                 plot_ds_wheel(ds_ax, moving_gratings, cell_idx=reM_cell_idx)
 
             pp.savefig()
@@ -831,6 +868,9 @@ def plot_recap_vitro_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_
 
             print("Cell cluster n°",cluster,"done")
 
+    sns.set()
+    plt.rcdefaults()
+    print()
     sns.set()
     plt.rcdefaults()
     print()
