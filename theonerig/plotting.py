@@ -586,13 +586,14 @@ def plot_stim_recap_table(df, ax=None):
 
     return ax
 
-def plot_composed_A_masks(A_matrix, ax=None):
+def plot_composed_A_masks(A_matrix, shape=None, ax=None):
     """
     Plot in a single image the spatial mask of all cell of a record, obtained with CaImAn.
 
     params:
-        - A_matrix: the A matrix given by CaImAn
+        - A_matrix: the A matrix given by CaImAn (h*w, n_cell) or the 2D reshaped A_matrix (n_cell, h, w)
         - ax: The axis for the plot. If None, a new plot is created
+        - shape: Shape of a single cell image if A_matrix is native, e.g. (256, 256). If None, it assumes it's a square and tries to guess the shape.
 
     return:
         - The axis of the plot
@@ -600,6 +601,14 @@ def plot_composed_A_masks(A_matrix, ax=None):
     """
     if ax is None:
         fig, ax = plt.subplots()
+
+    if len(A_matrix.shape) == 2: #The A_matrix is native from CaImAn and needs to be transposed and reshaped
+        if shape is None: #Trying to guess the shape (must be a square)
+            side = int(np.sqrt(A_matrix.shape[0]))
+            assert A_matrix.shape[0] == (side*side), "The A_matrix shape could not be guessed"
+            shape = (side, side)
+        A_matrix = A_matrix.T.reshape((-1, *shape))
+
 
     center_mass_l = []
     final_img = np.ones((3,*A_matrix.shape[1:]), dtype="float")

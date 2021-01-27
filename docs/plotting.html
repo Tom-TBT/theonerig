@@ -694,13 +694,14 @@ The response is plotted with seaborn's lineplot.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_composed_A_masks" class="doc_header"><code>plot_composed_A_masks</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L589" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_composed_A_masks</code>(<strong><code>A_matrix</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_composed_A_masks" class="doc_header"><code>plot_composed_A_masks</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L589" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_composed_A_masks</code>(<strong><code>A_matrix</code></strong>, <strong><code>shape</code></strong>=<em><code>None</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot in a single image the spatial mask of all cell of a record, obtained with CaImAn.</p>
 <p>params:</p>
 
-<pre><code>- A_matrix: the A matrix given by CaImAn
+<pre><code>- A_matrix: the A matrix given by CaImAn (h*w, n_cell) or the 2D reshaped A_matrix (n_cell, h, w)
 - ax: The axis for the plot. If None, a new plot is created
+- shape: Shape of a single cell image if A_matrix is native, e.g. (256, 256). If None, it assumes it's a square and tries to guess the shape.
 
 </code></pre>
 <p>return:</p>
@@ -728,7 +729,7 @@ The response is plotted with seaborn's lineplot.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_sta_positions" class="doc_header"><code>plot_sta_positions</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L623" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_sta_positions</code>(<strong><code>stas</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_sta_positions" class="doc_header"><code>plot_sta_positions</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L632" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_sta_positions</code>(<strong><code>stas</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot in a single image all 2D STAs of a single record. The STA are fitted with a gaussian,
 and plotted as ellipses.</p>
@@ -770,7 +771,7 @@ and plotted as ellipses.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_2d_sta" class="doc_header"><code>plot_2d_sta</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L659" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_2d_sta</code>(<strong><code>sta</code></strong>, <strong><code>gs</code></strong>=<em><code>None</code></em>, <strong><code>pval</code></strong>=<em><code>None</code></em>, <strong><code>title</code></strong>=<em><code>'Checkerboard'</code></em>)</p>
+<h4 id="plot_2d_sta" class="doc_header"><code>plot_2d_sta</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L668" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_2d_sta</code>(<strong><code>sta</code></strong>, <strong><code>gs</code></strong>=<em><code>None</code></em>, <strong><code>pval</code></strong>=<em><code>None</code></em>, <strong><code>title</code></strong>=<em><code>'Checkerboard'</code></em>)</p>
 </blockquote>
 <p>Plot a single 2D STA or an iterable of 2D STAs</p>
 <p>params:</p>
@@ -850,7 +851,7 @@ and plotted as ellipses.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_dome_flat" class="doc_header"><code>plot_dome_flat</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L707" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_dome_flat</code>(<strong><code>sph_pos</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>, <strong>**<code>scatter_args</code></strong>)</p>
+<h4 id="plot_dome_flat" class="doc_header"><code>plot_dome_flat</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L716" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_dome_flat</code>(<strong><code>sph_pos</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>, <strong>**<code>scatter_args</code></strong>)</p>
 </blockquote>
 <p>Plot the dome LED as flat.</p>
 <p>params:</p>
@@ -885,7 +886,7 @@ and plotted as ellipses.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_dome_checker" class="doc_header"><code>plot_dome_checker</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L731" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_dome_checker</code>(<strong><code>sta</code></strong>, <strong><code>s</code></strong>=<em><code>20</code></em>, <strong><code>gs</code></strong>=<em><code>None</code></em>, <strong><code>pval</code></strong>=<em><code>None</code></em>, <strong><code>title</code></strong>=<em><code>'Checkerboard'</code></em>)</p>
+<h4 id="plot_dome_checker" class="doc_header"><code>plot_dome_checker</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L740" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_dome_checker</code>(<strong><code>sta</code></strong>, <strong><code>s</code></strong>=<em><code>20</code></em>, <strong><code>gs</code></strong>=<em><code>None</code></em>, <strong><code>pval</code></strong>=<em><code>None</code></em>, <strong><code>title</code></strong>=<em><code>'Checkerboard'</code></em>)</p>
 </blockquote>
 <p>Plot a single 2D STA or an iterable of 2D STAs for the LED dome</p>
 <p>params:</p>
@@ -929,7 +930,7 @@ and plotted as ellipses.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_pyplot_recap" class="doc_header"><code>configure_pyplot_recap</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L767" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_pyplot_recap</code>(<strong><code>small_size</code></strong>=<em><code>14</code></em>, <strong><code>medium_size</code></strong>=<em><code>18</code></em>, <strong><code>bigger_size</code></strong>=<em><code>24</code></em>)</p>
+<h4 id="configure_pyplot_recap" class="doc_header"><code>configure_pyplot_recap</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L776" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_pyplot_recap</code>(<strong><code>small_size</code></strong>=<em><code>14</code></em>, <strong><code>medium_size</code></strong>=<em><code>18</code></em>, <strong><code>bigger_size</code></strong>=<em><code>24</code></em>)</p>
 </blockquote>
 <p>Set the fontsize and other style of matplotlib and seaborn for the recap plots.
 Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
@@ -962,7 +963,7 @@ Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_vivo_ephy" class="doc_header"><code>plot_recap_vivo_ephy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L791" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
+<h4 id="plot_recap_vivo_ephy" class="doc_header"><code>plot_recap_vivo_ephy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L800" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
 </blockquote>
 <p>Plot the recap pdf of in vivo electrophy records.</p>
 <p>params:</p>
@@ -1009,7 +1010,7 @@ Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_vivo_calcium" class="doc_header"><code>plot_recap_vivo_calcium</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L917" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_calcium</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>A_matrix</code></strong>, <strong><code>cell_traces</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_indexes</code></strong>=<em><code>None</code></em>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>water</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
+<h4 id="plot_recap_vivo_calcium" class="doc_header"><code>plot_recap_vivo_calcium</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L926" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_calcium</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>A_matrix</code></strong>, <strong><code>cell_traces</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_indexes</code></strong>=<em><code>None</code></em>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>water</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
 </blockquote>
 <p>Plot the recap pdf of in vivo calcium records.</p>
 <p>params:</p>
@@ -1057,7 +1058,7 @@ Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_vitro_ephy" class="doc_header"><code>plot_recap_vitro_ephy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1066" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vitro_ephy</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
+<h4 id="plot_recap_vitro_ephy" class="doc_header"><code>plot_recap_vitro_ephy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1075" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vitro_ephy</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
 </blockquote>
 <p>Plot the recap pdf of in vitro electrophy records.</p>
 <p>params:</p>
@@ -1104,7 +1105,7 @@ Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_vivo_ephy_dome" class="doc_header"><code>plot_recap_vivo_ephy_dome</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1192" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy_dome</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
+<h4 id="plot_recap_vivo_ephy_dome" class="doc_header"><code>plot_recap_vivo_ephy_dome</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1201" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy_dome</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
 </blockquote>
 <p>Plot the recap pdf of in vivo electrophy records with the LED dome as stimuluation device.</p>
 <p>params:</p>
