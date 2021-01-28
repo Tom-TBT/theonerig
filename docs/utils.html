@@ -30,17 +30,19 @@ description: "Useful functions to reshape/arrange/reduce raw data into clean dat
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">nbdev.test</span> <span class="kn">import</span> <span class="n">test_eq</span>
-<span class="kn">from</span> <span class="nn">nbdev.showdoc</span> <span class="kn">import</span> <span class="o">*</span>
-</pre></div>
+</div>
+    {% endraw %}
 
-    </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Synchronisation-utils">Synchronisation utils<a class="anchor-link" href="#Synchronisation-utils"> </a></h1>
 </div>
 </div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -48,6 +50,40 @@ description: "Useful functions to reshape/arrange/reduce raw data into clean dat
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="extend_sync_timepoints" class="doc_header"><code>extend_sync_timepoints</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L21" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>extend_sync_timepoints</code>(<strong><code>timepoints</code></strong>:<code>ndarray</code>, <strong><code>signals</code></strong>:<code>ndarray</code>, <strong><code>up_bound</code></strong>, <strong><code>low_bound</code></strong>=<em><code>0</code></em>)</p>
+</blockquote>
+<p>Extend arrays of timepoints and signals (with identical shape) from the low_bound up to the up_bound.
+For example, the first timepoint could be 2000, and with a low_bound of 0, it would add the
+timepoints 0, 500, 1000, 1500 if the timepoint distance is of 500 (obtained by averaging the timepoints
+distances).</p>
+<p>params:</p>
+
+<pre><code>- timepoints: Timepoints to extend
+- signals: Signals to extend
+- up_bound: Up bound to which to extend both timepoints and signals
+- low_bound: Low bound to which to extend both timepoints and signals
+
+</code></pre>
+<p>returns:</p>
+
+<pre><code>- timepoint: Extended timepoints
+- signals: The datachunk array is not modified, but the idx attribute is increased by the number
+of frames added with the low_bound.</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
 
 </div>
     {% endraw %}
@@ -70,11 +106,334 @@ description: "Useful functions to reshape/arrange/reduce raw data into clean dat
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="extend_sync_timepoints" class="doc_header"><code>extend_sync_timepoints</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L22" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>extend_sync_timepoints</code>(<strong><code>timepoints</code></strong>:<code>ndarray</code>, <strong><code>signals</code></strong>:<code>ndarray</code>, <strong><code>up_bound</code></strong>, <strong><code>low_bound</code></strong>=<em><code>0</code></em>)</p>
+<h4 id="align_sync_timepoints" class="doc_header"><code>align_sync_timepoints</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L59" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>align_sync_timepoints</code>(<strong><code>timepoints</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>, <strong><code>signals</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>, <strong><code>ref_timepoints</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>, <strong><code>ref_signals</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>)</p>
 </blockquote>
-<p>From <code>timepoints</code> and <code>signals</code> list, extend it on the left so it includes <code>low_bound</code>, and extend it
-up to <code>up_bound</code>.
-The number of frame added to the left can be found in the signal_chunk.idx</p>
+<p>Align the signals of a timepoints timeserie to a reference ref_timepoints with the corresponding
+ref_signals. ref_timepoints is extended to match ref_timepoints lenght.</p>
+<p>params:</p>
+
+<pre><code>- timepoints: timepoints to align
+- signals: signals to align
+- ref_timepoints: reference timepoints
+- ref_signals: reference signals
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- Aligned timepoints (DataChunk)
+- Aligned signals (DataChunk)</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="resample_to_timepoints" class="doc_header"><code>resample_to_timepoints</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L124" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>resample_to_timepoints</code>(<strong><code>timepoints</code></strong>:<code>ndarray</code>, <strong><code>data</code></strong>:<code>ndarray</code>, <strong><code>ref_timepoints</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>, <strong><code>group</code></strong>=<em><code>'data'</code></em>)</p>
+</blockquote>
+<p>Resample the data at timepoints to new timepoints given by ref_timepoints.
+Return a DataChunk of the resampled data belonging to a specified group.</p>
+<p>params:</p>
+
+<pre><code>- timepoints: Original timepoints of the data
+- data: Data to resample of shape (t, ...)
+- ref_timepoints: Target timepoints for the resampling
+- group: Group assigned to the returned DataChunk
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- Resampled datachunk with appropriate idx.</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="flip_stimulus" class="doc_header"><code>flip_stimulus</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L162" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>flip_stimulus</code>(<strong><code>stim_inten</code></strong>, <strong><code>ud_inv</code></strong>, <strong><code>lr_inv</code></strong>)</p>
+</blockquote>
+<p>Flip QDSpy stimuli arrays to match the up/down left/right orientation of the stimulus displayed to
+the mouse.</p>
+<p>params:</p>
+
+<pre><code>- stim_inten: Stimulus matrix to flip of shape (t, color, y, x)
+- ud_inv: Up down inversion boolean (1 to make the flip, 0 for no operation)
+- lr_inv: Up down inversion boolean (1 to make the flip, 0 for no operation)
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- Flipped stimulus array</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="flip_gratings" class="doc_header"><code>flip_gratings</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L184" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>flip_gratings</code>(<strong><code>stim_shader</code></strong>, <strong><code>ud_inv</code></strong>, <strong><code>lr_inv</code></strong>)</p>
+</blockquote>
+<p>Flip gratings to match the up/down left/right orientation of the stimulus displayed to
+the mouse. A grating is encoded by an array of shape (t, 3(size, angle, speed)).
+Therefore the angles of the grating are modified to encode the "flipped" grating.</p>
+<p>params:</p>
+
+<pre><code>- stim_shader: Grating matrix to flip of shape (t, 3(size, angle(degree), speed))
+- ud_inv: Up down inversion boolean (1 to make the flip, 0 for no operation)
+- lr_inv: Up down inversion boolean (1 to make the flip, 0 for no operation)
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- Flipped grating array</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="stim_to_dataChunk" class="doc_header"><code>stim_to_dataChunk</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L205" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stim_to_dataChunk</code>(<strong><code>stim_inten</code></strong>, <strong><code>stim_start_idx</code></strong>, <strong><code>reference</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>)</p>
+</blockquote>
+<p>Factory function for DataChunk of a stimulus, that squeeze the stim_inten matrix.</p>
+<p>params:</p>
+
+<pre><code>- stim_inten: Stimulus matrix of shape (t, ...)
+- stim_start_idx: Starting frame index of the stimulus
+- reference: DataChunk signal reference used to determine the starting index of the stimulus
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- Datachunk of the stimulus</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="phy_results_dict" class="doc_header"><code>phy_results_dict</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L220" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>phy_results_dict</code>(<strong><code>phy_dir</code></strong>)</p>
+</blockquote>
+<p>Open the result arrays of spike sorting after manual merging with phy.</p>
+<p>params:</p>
+
+<pre><code>- phy_dir: path to the phy results
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- Dictionnary of the phy arrays (amplitudes, channel_map, channel_positions, spike_clusters,
+spike_templates, spike_times, templates)</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="spike_to_dataChunk" class="doc_header"><code>spike_to_dataChunk</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L241" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>spike_to_dataChunk</code>(<strong><code>spike_timepoints</code></strong>, <strong><code>ref_timepoints</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>)</p>
+</blockquote>
+<p>Factory function of a DataChunk for spiking count of cells from spike timepoints.</p>
+<p>params:</p>
+
+<pre><code>- spike_timepoints: Dictionnary of the cells spike timepoints (list)
+- ref_timepoints: Reference DataChunk to align the newly created spike count Datachunk
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- Spike count datachunk of shape (t, n_cell)</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="get_calcium_stack_lenghts" class="doc_header"><code>get_calcium_stack_lenghts</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L267" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_calcium_stack_lenghts</code>(<strong><code>folder</code></strong>)</p>
+</blockquote>
+<p>Function to extract calcium stack lenghts from imageJ macro files associated to the stacks.</p>
+<p>params:</p>
+
+<pre><code>- folder: path of the folder containing the IJ macros files
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- list of stack lenghts</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="twoP_dataChunks" class="doc_header"><code>twoP_dataChunks</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L285" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>twoP_dataChunks</code>(<strong><code>ref_timepoints</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>, <strong><code>frame_timepoints</code></strong>, <strong><code>len_epochs</code></strong>, <strong><code>C_matrix</code></strong>, <strong><code>S_matrix</code></strong>)</p>
+</blockquote>
+<p>Factory function for two photon data.</p>
+<p>params:</p>
+
+<pre><code>- ref_timepoints: Reference timepoints to create the DataChunk
+- frame_timepoints: List of frame timepoints for each sequence of two photon frame recorded.
+- len_epochs: Lenght of the recorded epochs (&lt;= than the corresponding frame_timepoints)
+- C_matrix: C_matrix of all frames detected by CaImAn
+- S_matrix: S_matrix of all frames detected by CaImAn
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- C_datachunk_l: A list of C_matrix datachunks
+- S_datachunk_l: A list of S_matrix datachunks</code></pre>
 
 </div>
 
@@ -88,8 +447,7 @@ The number of frame added to the left can be found in the signal_chunk.idx</p>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>It extends the timepoints by finding the typical distance between timepoints so it includes both left and right limits.</p>
-
+<h1 id="Modelling-utils">Modelling utils<a class="anchor-link" href="#Modelling-utils"> </a></h1>
 </div>
 </div>
 </div>
@@ -111,44 +469,14 @@ The number of frame added to the left can be found in the signal_chunk.idx</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="align_sync_timepoints" class="doc_header"><code>align_sync_timepoints</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L47" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>align_sync_timepoints</code>(<strong><code>timepoints</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>, <strong><code>signals</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>, <strong><code>ref_timepoints</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>, <strong><code>ref_signals</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>)</p>
+<h4 id="img_2d_fit" class="doc_header"><code>img_2d_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L319" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>img_2d_fit</code>(<strong><code>shape</code></strong>, <strong><code>param_d</code></strong>, <strong><code>f</code></strong>)</p>
 </blockquote>
-<p>Align the <code>signals</code> of a <code>timepoints</code> timeserie to a reference <code>ref_timepoints</code> with the corresponding
-<code>ref_signals</code>. <code>ref_timepoints</code> and <code>ref_signals</code> are potentially extended and returned
-Returns a DataChunk of the aligned timepoints</p>
+<p>Helper function to generate the 2D image of a fit.</p>
+<p>params:</p>
 
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="resample_to_timepoints" class="doc_header"><code>resample_to_timepoints</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L101" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>resample_to_timepoints</code>(<strong><code>timepoints</code></strong>:<code>ndarray</code>, <strong><code>data</code></strong>:<code>ndarray</code>, <strong><code>ref_timepoints</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>, <strong><code>group</code></strong>=<em><code>'data'</code></em>)</p>
-</blockquote>
-<p>Resample the <code>data</code> at the <code>timepoints</code> to an array at the timepoints of <code>ref_timepoints</code>.
-Return a DataChunck of the resampled data belonging to <code>group</code>.</p>
+<pre><code>- shape: Shape of the image in (y, x).
+- param_d: Fit dictionnary.
+- f: Function used of the fit.</code></pre>
 
 </div>
 
@@ -178,8 +506,9 @@ Return a DataChunck of the resampled data belonging to <code>group</code>.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="flip_stimulus" class="doc_header"><code>flip_stimulus</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L128" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>flip_stimulus</code>(<strong><code>stim_inten</code></strong>, <strong><code>ud_inv</code></strong>, <strong><code>lr_inv</code></strong>)</p>
+<h4 id="fill_nan" class="doc_header"><code>fill_nan</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L333" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fill_nan</code>(<strong><code>A</code></strong>)</p>
 </blockquote>
+<p>Fill nan values with interpolation. Credits to BRYAN WOODS@StackOverflow</p>
 
 </div>
 
@@ -187,6 +516,19 @@ Return a DataChunck of the resampled data belonging to <code>group</code>.</p>
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Processing-utils">Processing utils<a class="anchor-link" href="#Processing-utils"> </a></h1>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -202,33 +544,9 @@ Return a DataChunck of the resampled data belonging to <code>group</code>.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="flip_gratings" class="doc_header"><code>flip_gratings</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L138" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>flip_gratings</code>(<strong><code>stim_shader</code></strong>, <strong><code>ud_inv</code></strong>, <strong><code>lr_inv</code></strong>)</p>
+<h4 id="stim_inten_norm" class="doc_header"><code>stim_inten_norm</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L344" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stim_inten_norm</code>(<strong><code>stim_inten</code></strong>)</p>
 </blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="stim_to_dataChunk" class="doc_header"><code>stim_to_dataChunk</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L146" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stim_to_dataChunk</code>(<strong><code>stim_inten</code></strong>, <strong><code>stim_start_idx</code></strong>, <strong><code>reference</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>)</p>
-</blockquote>
-<p>Factory function for DataChunk of a stimulus</p>
+<p>Normalize a stimulus with intensity in the 8bit range (0-255) to -1 to 1 range.</p>
 
 </div>
 
@@ -258,10 +576,21 @@ Return a DataChunck of the resampled data belonging to <code>group</code>.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="spike_to_dataChunk" class="doc_header"><code>spike_to_dataChunk</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L151" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>spike_to_dataChunk</code>(<strong><code>spike_timepoints</code></strong>, <strong><code>ref_timepoints</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>)</p>
+<h4 id="group_direction_response" class="doc_header"><code>group_direction_response</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L355" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>group_direction_response</code>(<strong><code>stim_prop</code></strong>, <strong><code>spike_counts</code></strong>, <strong><code>n_repeat</code></strong>, <strong><code>n_cond</code></strong>=<em><code>32</code></em>)</p>
 </blockquote>
-<p><code>spike_timepoints</code> must be a dictionnary of cell spike_timepoints list. This function then
-bins the</p>
+<p>Group the cells responses from shuffled grating stimulus repetitions. Retrieves a dictionnary
+with a key for each condition.</p>
+<p>params:</p>
+
+<pre><code>- stim_prop: Grating array of shape (t, 3(size, angle, speed))
+- spike_counts: Spike counts response of the cells of shape (t, n_cell)
+- n_repeat: Number of repeat of each condition
+- n_cond: Total number of condition (speed/size condition * n_angle)
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- dictionnary of the spike counts for each condition (speed/size), with shape (n_angle, n_repeat, len, n_cell)</code></pre>
 
 </div>
 
@@ -291,10 +620,19 @@ bins the</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="parse_stim_args" class="doc_header"><code>parse_stim_args</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L169" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>parse_stim_args</code>(<strong><code>stim_name</code></strong>, <strong><code>stim_ref</code></strong>)</p>
+<h4 id="group_chirp_bumps" class="doc_header"><code>group_chirp_bumps</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L394" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>group_chirp_bumps</code>(<strong><code>stim_inten</code></strong>, <strong><code>spike_counts</code></strong>, <strong><code>n_repeat</code></strong>)</p>
 </blockquote>
-<p>Function really specific to Asari Lab stimuli. Stimuli were stored as h5 files. This function parse
-the attributes of the stimuli that were stored in the h5 references of the stimuli.</p>
+<p>Find the cells response to the OFF-ON-OFF initial parts of the chirps.</p>
+<p>params:</p>
+
+<pre><code>- stim_inten: Stimulus intensity array
+- spike_counts: Spike counts array of shape (t, n_cell)
+- n_repeat: Number of repetitions of the chirp stimulus
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- Dictionnary of cells response to the different ON or OFF stimuli</code></pre>
 
 </div>
 
@@ -324,8 +662,20 @@ the attributes of the stimuli that were stored in the h5 references of the stimu
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="peak_sta_frame" class="doc_header"><code>peak_sta_frame</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L192" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>peak_sta_frame</code>(<strong><code>sta</code></strong>)</p>
+<h4 id="get_repeat_corrected" class="doc_header"><code>get_repeat_corrected</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L447" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_repeat_corrected</code>(<strong><code>stim_inten</code></strong>, <strong><code>spike_counts</code></strong>, <strong><code>n_repeats</code></strong>=<em><code>10</code></em>)</p>
 </blockquote>
+<p>Apply shifts (detected during synchro) to the chirp repetition.</p>
+<p>params:</p>
+
+<pre><code>- stim_inten: Stimulus DataChunk (containing the shifts and frame replacements info)
+- spike_counts: Spike count matrix of shape (t, n_cell)
+- n_repeats: Number of repeats of the chirp
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- aligned cells response to stimulus, of shape (n_repeat, t, n_cell)
+- Number of duplicated frame per repetition.</code></pre>
 
 </div>
 
@@ -337,61 +687,12 @@ the attributes of the stimuli that were stored in the h5 references of the stimu
 </div>
     {% endraw %}
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="stim_inten_norm" class="doc_header"><code>stim_inten_norm</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L197" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stim_inten_norm</code>(<strong><code>stim_inten</code></strong>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Plotting-utils">Plotting utils<a class="anchor-link" href="#Plotting-utils"> </a></h1>
 </div>
 </div>
-
 </div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="twoP_dataChunks" class="doc_header"><code>twoP_dataChunks</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L208" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>twoP_dataChunks</code>(<strong><code>ref_timepoints</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>, <strong><code>frame_timepoints</code></strong>, <strong><code>len_epochs</code></strong>, <strong><code>C_matrix</code></strong>, <strong><code>S_matrix</code></strong>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -410,8 +711,18 @@ the attributes of the stimuli that were stored in the h5 references of the stimu
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="img_2d_fit" class="doc_header"><code>img_2d_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L228" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>img_2d_fit</code>(<strong><code>shape</code></strong>, <strong><code>param_d</code></strong>, <strong><code>f</code></strong>)</p>
+<h4 id="buszaki_shank_channels" class="doc_header"><code>buszaki_shank_channels</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L486" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>buszaki_shank_channels</code>(<strong><code>channel_positions</code></strong>)</p>
 </blockquote>
+<p>Group the channels of a Buzsaki32 silicone probe into their shanks
+from the channel position.</p>
+<p>params:</p>
+
+<pre><code>- channel_positions: List of channel positions
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- array of grouped channel index of shape (n_shank(4), n_channel(8))</code></pre>
 
 </div>
 
@@ -441,9 +752,9 @@ the attributes of the stimuli that were stored in the h5 references of the stimu
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fill_nan" class="doc_header"><code>fill_nan</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L234" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fill_nan</code>(<strong><code>A</code></strong>)</p>
+<h4 id="format_pval" class="doc_header"><code>format_pval</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L514" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>format_pval</code>(<strong><code>pval</code></strong>, <strong><code>significant_figures</code></strong>=<em><code>2</code></em>)</p>
 </blockquote>
-<p>interpolate to fill nan values. BRYAN WOODS@StackOverflow</p>
+<p>Helper function to format pvalue into string.</p>
 
 </div>
 
@@ -473,251 +784,18 @@ the attributes of the stimuli that were stored in the h5 references of the stimu
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="group_direction_response" class="doc_header"><code>group_direction_response</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L245" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>group_direction_response</code>(<strong><code>stim_prop</code></strong>, <strong><code>spike_counts</code></strong>, <strong><code>n_repeat</code></strong>, <strong><code>n_cond</code></strong>=<em><code>32</code></em>)</p>
+<h4 id="stim_recap_df" class="doc_header"><code>stim_recap_df</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L521" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stim_recap_df</code>(<strong><code>reM</code></strong>)</p>
 </blockquote>
-<p>Group the record according to conditions.</p>
+<p>Extract stimuli parameters (originally from the Database) to put them into a
+dataframe that will be displayed in the recapitulation plot.</p>
+<p>params:</p>
 
-</div>
+<pre><code>- reM: RecordMaster to extract stimuli parameters from
 
-</div>
+</code></pre>
+<p>return:</p>
 
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="group_chirp_bumps" class="doc_header"><code>group_chirp_bumps</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L267" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>group_chirp_bumps</code>(<strong><code>stim_inten</code></strong>, <strong><code>spike_counts</code></strong>, <strong><code>n_repeat</code></strong>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="buszaki_shank_channels" class="doc_header"><code>buszaki_shank_channels</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L308" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>buszaki_shank_channels</code>(<strong><code>channel_positions</code></strong>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="phy_results_dict" class="doc_header"><code>phy_results_dict</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L326" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>phy_results_dict</code>(<strong><code>phy_dir</code></strong>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="format_pval" class="doc_header"><code>format_pval</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L338" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>format_pval</code>(<strong><code>pval</code></strong>, <strong><code>significant_figures</code></strong>=<em><code>2</code></em>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_calcium_stack_lenghts" class="doc_header"><code>get_calcium_stack_lenghts</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L342" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_calcium_stack_lenghts</code>(<strong><code>folder</code></strong>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_repeat_corrected" class="doc_header"><code>get_repeat_corrected</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L352" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_repeat_corrected</code>(<strong><code>stim_inten</code></strong>, <strong><code>spike_counts</code></strong>, <strong><code>n_repeats</code></strong>=<em><code>10</code></em>)</p>
-</blockquote>
-<p>Correct the stimulus shifts before averaging the spikes</p>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="stim_recap_df" class="doc_header"><code>stim_recap_df</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L380" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stim_recap_df</code>(<strong><code>reM</code></strong>)</p>
-</blockquote>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="stim_recap_df_old" class="doc_header"><code>stim_recap_df_old</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L438" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stim_recap_df_old</code>(<strong><code>h5_stim_group</code></strong>)</p>
-</blockquote>
+<pre><code>- dataframe with the stimuli important informations</code></pre>
 
 </div>
 

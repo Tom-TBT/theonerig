@@ -189,7 +189,7 @@ def extract_spyking_circus_results(dir_, record_basename):
 def extract_best_pupil(fn):
     """From results of MaskRCNN, go over all or None pupil detected and select the best pupil.
     Each pupil returned is (x,y,width,height,angle,probability)"""
-    pupil = np.load(fn)
+    pupil = np.load(fn, allow_pickle=True)
     filtered_pupil = np.empty((len(pupil), 6))
     for i, detected in enumerate(pupil):
         if len(detected)>0:
