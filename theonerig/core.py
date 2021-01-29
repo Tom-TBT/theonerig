@@ -384,7 +384,7 @@ class Data_Pipe():
         cursor = 0
         for i,seq in enumerate(self.record_master):
             plt.plot(range(cursor,cursor+len(seq)), self._masks[i]*factor-1)
-            cursor += len(seq) + self.record_master.sep_size
+            cursor += len(seq) + self.record_master._sep_size
 
     def copy(self):
         """
