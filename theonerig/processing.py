@@ -441,7 +441,7 @@ def process_nonlinearity(stim_ensemble, spike_counts):
                             middle_vec)))
     stim_ensemble_tranfo = fit.transform(stim_ensemble)
 
-    if np.min(spike_bins)<1:#We have probabilities, not spike counts. Need to make it integers
+    if np.max(spike_counts)<1:#We have probabilities, not spike counts. Need to make it integers
         mask        = np.where(spike_counts > 0)[0]
         nonzero_min = np.min(spike_counts[mask])
         discretized = spike_counts/nonzero_min
