@@ -205,7 +205,7 @@ def fit_spatial_sta(sta):
 
 
 # Cell
-def fit_temporal_sta(sta):
+def fit_temporal_sta(sta, frame_rate=60):
     """Fit a sum of gaussian to a 1D input. Used to fit the STA obtained from fullfield flicker like stimulus.
     params:
         - sta: 1D data to fit
@@ -217,12 +217,12 @@ def fit_temporal_sta(sta):
     argmin = sta.argmin()
     if sta[argmax] < abs(sta[argmin]):
         argmax, argmin = argmin, argmax
-    t = np.linspace((1-len(sta))/60, 0, len(sta))
-    init_fit = (2, sta[argmin], (argmin-len(sta))/60, 2, sta[argmax], (argmax-len(sta))/60, 0)
+    t = np.linspace((1-len(sta))/frame_rate, 0, len(sta))
+    init_fit = (2, sta[argmin], (argmin-len(sta))/frame_rate, 2, sta[argmax], (argmax-len(sta))/frame_rate, 0)
 
                 #sigma_1,   amp_1,  x0_1,      sigma_2,    amp_2,  x0_2,       y0
-    bounds   = ((0,           -2, -len(sta)/60,        0,  -2,  -len(sta)/60,  -1),
-                (len(sta)*4,  2,    1/60,     len(sta)*4,   2,     1/60,    1 ))
+    bounds   = ((0,           -2, -len(sta)/frame_rate,        0,  -2,  -len(sta)/frame_rate,  -1),
+                (len(sta)*4,  2,    1/frame_rate,     len(sta)*4,   2,     1/frame_rate,    1 ))
 
     if np.isnan(sp.sum(sta)): #We check that the sta exists, otherwise return default zero model
         res  = {"sigma_1":1,"amp_1":0,"x0_1":0,
@@ -241,7 +241,7 @@ def fit_temporal_sta(sta):
     return fit, quality_index
 
 # Cell
-def fit_chirp_am(cell_mean, start=420, stop=960, freq=1.5):
+def fit_chirp_am(cell_mean, start=420, stop=960, freq=1.5, frame_rate=60):
     """Fit a sinexp_sigm to the mean response of a cell to chirp_am stimulus.
     params:
         - cell_mean: Average response of the cell to the chirp_am stimulus
@@ -254,7 +254,7 @@ def fit_chirp_am(cell_mean, start=420, stop=960, freq=1.5):
         - A quality index of the fit (explained variance of the model)"""
 
     to_fit = cell_mean[start:stop]
-    t = np.linspace(0, len(to_fit)/60, len(to_fit), endpoint=False)
+    t = np.linspace(0, len(to_fit)/frame_rate, len(to_fit), endpoint=False)
 
     #If suppressed by contrast cell, the firing should be higher in first part of chirp
     fit_positive = np.mean(to_fit[:len(to_fit)//3]) < np.mean(to_fit[len(to_fit)*2//3:])
@@ -292,7 +292,7 @@ def fit_chirp_am(cell_mean, start=420, stop=960, freq=1.5):
     quality_index = 1 - (np.var(to_fit-model)/np.var(to_fit))
     return best_fit, quality_index
 
-def fit_chirp_freq_epoch(cell_mean, freqs=[1.875,3.75,7.5,15,30], durations=[2,2,2,1,1]):
+def fit_chirp_freq_epoch(cell_mean, freqs=[1.875,3.75,7.5,15,30], durations=[2,2,2,1,1], frame_rate=60):
     """Fit multiple sinexp_sigm to the mean response of a cell to chirp_freq_epoch stimulus.
     Each epoch is fitted independantly by a `sin_exponent`
     params:
@@ -319,8 +319,8 @@ def fit_chirp_freq_epoch(cell_mean, freqs=[1.875,3.75,7.5,15,30], durations=[2,2
         #Upsampling of the data to prevent low sampling effects with high freq sine
         upsamp = 10
         to_fit = cell_mean[cursor:cursor+len_fit+1]
-        t = np.linspace(0, len_fit/60, len_fit*upsamp, endpoint=False)
-        to_fit = interp1d(np.linspace(0,len(to_fit)/60, len(to_fit), endpoint=False), to_fit)(t)
+        t = np.linspace(0, len_fit/frame_rate, len_fit*upsamp, endpoint=False)
+        to_fit = interp1d(np.linspace(0,len(to_fit)/frame_rate, len(to_fit), endpoint=False), to_fit)(t)
 
         best_fit = None
         tmp_diff = np.inf
@@ -349,7 +349,7 @@ def fit_chirp_freq_epoch(cell_mean, freqs=[1.875,3.75,7.5,15,30], durations=[2,2
     return best_fit_l, qualityidx_l #, best_cov_l
 
 # Cell
-def fit_transiency(pref_response):
+def fit_transiency(pref_response, frame_rate=60):
     """Fit an exponential decay to a 1D input. Used to fit the response of cells to their preferred
     sustained stimulus.
     params:
@@ -361,7 +361,7 @@ def fit_transiency(pref_response):
     peak_position = np.argmax(pref_response)
     pref_response = pref_response[peak_position:]
 
-    t = np.linspace(0, len(pref_response)/60, len(pref_response), endpoint=False)
+    t = np.linspace(0, len(pref_response)/frame_rate, len(pref_response), endpoint=False)
     bounds = ([0.000001, 0],
               [np.inf  , pref_response[0]])
     if np.all(pref_response==0):
