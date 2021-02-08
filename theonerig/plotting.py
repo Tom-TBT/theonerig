@@ -785,6 +785,7 @@ def plot_2d_sta(sta, gs=None, pval=None, title="Checkerboard"):
         sta = np.expand_dims(sta, axis=0)
 
     if gs is None:
+        plt.figure()
         n_col = int(np.sqrt(len(sta))*1.618*(sta.shape[1]/sta.shape[2]))
         n_row = len(sta)//n_col
         if n_col*n_row<len(sta):
@@ -900,7 +901,7 @@ def configure_pyplot_recap(small_size=14, medium_size=18, bigger_size=24):
 # Cell
 def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_db_ids=None,
                          checkerboard=None, fullfield_fl=None, fl_bars=None, chirp_am=None,
-                         chirp_fm=None, moving_gratings=None, export_path="./recap_plot.pdf"):
+                         chirp_fm=None, moving_gratings=None, water=None, export_path="./recap_plot.pdf"):
     """
     Plot the recap pdf of in vivo electrophy records.
 
@@ -917,6 +918,7 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
         - chirp_am: A tuple of the chirp_am obtained from a pipe, where [0] is the stimulus and [1] the cells response
         - chirp_fm: Same as chirp_am but for a chirp_fm stimulus
         - moving_gratings: The dict of response obtained from `utils.group_direction_response`
+        - water: A matrix of STA of cells to the water stimulus of shape (n_cell, 16, height, width)
         - export_path: The path for a pdf file to be exported. If None, the plot is displayed.
     """
     print("Generating the recap plot")
@@ -981,7 +983,14 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
                 pval_checker = np.min(pval_checker[pval_checker!=0])
                 inner_grid = gridspec.GridSpecFromSubplotSpec(4, 4,
                             subplot_spec=gs[5:12,0:12], wspace=.09, hspace=.13)
-                plot_2d_sta(checkerboard[0][reM_cell_idx], pval=pval_checker, gs=inner_grid)
+                plot_2d_sta(checkerboard[0][reM_cell_idx], pval=pval_checker, gs=inner_grid, title="Checkerboard")
+            #Water STA
+            elif water is not None:
+                pval_water = water[1][reM_cell_idx]
+                pval_water = np.min(pval_water[pval_water!=0])
+                inner_grid = gridspec.GridSpecFromSubplotSpec(4, 4,
+                            subplot_spec=gs[5:12,0:12], wspace=.09, hspace=.13)
+                plot_2d_sta(water[0][reM_cell_idx], pval=pval_water, gs=inner_grid, title="Water")
 
             #Fullfield flickering STA
             if fullfield_fl is not None:
