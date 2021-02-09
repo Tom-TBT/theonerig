@@ -190,7 +190,7 @@ def _linear_transform(box_dim, transfo_matrix, x_eyeShift, y_eyeShift):
     return stim_vec[0], -stim_vec[1]
 
 # Cell
-def process_sta_batch(stim_inten, spike_counts, Hw=30, Fw=2, return_pval=False):
+def process_sta_batch(stim_inten, spike_counts, Hw=30, Fw=2, return_pval=False, normalisation="abs"):
     """
     Computes the STA and associated pvalues in parallel for a batch of cells.
 
@@ -200,11 +200,13 @@ def process_sta_batch(stim_inten, spike_counts, Hw=30, Fw=2, return_pval=False):
         - Hw: Lenght in frames of the history window, including the 0 timepoint
         - Fw: Lenght in frames of the forward window
         - return_pval: Flag to signal whether or not to return the pvalues
+        - normalisation: Normalization applied to the STA. One of ["abs", "L2", None]
 
     return:
         - stas of shape (n_cell, Hw+Fw, ...)
         - stas and pvalues if return_pval=True, both of shape (n_cell, Hw+Fw, ...)
     """
+    assert normalisation in ["abs", "L2", None], "normalisation must be one of ['abs', 'L2', None]"
     #Preparing the stimulus
     orig_shape = stim_inten.shape
     stim_inten = stim_inten_norm(stim_inten)
@@ -236,7 +238,12 @@ def process_sta_batch(stim_inten, spike_counts, Hw=30, Fw=2, return_pval=False):
             z_scores    = cell_sta/ np.sqrt(1/sum_spikes[k]) #Standard score is calculated as (x-mean)/std
             p_values[k] = sp.stats.norm.sf(abs(z_scores))*2
 
-        allCells_sta[k] = np.nan_to_num(cell_sta/np.max(np.abs(cell_sta)))
+        if normalisation is None:
+            continue
+        elif normalisation=="abs":
+            allCells_sta[k] = np.nan_to_num(cell_sta/np.max(np.abs(cell_sta)))
+        elif normalisation=="L2":
+            allCells_sta[k] = np.nan_to_num(cell_sta/np.sqrt(np.sum(np.power(cell_sta, 2))))
 
     if return_pval:
         return allCells_sta, p_values
@@ -273,7 +280,7 @@ def staEst_fromBins(stim, spike_counts, Hw, Fw=0):
     spike_counts = np.roll(spike_counts, -Fw, axis=0)
     return np.transpose(sta, (2,0,1))
 
-def process_sta_batch_large(stim_inten, spike_counts, Hw=30, Fw=2, return_pval=False, bs=1000):
+def process_sta_batch_large(stim_inten, spike_counts, Hw=30, Fw=2, return_pval=False, normalisation="abs", bs=1000):
     """
     Computes the STA and associated pvalues in parallel for a batch of cells, for a large stimulus.
 
@@ -283,6 +290,7 @@ def process_sta_batch_large(stim_inten, spike_counts, Hw=30, Fw=2, return_pval=F
         - Hw: Lenght in frames of the history window, including the 0 timepoint
         - Fw: Lenght in frames of the forward window
         - return_pval: Flag to signal whether or not to return the pvalues
+        - normalisation: Normalization applied to the STA. One of ["abs", "L2", None]
         - bs: batch size to compute partial STA
 
     return:
@@ -326,7 +334,12 @@ def process_sta_batch_large(stim_inten, spike_counts, Hw=30, Fw=2, return_pval=F
             z_scores    = cell_sta/ np.sqrt(1/sum_spikes[k]) #Standard score is calculated as (x-mean)/std
             p_values[k] = sp.stats.norm.sf(abs(z_scores))*2
 
-        allCells_sta[k] = np.nan_to_num(cell_sta/np.max(np.abs(cell_sta)))
+        if normalisation is None:
+            continue
+        elif normalisation=="abs":
+            allCells_sta[k] = np.nan_to_num(cell_sta/np.max(np.abs(cell_sta)))
+        elif normalisation=="L2":
+            allCells_sta[k] = np.nan_to_num(cell_sta/np.sqrt(np.sum(np.power(cell_sta, 2))))
 
     if return_pval:
         return allCells_sta, p_values
