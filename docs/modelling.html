@@ -820,7 +820,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fit_temporal_sta" class="doc_header"><code>fit_temporal_sta</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L208" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_temporal_sta</code>(<strong><code>sta</code></strong>)</p>
+<h4 id="fit_temporal_sta" class="doc_header"><code>fit_temporal_sta</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L208" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_temporal_sta</code>(<strong><code>sta</code></strong>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>)</p>
 </blockquote>
 <p>Fit a sum of gaussian to a 1D input. Used to fit the STA obtained from fullfield flicker like stimulus.
 params:</p>
@@ -861,7 +861,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fit_chirp_am" class="doc_header"><code>fit_chirp_am</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L244" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_chirp_am</code>(<strong><code>cell_mean</code></strong>, <strong><code>start</code></strong>=<em><code>420</code></em>, <strong><code>stop</code></strong>=<em><code>960</code></em>, <strong><code>freq</code></strong>=<em><code>1.5</code></em>)</p>
+<h4 id="fit_chirp_am" class="doc_header"><code>fit_chirp_am</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L244" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_chirp_am</code>(<strong><code>cell_mean</code></strong>, <strong><code>start</code></strong>=<em><code>420</code></em>, <strong><code>stop</code></strong>=<em><code>960</code></em>, <strong><code>freq</code></strong>=<em><code>1.5</code></em>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>)</p>
 </blockquote>
 <p>Fit a sinexp_sigm to the mean response of a cell to chirp_am stimulus.
 params:</p>
@@ -898,7 +898,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fit_chirp_freq_epoch" class="doc_header"><code>fit_chirp_freq_epoch</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L295" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_chirp_freq_epoch</code>(<strong><code>cell_mean</code></strong>, <strong><code>freqs</code></strong>=<em><code>[1.875, 3.75, 7.5, 15, 30]</code></em>, <strong><code>durations</code></strong>=<em><code>[2, 2, 2, 1, 1]</code></em>)</p>
+<h4 id="fit_chirp_freq_epoch" class="doc_header"><code>fit_chirp_freq_epoch</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L295" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_chirp_freq_epoch</code>(<strong><code>cell_mean</code></strong>, <strong><code>freqs</code></strong>=<em><code>[1.875, 3.75, 7.5, 15, 30]</code></em>, <strong><code>durations</code></strong>=<em><code>[2, 2, 2, 1, 1]</code></em>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>)</p>
 </blockquote>
 <p>Fit multiple sinexp_sigm to the mean response of a cell to chirp_freq_epoch stimulus.
 Each epoch is fitted independantly by a <a href="/theonerig/modelling#sin_exponent"><code>sin_exponent</code></a>
@@ -943,7 +943,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fit_transiency" class="doc_header"><code>fit_transiency</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L352" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_transiency</code>(<strong><code>pref_response</code></strong>)</p>
+<h4 id="fit_transiency" class="doc_header"><code>fit_transiency</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L352" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_transiency</code>(<strong><code>pref_response</code></strong>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>)</p>
 </blockquote>
 <p>Fit an exponential decay to a 1D input. Used to fit the response of cells to their preferred
 sustained stimulus.

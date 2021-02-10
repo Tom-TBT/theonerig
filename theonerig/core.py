@@ -89,6 +89,7 @@ class ContiguousRecord():
         self._slice = slice(0,self.length,1)
 
     def dataset_intersect(self, existing_datachunk:list, new_datachunk:DataChunk):
+        """Check for timepoint intersections of two DataChunks"""
         range_new = set(new_datachunk.range)
         intersect = False
         for range_existing in existing_datachunk:
@@ -96,9 +97,11 @@ class ContiguousRecord():
         return intersect
 
     def keys(self):
+        """Retrieves the existing keyys inside this ContiguousRecord"""
         return self._data_dict.keys()
 
     def get_slice(self, datachunk_name:str) -> list:
+        """Returns the slices of the DataChunk corresponding to the given key"""
         if datachunk_name in self._data_dict.keys():
             return [chunk.slice for chunk in self._data_dict[datachunk_name]]
         else:
