@@ -459,6 +459,7 @@ def process_nonlinearity(stim_ensemble, spike_counts):
         nonzero_min = np.min(spike_counts[mask])
         discretized = spike_counts/nonzero_min
         spike_bins  = ((10*discretized)/(np.max(discretized))).astype(int)
+
     spike_ensembl = stim_ensemble_tranfo[np.where(spike_counts)[0]]
 
     xaxis      = np.linspace(np.min(stim_ensemble_tranfo),np.max(stim_ensemble_tranfo),101)

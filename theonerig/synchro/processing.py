@@ -28,15 +28,23 @@ def get_first_high(data, threshold):
         return -1
 
 # Cell
-def detect_frames(data, low_threshold, high_threshold, increment, do_reverse=True):
+def detect_frames(data, low_threshold, high_threshold, increment, do_reverse=True, precision=.95):
     """Frame detection (or ON signal detection). Capable of finding frame times produced in a regular
     fashion:
         - data: raw data
         - low_threshold: threshold used to detect begginning of each frame.
         - high_threshold: threshold used to assign label to the frames, and used to detect the beggining of the reading frame.
-        - do_reverse: boolean to indicate if the reverse detection should be done after detecting the first frame."""
+        - increment: Number of timepoints separating frames. Eg, for 30KHz recording of 60hz stimulus: 30000/60
+        - do_reverse: boolean to indicate if the reverse detection should be done after detecting the first frame.
+        - precision: Value that indicates how precise are the events recorded to accelerate the detection.
+        DLP is very stable (.95) whereas some camera triggers have more jitter (.6). Too low value (bellow 0.5) can
+        result in an overdetection of frames.
+
+    """
+    assert (precision>0) and (precision<=1)
     frame_timepoints, frame_signals = [], []
-    safe_increment = int(increment*95/100)
+    increment      = int(increment)
+    safe_increment = int(increment*precision)
 
     first_high = get_first_high(data, high_threshold)
     if first_high == -1:
@@ -47,7 +55,7 @@ def detect_frames(data, low_threshold, high_threshold, increment, do_reverse=Tru
     frame_signals.append(1)
 
     if do_reverse:
-        new_timepoints   = reverse_detection(data, frame_timepoints, low_threshold, increment)
+        new_timepoints   = reverse_detection(data, frame_timepoints, low_threshold, increment, precision)
         if len(new_timepoints)>1:
             new_extrapolated = extend_timepoints(new_timepoints)
         else:
@@ -57,7 +65,7 @@ def detect_frames(data, low_threshold, high_threshold, increment, do_reverse=Tru
 
     i = first_high + safe_increment
     while i < len(data):
-        data_slice = data[i:i+increment//2]
+        data_slice = data[i:i+increment//2+(increment-safe_increment)*2]
         if np.any(data_slice>low_threshold):
             i = i+np.argmax(data_slice>low_threshold)
         else:
@@ -75,16 +83,16 @@ def detect_frames(data, low_threshold, high_threshold, increment, do_reverse=Tru
 
     return frame_timepoints, frame_signals
 
-def reverse_detection(data, frame_timepoints, low_threshold, increment):
+def reverse_detection(data, frame_timepoints, low_threshold, increment, precision=.95):
     """Detect frames in the left direction."""
     new_timepoints = []
     new_signals = []
 
-    safe_increment = int(increment * 105/100)
+    safe_increment = int(increment * (1+(1-precision)))
 
     i = frame_timepoints[0]-safe_increment
     while i>0:
-        data_slice = data[i:i+increment//2]
+        data_slice = data[i:i+increment//2+(safe_increment-increment)*2]
         if np.any(data_slice > low_threshold):
             i = i+np.argmax(data_slice > low_threshold)
         else:
