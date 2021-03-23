@@ -369,9 +369,9 @@ class Data_Pipe():
             raise Exception("data_names and target_names length must match")
 
         self.target_names = target_names
-        self.data_names = data_names
-        self._masks     = [np.zeros(len(seq), dtype=bool) for seq in record_master]
-        self._slices    = []
+        self.data_names   = data_names
+        self._masks       = [np.zeros(len(seq), dtype=bool) for seq in record_master]
+        self._slices      = []
 
     def plot(self, newfig=False):
         """
@@ -386,7 +386,7 @@ class Data_Pipe():
             factor = 1
         cursor = 0
         for i,seq in enumerate(self.record_master):
-            plt.plot(range(cursor,cursor+len(seq)), self._masks[i]*factor-1)
+            plt.plot(range(cursor,cursor+len(seq)), self._masks[i]*factor-1, c='tab:blue')
             cursor += len(seq) + self.record_master._sep_size
 
     def copy(self):
@@ -420,7 +420,7 @@ class Data_Pipe():
                     break
 
     def _update_slices(self):
-        self._intersect_names() #Always intersect the names we wanna retrieve
+#         self._intersect_names() #Always intersect the names we wanna retrieve ? Might be not needed (even cause bug)
         self._slices = []
         #Iterating the list of mask (one per seq of the record_master)
         for j, mask in enumerate(self._masks):

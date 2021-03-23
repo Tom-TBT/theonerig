@@ -3,7 +3,8 @@
 __all__ = ['extend_sync_timepoints', 'align_sync_timepoints', 'resample_to_timepoints', 'flip_stimulus',
            'flip_gratings', 'stim_to_dataChunk', 'phy_results_dict', 'spike_to_dataChunk', 'get_calcium_stack_lenghts',
            'twoP_dataChunks', 'img_2d_fit', 'fill_nan', 'stim_inten_norm', 'group_direction_response',
-           'group_chirp_bumps', 'get_repeat_corrected', 'buszaki_shank_channels', 'format_pval', 'stim_recap_df']
+           'group_chirp_bumps', 'get_repeat_corrected', 'removeSlowDrift', 'time_shift_test_corr',
+           'cross_corr_with_lag', 'buszaki_shank_channels', 'format_pval', 'stim_recap_df']
 
 # Cell
 import numpy as np
@@ -14,6 +15,12 @@ import re
 from typing import Dict, Tuple, Sequence, Union, Callable
 import scipy.interpolate as interpolate
 from scipy.ndimage import convolve1d
+from scipy.signal import savgol_filter
+import scipy.stats
+from scipy.ndimage import gaussian_filter
+import matplotlib.pyplot as plt
+import math
+from cmath import *
 
 from .core import *
 
@@ -481,6 +488,123 @@ def get_repeat_corrected(stim_inten, spike_counts, n_repeats=10):
         errors_per_repeat.append(count_repl_in_range(frame_replacement, range(len_epoch*i, len_epoch*(i+1))))
         spike_counts_corrected.append(spike_count_corr[len_epoch*i:len_epoch*(i+1)])
     return np.array(spike_counts_corrected), np.array(errors_per_repeat)
+
+# Cell
+def removeSlowDrift(traces, fps=60, window=80, percentile=8):
+    """
+    Remove slow drifts from behavioral temporal traces such as locomotion speed obtained from the treadmill signal
+    or pupil size obtained from the eye_tracking signal, by extracting a specified percentile within moving window from the signal.
+
+    params:
+        - traces: Behavioral temporal traces obtained from reM
+        - fps: Sampling rate
+        - window: Moving temporal window in seconds
+        - percentile: Percentile to be extracted within moving window
+
+    return:
+        - Filtered temporal traces
+    """
+    smoothed = np.zeros(len(traces))
+    n = round(window * fps)-1
+    if n%2 == 0:
+        n = n+1
+
+    nBefore = math.floor((n-1)/2)
+    nAfter = n - nBefore - 1
+
+    for k in range(len(traces)):
+        idx1 = max(np.array([0,k-nBefore]))
+        idx2 = min(len(traces)-1,k+nAfter)
+        tmpTraces = traces[idx1:idx2]
+        smoothed[k] = np.percentile(tmpTraces, percentile)
+
+    smoothed = savgol_filter(smoothed, n, 3)
+
+    filteredTraces = traces - smoothed
+    return filteredTraces
+
+# Cell
+def time_shift_test_corr(spike_counts, behav_signal, n_tests = 500, seed = 1):
+    """
+    Compute the null distribution of correlation between behavioral signal and spiking signal with a time shift test.
+
+    params:
+        - spike_counts: Array with spike counts for a specific neuron and data chunk from the reM
+        - behav_signal: Array with behavioral signal for a specific neuron and data chunk from the reM
+        - n_tests: number of used shifted signals to compute distribution
+        - seed: seed for numpy function random.randint
+
+    return:
+        - null_dist_corr: Null distribution of correlation values
+    """
+
+    np.random.seed(seed)
+
+    null_dist_corr=[]
+    for i in range(n_tests):
+        #Generate time-shifted behavioral test signal for shifts between 0.05*len(behav_signal) and len(behav_signal)
+        test_behav_signal = np.roll(behav_signal, np.random.randint(len(behav_signal)*0.05, len(behav_signal)))
+        # Compute Pearson's correlation with behavioral time-shifted test signal and spiking signal
+        null_dist_corr.append(scipy.stats.pearsonr(test_behav_signal, spike_counts)[0])
+
+    return null_dist_corr
+
+# Cell
+def cross_corr_with_lag(spike_counts, behav_signal, behav, conversion_factor_treadmill=None, removeslowdrift=True, fps=60, seconds=30):
+    """
+    Compute cross-correlation with lag between behavioral signal and spiking signal.
+    Process signals, compute null distribution of the correlation with a time shift test and values .
+    Return cross-correlation array, null-distribution array and values for plotting.
+
+    params:
+        - spike_counts: Array with spike counts for a specific neuron and data chunk from the reM
+        - behav_signal: Array with behavioral signal for a specific neuron and data chunk from the reM
+        - behav : String with name of behavioral signal to be analysed
+        - conversion_factor : The value to convert the treadmill signal into cm/s
+        - removeslowdrift: Boolean:
+            False - doesn't remove slow drifts from the signal
+            True - removes slow drifts by extracting a specified percentile within moving window from the signal
+        - fps: Sampling rate
+        - seconds: Window in seconds of the correlation lag
+
+    return:
+        - crosscorr: Cross-correlation with lag array between behavioral signal and spiking signal
+        - corr_peak: Cross-correlation value at peak synchrony between behavioral signal and spiking signal
+        - p_value_peak: P-value of the peak cross-correlation value
+        - offset_peak: Temporal offset of the peak synchrony between behavioral signal and spiking signal in seconds
+        - null_dist_corr: Null distribution of correlation values (output of 'utils.cross_corr_with_lag')
+    """
+
+    if behav == "treadmill":
+        #Convert treadmill signal to running speed (cm/s)
+        behav_signal = behav_signal * conversion_factor_treadmill
+        behav_signal_filtered = gaussian_filter(abs(behav_signal), sigma=60)
+    else:
+        behav_signal_filtered = gaussian_filter(behav_signal, sigma=60)
+
+    #Convolve signals with gaussian window of 1 second/60 frame
+    spike_counts_filtered = gaussian_filter(spike_counts, sigma=60)
+
+    if removeslowdrift:
+        #Remove slow drifts from treadmill, pupil size and spiking signal
+        spike_counts_detrend = removeSlowDrift(spike_counts_filtered, fps=60, window=100, percentile=8)
+        behav_signal_detrend = removeSlowDrift(behav_signal_filtered, fps=60, window=100, percentile=8)
+    else:
+        spike_counts_detrend = spike_counts_filtered
+        behav_signal_detrend = behav_signal_filtered
+
+    #Get null distribution for correlation between behav_signal and spike_counts signal
+    null_dist_corr = time_shift_test_corr(spike_counts_detrend, behav_signal_detrend, n_tests = 500)
+
+    #Compute cross-correlation with lag and values to plot
+    d1 = pd.Series(behav_signal_detrend)
+    d2 = pd.Series(spike_counts_detrend)
+    crosscorr = [d1.corr(d2.shift(lag)) for lag in range(-int(seconds*fps),int(seconds*fps+1))]
+    offset_peak = np.around((np.ceil(len(crosscorr)/2)-np.argmax(abs(np.array(crosscorr))))/fps, decimals=3)
+    corr_peak = np.max(abs(np.array(crosscorr)))
+    p_value_peak = round((100-scipy.stats.percentileofscore(abs(np.array(null_dist_corr)), abs(corr_peak), kind='strict'))/100,2)
+
+    return crosscorr, corr_peak, p_value_peak, offset_peak, null_dist_corr
 
 # Cell
 def buszaki_shank_channels(channel_positions):

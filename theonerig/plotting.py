@@ -5,8 +5,9 @@ __all__ = ['DEFAULT_COLORS', 'plot_2d_fit', 'plot_tSTA_fit', 'plot_chirpam_fit',
            'plot_spike_template', 'plot_spike_template_MEA', 'plot_autocorrelogram', 'plot_spike_amplitudes',
            'plot_calcium_trace', 'plot_stim_epochs_to_ephy', 'plot_stim_epochs_to_calcium', 'plot_cell_spatial',
            'plot_stim_recap_table', 'plot_composed_A_masks', 'plot_sta_positions', 'plot_2d_sta', 'plot_dome_flat',
-           'plot_dome_checker', 'configure_pyplot_recap', 'plot_recap_vivo_ephy', 'plot_recap_vivo_calcium',
-           'plot_recap_vitro_ephy', 'plot_recap_vivo_ephy_dome']
+           'plot_dome_checker', 'plot_crosscorr_spikes_behav', 'configure_pyplot_recap', 'plot_recap_vivo_ephy',
+           'plot_recap_vivo_calcium', 'plot_recap_vitro_ephy', 'plot_recap_vivo_ephy_dome',
+           'plot_recap_vivo_ephy_corr_behav']
 
 # Cell
 import matplotlib.pyplot as plt
@@ -875,6 +876,43 @@ def plot_dome_checker(sta, s=20, gs=None, pval=None, title="Checkerboard"):
     return gs
 
 # Cell
+def plot_crosscorr_spikes_behav(behav, corr_behav_lag, p_value_peak, offset_peak, null_dist_behav, fps=60, seconds=30, color_line='black', title='visual stim', ax=None):
+    """
+    Cross-correlation with lag plotting helper function.
+
+    params:
+        - behav: String with name of behavioral signal to be analysed
+        - corr_behav_lag: Array of values of the cross-correlation between behavioral signal and spiking signal (output of 'utils.cross_corr_with_lag')
+        - p_value_peak: P-value of the peak correlation between behavioral signal and spiking signal (output of 'utils.cross_corr_with_lag')
+        - offset_peak: Offset value in seconds of the peak correlation value from the centered correlation value (output of 'utils.cross_corr_with_lag')
+        - null_dist_behav: Null distribution of correlation values (output of 'utils.cross_corr_with_lag')
+        - fps: Sampling rate
+        - seconds: Window in seconds of the correlation lag
+        - color_line: Color of plotted line
+        - title: Title of the plot
+        - ax: The axis for the plot
+
+    return:
+        - The axis of the figure
+    """
+
+    ax.plot(corr_behav_lag, color=color_line)
+    ax.axvline(np.ceil(len(corr_behav_lag)/2),color='k',linestyle='--',label='Center')
+    ax.axvline(np.argmax(abs(np.array(corr_behav_lag))),color='r',linestyle='--',label='Peak synchrony')
+    #Plot shaded section corresponding to 2.5th-97.5th percentile of the null dist
+    ax.axhspan(np.percentile(null_dist_behav, 2.5), np.percentile(null_dist_behav, 97.5), facecolor='grey', alpha=0.5, label='2.5th-97.5th percentile null dist')
+    ax.set_title('\n'+title+f'\n Offset = {offset_peak} seconds, p peak={p_value_peak} \n'+ behav + ' signal leads <> Spiking signal leads', fontsize= 7)
+    ax.set_ylim(min(corr_behav_lag),max(corr_behav_lag))
+    ax.set_xlabel('Offset (s)', fontsize=8)
+    ax.set_ylabel('Pearson r', fontsize=8)
+    ax.set_xticks([0, fps*seconds, fps*seconds*2])
+    ax.set_xticklabels([-seconds, 0, seconds])
+    ax.tick_params(axis='both', which='major', labelsize=8)
+    ax.legend(loc=0, fontsize=6)
+
+    return ax
+
+# Cell
 def configure_pyplot_recap(small_size=14, medium_size=18, bigger_size=24):
     """
     Set the fontsize and other style of matplotlib and seaborn for the recap plots.
@@ -1421,6 +1459,213 @@ def plot_recap_vivo_ephy_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_id
             plt.close()
 
             print("Cell cluster n°",cluster,"done")
+
+    sns.set()
+    plt.rcdefaults()
+    print()
+
+# Cell
+def plot_recap_vivo_ephy_corr_behav(title_dict, reM, phy_dict, cluster_ids, df_stim, behavs, conversion_factor_treadmill=6.25, removeslowdrifts=True, cell_db_ids=None,
+                         checkerboard=None, fullfield_fl=None, fl_bars=None, chirp_am=None,
+                         chirp_fm=None, moving_gratings=None, water=None, export_path="./recap_plot_corr_behav.pdf"):
+    """
+    Plot the recap pdf of in vivo electrophy records.
+
+    params:
+        - title_dict: A dictionary containing the str info for the title: keys(condition, date, record_name, record_id)
+        - reM: The record master object of the record
+        - phy_dict: A dictionary containing the results from phy (see utils.phy_results_dict())
+        - cluster_ids: A list of the cluster id used by phy, to plot. Usually the cells classified as good.
+        - df_stim: Stimulus dataframe recap of their syncronisation obtained with `utils.stim_recap_df`
+        - behavs: A list with behavioral signal names from reM to plot the correlation with spiking signal
+        - conversion_factor_treadmill: The value to convert the treadmill signal into cm/s
+        - removeslowdrifts: Boolean:
+                False - does not remove slow drifts from the signal, for the correlation analysis;
+                True - removes slow drifts by extracting a specified percentile within moving window from the signal, for the correlation analysis.
+        - cell_db_ids: A list of the database ids of the cells corresponding to cluster_ids.
+        - checkerboard: A matrix of STA of cells to the checkerboard stimulus of shape (n_cell, 16, height, width)
+        - fullfield_fl: A matrix of STA of cells to the fullfield_flicker stimulus of shape (n_cell, 16)
+        - fl_bars: A matrix of STA of cells to the flickering_bars stimulus of shape (n_cell, 16, height, width)
+        - chirp_am: A tuple of the chirp_am obtained from a pipe, where [0] is the stimulus and [1] the cells response
+        - chirp_fm: Same as chirp_am but for a chirp_fm stimulus
+        - moving_gratings: The dict of response obtained from `utils.group_direction_response`
+        - water: A matrix of STA of cells to the water stimulus of shape (n_cell, 16, height, width)
+        - export_path: The path for a pdf file to be exported. If None, the plot is displayed.
+    """
+    print("Generating the recap plot")
+    configure_pyplot_recap()
+
+    shanks_idx = buszaki_shank_channels(phy_dict["channel_positions"])
+    cond = title_dict["condition"]
+    date = title_dict["date"]
+    record_name = title_dict["record_name"]
+    record_id = title_dict["record_id"]
+
+    if cell_db_ids is None:
+        cell_db_ids = [-1]*len(cluster_ids)
+
+    with PdfPages(export_path) as pp:
+
+        #Plotting Cover
+        fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
+        gs  = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
+        ax_rem  = fig.add_subplot(gs[:10,2:-1])
+        reM.plot(ax_rem)
+
+        ax_stim_recap  = fig.add_subplot(gs[11:16,:])
+        plot_stim_recap_table(df_stim, ax=ax_stim_recap)
+        suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id)])
+        plt.suptitle(suptitle)
+
+        pp.savefig()
+        plt.close()
+
+        for cluster, cell_id in zip(cluster_ids, cell_db_ids):
+            reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][cluster]#np.where(cluster==cluster_ids)[0][0]
+
+            fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
+            suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id),
+                                   "Cluster n°"+str(cluster), "Cell id n°"+str(cell_id)])
+            plt.suptitle(suptitle)
+
+            mask_cluster = phy_dict["spike_clusters"]==cluster
+            cluster_composition = np.unique(phy_dict["spike_templates"][mask_cluster])
+
+            gs = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
+
+            #Template on electrodes
+            cell_loc_ax = fig.add_subplot(gs[0:4,0:2])
+            plot_spike_template(cluster_composition, phy_dict["templates"], shanks_idx, phy_dict["channel_positions"], ax=cell_loc_ax)
+
+            #Autocorrelogram
+            autocorr_ax = fig.add_subplot(gs[0:4,3:7])
+            plot_autocorrelogram(cluster, phy_dict["spike_times"], phy_dict["spike_clusters"],
+                                 bin_ms=.001, sampling_rate=30000, tails=30, ax=autocorr_ax)
+
+            #Spike amplitude across time
+            sp_amp_ax = fig.add_subplot(gs[0:4,8:])
+            plot_spike_amplitudes(cluster, phy_dict["spike_templates"], phy_dict["spike_clusters"],
+                                  phy_dict["spike_times"], phy_dict["amplitudes"], ax=sp_amp_ax)
+            plot_stim_epochs_to_ephy(reM, y_pos=0.2, ax=sp_amp_ax)
+
+            #Checkerboard STA
+            if checkerboard is not None:
+                pval_checker = checkerboard[1][reM_cell_idx]
+                pval_checker = np.min(pval_checker[pval_checker!=0])
+                inner_grid = gridspec.GridSpecFromSubplotSpec(4, 4,
+                            subplot_spec=gs[5:12,0:12], wspace=.09, hspace=.13)
+                plot_2d_sta(checkerboard[0][reM_cell_idx], pval=pval_checker, gs=inner_grid, title="Checkerboard")
+            #Water STA
+            elif water is not None:
+                pval_water = water[1][reM_cell_idx]
+                pval_water = np.min(pval_water[pval_water!=0])
+                inner_grid = gridspec.GridSpecFromSubplotSpec(4, 4,
+                            subplot_spec=gs[5:12,0:12], wspace=.09, hspace=.13)
+                plot_2d_sta(water[0][reM_cell_idx], pval=pval_water, gs=inner_grid, title="Water")
+
+            #Fullfield flickering STA
+            if fullfield_fl is not None:
+                pval_fffl = fullfield_fl[1][reM_cell_idx]
+                pval_fffl = np.min(pval_fffl[pval_fffl!=0])
+                sp_amp_ax = fig.add_subplot(gs[5:12,13:])
+                plot_t_sta(fullfield_fl[0][reM_cell_idx], pval=pval_fffl, ax=sp_amp_ax)
+
+            #Chirp_FM
+            if chirp_fm is not None:
+                chirpfm_ax = fig.add_subplot(gs[13:16,:])
+                plot_chirp(chirp_fm[0], chirp_fm[1][:,reM_cell_idx], smooth=False, ax=chirpfm_ax)
+                chirpfm_ax.set_title("Chirp FM")
+
+            #Chirp_AM
+            if chirp_am is not None:
+                chirpam_ax = fig.add_subplot(gs[17:20,:])
+                plot_chirp(chirp_am[0], chirp_am[1][:,reM_cell_idx], smooth=False, ax=chirpam_ax)
+                chirpam_ax.set_title("Chirp AM")
+
+            #Flickering bars
+            if fl_bars is not None:
+                pval_bars = fl_bars[1][reM_cell_idx]
+                pval_bars = np.min(pval_bars[pval_bars!=0])
+                fl_bars_ax = fig.add_subplot(gs[21:,:12])
+                plot_fl_bars(fl_bars[0][reM_cell_idx], pval=pval_bars, ax=fl_bars_ax)
+
+            #Moving gratings
+            if moving_gratings is not None:
+                ds_ax = fig.add_subplot(gs[21:,13:], projection="polar")
+                plot_ds_wheel(moving_gratings, cell_idx=reM_cell_idx, ax=ds_ax)
+
+            pp.savefig()
+            plt.close()
+
+            #Adding aditional page just for correlation plots between ephy spike_counts signal with behavioral signals
+            fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
+
+            seq = reM._sequences[0]
+            stim_names = seq.get_names_group("stim")
+
+            gs = gridspec.GridSpec(28, (len(stim_names)+1)*7, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
+
+            coord1=0
+            coord2=4
+            coord3=0
+            coord4=5
+
+            for index, behav_signal_name in enumerate(behavs):
+                ax = fig.add_subplot(gs[coord1:coord2,coord3:coord4])
+                pipe = Data_Pipe(reM, ["S_matrix", behav_signal_name])
+                pipe += "main_tp"
+                pipe -= "signals"
+                if behav_signal_name == "treadmill":
+                    spike_counts = pipe[0]["S_matrix"][:,reM_cell_idx]
+                    behav_signal = pipe[0][behav_signal_name]
+                    title_name = "Speed"
+                elif behav_signal_name == "eye_tracking":
+                    spike_counts = pipe[0]["S_matrix"][:,reM_cell_idx]
+                    behav_signal =  pipe[0][behav_signal_name][:,2] * pipe[0][behav_signal_name][:,3] * np.pi
+                    title_name = "Pupil size"
+                else:
+                    spike_counts = pipe[0]["S_matrix"][:,reM_cell_idx]
+                    behav_signal =  pipe[0][behav_signal_name][:,2] * pipe[0][behav_signal_name][:,3] * np.pi
+                    title_name = str(behav_signal_name)
+                crosscorr, corr_peak, p_value_peak, offset_peak, null_dist_corr = cross_corr_with_lag(spike_counts, behav_signal, behav_signal_name, conversion_factor_treadmill=conversion_factor_treadmill, removeslowdrift=removeslowdrifts, fps=60, seconds=30)
+                plot_crosscorr_spikes_behav(title_name, crosscorr, p_value_peak, offset_peak, null_dist_corr, fps=60, seconds=30, color_line=DEFAULT_COLORS[0], title='dark', ax=ax)
+
+                coord3+=7
+                coord4=coord3+5
+
+                for index, stim_name in enumerate(stim_names):
+                    ax = fig.add_subplot(gs[coord1:coord2,coord3:coord4])
+                    pipe = Data_Pipe(reM, ["S_matrix", behav_signal_name])
+                    pipe += stim_name
+                    if behav_signal_name == "treadmill":
+                        spike_counts = pipe[0]["S_matrix"][:,reM_cell_idx]
+                        behav_signal = pipe[0][behav_signal_name]
+                        title_name = "Speed"
+                    elif behav_signal_name == "eye_tracking":
+                        spike_counts = pipe[0]["S_matrix"][:,reM_cell_idx]
+                        behav_signal =  pipe[0][behav_signal_name][:,2] * pipe[0][behav_signal_name][:,3] * np.pi
+                        title_name = "Pupil size"
+                    else:
+                        spike_counts = pipe[0]["S_matrix"][:,reM_cell_idx]
+                        behav_signal =  pipe[0][behav_signal_name][:,2] * pipe[0][behav_signal_name][:,3] * np.pi
+                        title_name = str(behav_signal_name)
+                    crosscorr, corr_peak, p_value_peak, offset_peak, null_dist_corr = cross_corr_with_lag(spike_counts, behav_signal, behav_signal_name, conversion_factor_treadmill=conversion_factor_treadmill, removeslowdrift=removeslowdrifts, fps=60, seconds=30)
+                    plot_crosscorr_spikes_behav(title_name, crosscorr, p_value_peak, offset_peak, null_dist_corr, fps=60, seconds=30, color_line=DEFAULT_COLORS[index+1], title=stim_name, ax=ax)
+
+                    coord3+=7
+                    coord4=coord3+5
+
+                coord1+=7
+                coord2+=7
+                coord3=0
+                coord4=5
+
+            pp.savefig()
+            plt.close()
+            print("Cell cluster n°",cluster,"done")
+
+    if removeslowdrifts == 0:
+        print("Slowdrifts were not removed from signals to perform the correlation analysis.")
 
     sns.set()
     plt.rcdefaults()
