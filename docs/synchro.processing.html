@@ -163,7 +163,7 @@ description: "Processing functions to align stimuli, detect frame timings and co
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="detect_frames" class="doc_header"><code>detect_frames</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L31" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>detect_frames</code>(<strong><code>data</code></strong>, <strong><code>low_threshold</code></strong>, <strong><code>high_threshold</code></strong>, <strong><code>increment</code></strong>, <strong><code>do_reverse</code></strong>=<em><code>True</code></em>)</p>
+<h4 id="detect_frames" class="doc_header"><code>detect_frames</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L31" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>detect_frames</code>(<strong><code>data</code></strong>, <strong><code>low_threshold</code></strong>, <strong><code>high_threshold</code></strong>, <strong><code>increment</code></strong>, <strong><code>do_reverse</code></strong>=<em><code>True</code></em>, <strong><code>precision</code></strong>=<em><code>0.95</code></em>)</p>
 </blockquote>
 <p>Frame detection (or ON signal detection). Capable of finding frame times produced in a regular
 fashion:</p>
@@ -171,7 +171,11 @@ fashion:</p>
 <pre><code>- data: raw data
 - low_threshold: threshold used to detect begginning of each frame.
 - high_threshold: threshold used to assign label to the frames, and used to detect the beggining of the reading frame.
-- do_reverse: boolean to indicate if the reverse detection should be done after detecting the first frame.</code></pre>
+- increment: Number of timepoints separating frames. Eg, for 30KHz recording of 60hz stimulus: 30000/60
+- do_reverse: boolean to indicate if the reverse detection should be done after detecting the first frame.
+- precision: Value that indicates how precise are the events recorded to accelerate the detection.
+DLP is very stable (.95) whereas some camera triggers have more jitter (.6). Too low value (bellow 0.5) can
+result in an overdetection of frames.</code></pre>
 
 </div>
 
@@ -194,7 +198,7 @@ fashion:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="reverse_detection" class="doc_header"><code>reverse_detection</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L78" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>reverse_detection</code>(<strong><code>data</code></strong>, <strong><code>frame_timepoints</code></strong>, <strong><code>low_threshold</code></strong>, <strong><code>increment</code></strong>)</p>
+<h4 id="reverse_detection" class="doc_header"><code>reverse_detection</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L86" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>reverse_detection</code>(<strong><code>data</code></strong>, <strong><code>frame_timepoints</code></strong>, <strong><code>low_threshold</code></strong>, <strong><code>increment</code></strong>, <strong><code>precision</code></strong>=<em><code>0.95</code></em>)</p>
 </blockquote>
 <p>Detect frames in the left direction.</p>
 
@@ -219,7 +223,7 @@ fashion:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="extend_timepoints" class="doc_header"><code>extend_timepoints</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L97" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>extend_timepoints</code>(<strong><code>frame_timepoints</code></strong>, <strong><code>n</code></strong>=<em><code>10</code></em>)</p>
+<h4 id="extend_timepoints" class="doc_header"><code>extend_timepoints</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L105" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>extend_timepoints</code>(<strong><code>frame_timepoints</code></strong>, <strong><code>n</code></strong>=<em><code>10</code></em>)</p>
 </blockquote>
 <p>Extrapolates points to the left. Not really needed now except for the signals idx that would change
 otherwise (and some starting index were set manually)</p>
@@ -245,7 +249,7 @@ otherwise (and some starting index were set manually)</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="error_check" class="doc_header"><code>error_check</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L105" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>error_check</code>(<strong><code>frame_tp</code></strong>)</p>
+<h4 id="error_check" class="doc_header"><code>error_check</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L113" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>error_check</code>(<strong><code>frame_tp</code></strong>)</p>
 </blockquote>
 <p>Search error by looking at the time between each frame.
 DLP is regular and odd time reveal misdetections.</p>
@@ -340,7 +344,7 @@ DLP is regular and odd time reveal misdetections.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="cluster_frame_signals" class="doc_header"><code>cluster_frame_signals</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L117" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cluster_frame_signals</code>(<strong><code>data</code></strong>, <strong><code>frame_timepoints</code></strong>, <strong><code>n_cluster</code></strong>=<em><code>5</code></em>)</p>
+<h4 id="cluster_frame_signals" class="doc_header"><code>cluster_frame_signals</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L125" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cluster_frame_signals</code>(<strong><code>data</code></strong>, <strong><code>frame_timepoints</code></strong>, <strong><code>n_cluster</code></strong>=<em><code>5</code></em>)</p>
 </blockquote>
 <p>Cluster the <code>frame_timepoints</code> in <code>n_cluster</code> categories depending on the area under the curve.</p>
 <ul>
@@ -370,7 +374,7 @@ DLP is regular and odd time reveal misdetections.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="cluster_by_epochs" class="doc_header"><code>cluster_by_epochs</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L149" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cluster_by_epochs</code>(<strong><code>data</code></strong>, <strong><code>frame_timepoints</code></strong>, <strong><code>frame_signals</code></strong>, <strong><code>epochs</code></strong>)</p>
+<h4 id="cluster_by_epochs" class="doc_header"><code>cluster_by_epochs</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L157" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cluster_by_epochs</code>(<strong><code>data</code></strong>, <strong><code>frame_timepoints</code></strong>, <strong><code>frame_signals</code></strong>, <strong><code>epochs</code></strong>)</p>
 </blockquote>
 <p>Does the same thing as <a href="/theonerig/synchro.processing#cluster_frame_signals"><code>cluster_frame_signals</code></a>, but working on epochs around which the
 number of cluster can differ. Useful when a record contains stimuli with different signals sizes.</p>
@@ -553,7 +557,7 @@ number of cluster can differ. Useful when a record contains stimuli with differe
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="parse_time" class="doc_header"><code>parse_time</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L181" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>parse_time</code>(<strong><code>time_str</code></strong>, <strong><code>pattern</code></strong>=<em><code>'%y%m%d_%H%M%S'</code></em>)</p>
+<h4 id="parse_time" class="doc_header"><code>parse_time</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L189" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>parse_time</code>(<strong><code>time_str</code></strong>, <strong><code>pattern</code></strong>=<em><code>'%y%m%d_%H%M%S'</code></em>)</p>
 </blockquote>
 <p>Default parser of rhd timestamps. (serve as a template too)</p>
 
@@ -578,7 +582,7 @@ number of cluster can differ. Useful when a record contains stimuli with differe
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_position_estimate" class="doc_header"><code>get_position_estimate</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L185" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_position_estimate</code>(<strong><code>stim_time</code></strong>, <strong><code>record_time</code></strong>, <strong><code>sampling_rate</code></strong>)</p>
+<h4 id="get_position_estimate" class="doc_header"><code>get_position_estimate</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L193" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_position_estimate</code>(<strong><code>stim_time</code></strong>, <strong><code>record_time</code></strong>, <strong><code>sampling_rate</code></strong>)</p>
 </blockquote>
 <p>Estimate where in the record should a stimulus start, in sample points</p>
 
@@ -642,7 +646,7 @@ number of cluster can differ. Useful when a record contains stimuli with differe
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="match_starting_position" class="doc_header"><code>match_starting_position</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L193" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>match_starting_position</code>(<strong><code>frame_timepoints</code></strong>, <strong><code>frame_signals</code></strong>, <strong><code>stim_signals</code></strong>, <strong><code>estimate_start</code></strong>)</p>
+<h4 id="match_starting_position" class="doc_header"><code>match_starting_position</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L201" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>match_starting_position</code>(<strong><code>frame_timepoints</code></strong>, <strong><code>frame_signals</code></strong>, <strong><code>stim_signals</code></strong>, <strong><code>estimate_start</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -848,7 +852,7 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="display_match" class="doc_header"><code>display_match</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L207" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>display_match</code>(<strong><code>match_position</code></strong>, <strong><code>reference</code></strong>=<em><code>None</code></em>, <strong><code>recorded</code></strong>=<em><code>None</code></em>, <strong><code>corrected</code></strong>=<em><code>None</code></em>, <strong><code>len_line</code></strong>=<em><code>50</code></em>)</p>
+<h4 id="display_match" class="doc_header"><code>display_match</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L215" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>display_match</code>(<strong><code>match_position</code></strong>, <strong><code>reference</code></strong>=<em><code>None</code></em>, <strong><code>recorded</code></strong>=<em><code>None</code></em>, <strong><code>corrected</code></strong>=<em><code>None</code></em>, <strong><code>len_line</code></strong>=<em><code>50</code></em>)</p>
 </blockquote>
 
 </div>
@@ -932,7 +936,7 @@ REC [53989]  1 2 3 4 0 1 2 3 4 0 1 2 3 4 0 1 2 3 4 0 1 2 3 4 0 1 2 3 4 0 1 2 3 4
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="frame_error_correction" class="doc_header"><code>frame_error_correction</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L219" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>frame_error_correction</code>(<strong><code>signals</code></strong>, <strong><code>unpacked</code></strong>, <strong><code>algo</code></strong>=<em><code>'nw'</code></em>, <strong>**<code>kwargs</code></strong>)</p>
+<h4 id="frame_error_correction" class="doc_header"><code>frame_error_correction</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L227" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>frame_error_correction</code>(<strong><code>signals</code></strong>, <strong><code>unpacked</code></strong>, <strong><code>algo</code></strong>=<em><code>'nw'</code></em>, <strong>**<code>kwargs</code></strong>)</p>
 </blockquote>
 <p>Correcting the display stimulus frame values. Shifts are first detected with one of
 <a href="/theonerig/synchro.processing#shift_detection_conv"><code>shift_detection_conv</code></a> or <a href="/theonerig/synchro.processing#shift_detection_NW"><code>shift_detection_NW</code></a> and applied to the stimulus template. Then single frame
@@ -966,7 +970,7 @@ returns: stim_tuple_corrected, shift_log, (error_frames_idx, replacement_idx)</c
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="error_frame_matches" class="doc_header"><code>error_frame_matches</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L250" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>error_frame_matches</code>(<strong><code>signals</code></strong>, <strong><code>marker</code></strong>, <strong><code>range_</code></strong>)</p>
+<h4 id="error_frame_matches" class="doc_header"><code>error_frame_matches</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L258" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>error_frame_matches</code>(<strong><code>signals</code></strong>, <strong><code>marker</code></strong>, <strong><code>range_</code></strong>)</p>
 </blockquote>
 <p>Find the frames mismatching and finds in the record the closest frame with an identical signal value</p>
 
@@ -991,7 +995,7 @@ returns: stim_tuple_corrected, shift_log, (error_frames_idx, replacement_idx)</c
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="apply_shifts" class="doc_header"><code>apply_shifts</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L274" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>apply_shifts</code>(<strong><code>unpacked</code></strong>, <strong><code>op_log</code></strong>)</p>
+<h4 id="apply_shifts" class="doc_header"><code>apply_shifts</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L282" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>apply_shifts</code>(<strong><code>unpacked</code></strong>, <strong><code>op_log</code></strong>)</p>
 </blockquote>
 <p>Applies the shifts found by either shift_detection functions</p>
 
@@ -1016,7 +1020,7 @@ returns: stim_tuple_corrected, shift_log, (error_frames_idx, replacement_idx)</c
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="shift_detection_conv" class="doc_header"><code>shift_detection_conv</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L297" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>shift_detection_conv</code>(<strong><code>signals</code></strong>, <strong><code>marker</code></strong>, <strong><code>range_</code></strong>)</p>
+<h4 id="shift_detection_conv" class="doc_header"><code>shift_detection_conv</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L305" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>shift_detection_conv</code>(<strong><code>signals</code></strong>, <strong><code>marker</code></strong>, <strong><code>range_</code></strong>)</p>
 </blockquote>
 <p>Detect shifts with a convolution method. First look at how far the next closest frame are, and average
 it over the record. When the average cross the -1 or 1 threshold, shift the reference accordingly.</p>
@@ -1042,7 +1046,7 @@ it over the record. When the average cross the -1 or 1 threshold, shift the refe
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="shift_detection_NW" class="doc_header"><code>shift_detection_NW</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L328" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>shift_detection_NW</code>(<strong><code>signals</code></strong>, <strong><code>marker</code></strong>, <strong><code>simmat_basis</code></strong>=<em><code>[1, -1, -3, -3, -1]</code></em>, <strong><code>insdel</code></strong>=<em><code>-10</code></em>, <strong><code>rowside</code></strong>=<em><code>20</code></em>)</p>
+<h4 id="shift_detection_NW" class="doc_header"><code>shift_detection_NW</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L336" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>shift_detection_NW</code>(<strong><code>signals</code></strong>, <strong><code>marker</code></strong>, <strong><code>simmat_basis</code></strong>=<em><code>[1, -1, -3, -3, -1]</code></em>, <strong><code>insdel</code></strong>=<em><code>-10</code></em>, <strong><code>rowside</code></strong>=<em><code>20</code></em>)</p>
 </blockquote>
 <p>Memory optimized Needleman-Wunsch algorithm.
 Instead of an N<em>N matrix, it uses a N</em>(side*2+1) matrix. Indexing goes slightly differently but
@@ -1117,7 +1121,7 @@ size of the sequences to align.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="chop_stim_edges" class="doc_header"><code>chop_stim_edges</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L389" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>chop_stim_edges</code>(<strong><code>first_frame</code></strong>, <strong><code>last_frame</code></strong>, <strong><code>stim_tuple</code></strong>, <strong><code>shift_log</code></strong>, <strong><code>frame_replacement</code></strong>)</p>
+<h4 id="chop_stim_edges" class="doc_header"><code>chop_stim_edges</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L397" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>chop_stim_edges</code>(<strong><code>first_frame</code></strong>, <strong><code>last_frame</code></strong>, <strong><code>stim_tuple</code></strong>, <strong><code>shift_log</code></strong>, <strong><code>frame_replacement</code></strong>)</p>
 </blockquote>
 <p>Cut out the stimulus parts not containing actual stimulus, and change the idx values of <code>shift_log</code>
 and <code>frame_replacement</code> to match the new indexing.</p>
@@ -1150,7 +1154,7 @@ and <code>frame_replacement</code> to match the new indexing.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="detect_calcium_frames" class="doc_header"><code>detect_calcium_frames</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L406" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>detect_calcium_frames</code>(<strong><code>scanning_data</code></strong>, <strong><code>epoch_threshold</code></strong>=<em><code>-8</code></em>)</p>
+<h4 id="detect_calcium_frames" class="doc_header"><code>detect_calcium_frames</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L414" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>detect_calcium_frames</code>(<strong><code>scanning_data</code></strong>, <strong><code>epoch_threshold</code></strong>=<em><code>-8</code></em>)</p>
 </blockquote>
 <p>Detect the timing of the 2P frames, epoch by epoch over a record.</p>
 

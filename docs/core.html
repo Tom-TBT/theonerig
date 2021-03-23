@@ -42,6 +42,21 @@ description: "Core of this library: DataChunk, RecordMaster, Data_Pipe, and impo
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>The autoreload extension is already loaded. To reload it, use:
+  %reload_ext autoreload
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
     {% endraw %}
 
@@ -268,6 +283,36 @@ a same record. The timepoints must be evenly spaced (regular).</p>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-intense-fg ansi-bold">&lt;ipython-input-1-1d3635306a5e&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">      1</span> <span class="ansi-red-intense-fg ansi-bold">#export</span>
+<span class="ansi-green-intense-fg ansi-bold">----&gt; 2</span><span class="ansi-yellow-intense-fg ansi-bold"> </span><span class="ansi-green-intense-fg ansi-bold">class</span> Data_Pipe<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">      3</span>     &#34;&#34;&#34;
+<span class="ansi-green-fg">      4</span>     A Data_Pipe <span class="ansi-green-intense-fg ansi-bold">is</span> used to query data <span class="ansi-green-intense-fg ansi-bold">from</span> a RecordMaster<span class="ansi-yellow-intense-fg ansi-bold">.</span> By adding<span class="ansi-yellow-intense-fg ansi-bold">/</span>substracting portions
+<span class="ansi-green-fg">      5</span>     of the record using DataChunk names<span class="ansi-yellow-intense-fg ansi-bold">,</span> it creates a mask over which specified DataChunks
+
+<span class="ansi-green-intense-fg ansi-bold">&lt;ipython-input-1-1d3635306a5e&gt;</span> in <span class="ansi-cyan-fg">Data_Pipe</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
+<span class="ansi-green-fg">     11</span>         <span class="ansi-yellow-intense-fg ansi-bold">-</span> target_names<span class="ansi-yellow-intense-fg ansi-bold">:</span> Alias<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-green-intense-fg ansi-bold">or</span> list of alias to give to the DataChunk <span class="ansi-green-intense-fg ansi-bold">in</span> the retrieved dictionnary<span class="ansi-yellow-intense-fg ansi-bold">.</span>
+<span class="ansi-green-fg">     12</span>     &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">---&gt; 13</span><span class="ansi-yellow-intense-fg ansi-bold">     </span><span class="ansi-green-intense-fg ansi-bold">def</span> __init__<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> record_master<span class="ansi-yellow-intense-fg ansi-bold">:</span>RecordMaster<span class="ansi-yellow-intense-fg ansi-bold">,</span> data_names<span class="ansi-yellow-intense-fg ansi-bold">:</span>Union<span class="ansi-yellow-intense-fg ansi-bold">[</span>str<span class="ansi-yellow-intense-fg ansi-bold">,</span>list<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> target_names<span class="ansi-yellow-intense-fg ansi-bold">:</span>Union<span class="ansi-yellow-intense-fg ansi-bold">[</span>str<span class="ansi-yellow-intense-fg ansi-bold">,</span>list<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-green-intense-fg ansi-bold">None</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+<span class="ansi-green-fg">     14</span>         self<span class="ansi-yellow-intense-fg ansi-bold">.</span>record_master <span class="ansi-yellow-intense-fg ansi-bold">=</span> record_master
+<span class="ansi-green-fg">     15</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> isinstance<span class="ansi-yellow-intense-fg ansi-bold">(</span>data_names<span class="ansi-yellow-intense-fg ansi-bold">,</span> str<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
+
+<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;RecordMaster&#39; is not defined</pre>
+</div>
+</div>
+
+</div>
+</div>
 
 </div>
     {% endraw %}
