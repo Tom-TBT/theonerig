@@ -522,7 +522,7 @@ data, see <a href="/theonerig/synchro.io#load_all_data_adc"><code>load_all_data_
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="load_all_data_adc" class="doc_header"><code>load_all_data_adc</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1386" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>load_all_data_adc</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io#DataFile"><code>DataFile</code></a>)</p>
+<h4 id="load_all_data_adc" class="doc_header"><code>load_all_data_adc</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1386" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>load_all_data_adc</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io#DataFile"><code>DataFile</code></a>, <strong><code>channel_idx</code></strong>=<em><code>0</code></em>)</p>
 </blockquote>
 <p>Read all the data contained by a file. For rhd and hdf5, correspond to the adc channels. To read the ephy
 data, see <a href="/theonerig/synchro.io#load_all_data"><code>load_all_data</code></a></p>
@@ -548,7 +548,7 @@ data, see <a href="/theonerig/synchro.io#load_all_data"><code>load_all_data</cod
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="load_all_data_dig_in" class="doc_header"><code>load_all_data_dig_in</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1407" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>load_all_data_dig_in</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io#DataFile"><code>DataFile</code></a>)</p>
+<h4 id="load_all_data_dig_in" class="doc_header"><code>load_all_data_dig_in</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1407" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>load_all_data_dig_in</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io#DataFile"><code>DataFile</code></a>, <strong><code>channel_idx</code></strong>=<em><code>0</code></em>)</p>
 </blockquote>
 <p>Read all the data contained by a file. For rhd and hdf5, correspond to the adc channels. To read the ephy
 data, see <a href="/theonerig/synchro.io#load_all_data"><code>load_all_data</code></a></p>
@@ -600,7 +600,7 @@ data, see <a href="/theonerig/synchro.io#load_all_data"><code>load_all_data</cod
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="export_adc_raw" class="doc_header"><code>export_adc_raw</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1451" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>export_adc_raw</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io#DataFile"><code>DataFile</code></a>, <strong><code>output_fn</code></strong>=<em><code>''</code></em>)</p>
+<h4 id="export_adc_raw" class="doc_header"><code>export_adc_raw</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1451" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>export_adc_raw</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io#DataFile"><code>DataFile</code></a>, <strong><code>output_fn</code></strong>=<em><code>''</code></em>, <strong><code>channel_idx</code></strong>=<em><code>0</code></em>)</p>
 </blockquote>
 <p>Exports a datafile adc channel to a single raw binary file. Useful to reduce disk usage after that
 spike sorting is done.</p>
@@ -626,7 +626,7 @@ spike sorting is done.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="export_dig_in_raw" class="doc_header"><code>export_dig_in_raw</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1469" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>export_dig_in_raw</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io#DataFile"><code>DataFile</code></a>, <strong><code>output_fn</code></strong>=<em><code>''</code></em>)</p>
+<h4 id="export_dig_in_raw" class="doc_header"><code>export_dig_in_raw</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1469" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>export_dig_in_raw</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io#DataFile"><code>DataFile</code></a>, <strong><code>output_fn</code></strong>=<em><code>''</code></em>, <strong><code>channel_idx</code></strong>=<em><code>0</code></em>)</p>
 </blockquote>
 <p>Exports a datafile adc channel to a single raw binary file. Useful to reduce disk usage after that
 spike sorting is done.</p>

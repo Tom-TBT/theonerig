@@ -1383,7 +1383,7 @@ def load_all_data(datafile:DataFile):
     datafile.close()
     return data
 
-def load_all_data_adc(datafile:DataFile):
+def load_all_data_adc(datafile:DataFile, channel_idx=0):
     """Read all the data contained by a file. For rhd and hdf5, correspond to the adc channels. To read the ephy
     data, see `load_all_data`"""
     datafile.open()
@@ -1397,14 +1397,14 @@ def load_all_data_adc(datafile:DataFile):
     for idx in range(n_chunks):
         data_tmp, t_offset = datafile.get_data_adc(idx, chunk_size)
         if data_tmp.ndim == 2:
-            data_tmp = data_tmp[:,0]
+            data_tmp = data_tmp[:,channel_idx]
         data[t_offset:t_offset+len(data_tmp)] = data_tmp
         print("Loading the data... "+str(round(100*(idx+1)/n_chunks,2))+"%    ",end='\r',flush=True)
     print("Loading the data... "+str(round(100,2))+"%    ",end='\r',flush=True)
     datafile.close()
     return data
 
-def load_all_data_dig_in(datafile:DataFile):
+def load_all_data_dig_in(datafile:DataFile, channel_idx=0):
     """Read all the data contained by a file. For rhd and hdf5, correspond to the adc channels. To read the ephy
     data, see `load_all_data`"""
     datafile.open()
@@ -1418,7 +1418,7 @@ def load_all_data_dig_in(datafile:DataFile):
     for idx in range(n_chunks):
         data_tmp, t_offset = datafile.get_data_dig_in(idx, chunk_size)
         if data_tmp.ndim == 2:
-            data_tmp = data_tmp[:,0]
+            data_tmp = data_tmp[:,channel_idx]
         data[t_offset:t_offset+len(data_tmp)] = data_tmp
         print("Loading the data... "+str(round(100*(idx+1)/n_chunks,2))+"%    ",end='\r',flush=True)
     print("Loading the data... "+str(round(100,2))+"%    ",end='\r',flush=True)
@@ -1448,10 +1448,10 @@ def load_all_data_both(datafile:DataFile):
     datafile.close()
     return data, data_adc
 
-def export_adc_raw(datafile:DataFile, output_fn=""):
+def export_adc_raw(datafile:DataFile, output_fn="", channel_idx=0):
     """Exports a datafile adc channel to a single raw binary file. Useful to reduce disk usage after that
     spike sorting is done."""
-    data = load_all_data_adc(datafile)
+    data = load_all_data_adc(datafile, channel_idx=channel_idx)
     if output_fn=="":
         raw_fn = os.path.splitext(datafile.file_name)[0]+".dat"
     else:
@@ -1466,10 +1466,10 @@ def export_adc_raw(datafile:DataFile, output_fn=""):
     raw_file.set_data(0, data)
     raw_file.close()
 
-def export_dig_in_raw(datafile:DataFile, output_fn=""):
+def export_dig_in_raw(datafile:DataFile, output_fn="", channel_idx=0):
     """Exports a datafile adc channel to a single raw binary file. Useful to reduce disk usage after that
     spike sorting is done."""
-    data = load_all_data_dig_in(datafile)
+    data = load_all_data_dig_in(datafile, channel_idx=channel_idx)
     if output_fn=="":
         raw_fn = os.path.splitext(datafile.file_name)[0]+".dat"
     else:
