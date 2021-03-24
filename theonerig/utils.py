@@ -21,6 +21,7 @@ from scipy.ndimage import gaussian_filter
 import matplotlib.pyplot as plt
 import math
 from cmath import *
+from PIL import Image
 
 from .core import *
 
