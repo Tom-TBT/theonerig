@@ -627,7 +627,7 @@ def get_inception_generator(imageset_folder, len_set=25, width=500):
     def image_yield(idx):
         set_idx = idx//25
         img_idx = idx%25
-        return imageset_l[set_idx][:,width*img_idx:width*(img_idx+1)]
+        return imageset_l[set_idx][:,width*img_idx:width*(img_idx+1), 1] #Returns a gray image
 
     return image_yield
 

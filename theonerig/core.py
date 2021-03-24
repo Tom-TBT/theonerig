@@ -354,8 +354,9 @@ class Data_Pipe():
         - record_master: the RecordMaster from which to retrieve data
         - data_names: Name, or list of names of the DataChunk to retrieve once the masking process is done.
         - target_names: Alias, or list of alias to give to the DataChunk in the retrieved dictionnary.
+        - cast_to_np: boolean to cast the piped data into a numpy array. Can be set directly too in self.cast_to_np
     """
-    def __init__(self, record_master:RecordMaster, data_names:Union[str,list], target_names:Union[str,list]=None):
+    def __init__(self, record_master:RecordMaster, data_names:Union[str,list], target_names:Union[str,list]=None, cast_to_np=False):
         self.record_master = record_master
         if isinstance(data_names, str):
             data_names = [data_names]
@@ -372,6 +373,8 @@ class Data_Pipe():
         self.data_names   = data_names
         self._masks       = [np.zeros(len(seq), dtype=bool) for seq in record_master]
         self._slices      = []
+
+        self.cast_to_np   = cast_to_np
 
     def plot(self, newfig=False):
         """
@@ -492,7 +495,10 @@ class Data_Pipe():
             seq_idx, _slice = self._slices[self._n]
             self.record_master[seq_idx].set_slice(_slice)
             for i, name in enumerate(self.data_names):
-                res[self.target_names[i]] = self.record_master[seq_idx][name]
+                if self.cast_to_np:
+                    res[self.target_names[i]] = np.array(self.record_master[seq_idx][name])
+                else:
+                    res[self.target_names[i]] = self.record_master[seq_idx][name]
             self.record_master[seq_idx].set_slice(None)
             self._n += 1
             return res
@@ -508,7 +514,10 @@ class Data_Pipe():
             self.record_master[seq_idx].set_slice(_slice)
             res = {}
             for i, name in enumerate(self.data_names):
-                res[self.target_names[i]] = self.record_master[seq_idx][name]
+                if self.cast_to_np:
+                    res[self.target_names[i]] = np.array(self.record_master[seq_idx][name])
+                else:
+                    res[self.target_names[i]] = self.record_master[seq_idx][name]
             self.record_master[seq_idx].set_slice(None)
             return res
         elif isinstance(key, slice):
@@ -516,7 +525,11 @@ class Data_Pipe():
             for seq_idx, _slice in self._slices[key]:
                 res = {}
                 for i, name in enumerate(self.data_names):
-                    res[self.target_names[i]] = self.record_master[seq_idx][name][_slice]
+                    if self.cast_to_np:
+                        res[self.target_names[i]] = np.array(self.record_master[seq_idx][name][_slice])
+                    else:
+                        res[self.target_names[i]] = self.record_master[seq_idx][name][_slice]
+
                 l_res.append(res)
             return l_res
         else:

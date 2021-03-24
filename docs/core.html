@@ -284,36 +284,6 @@ a same record. The timepoints must be evenly spaced (regular).</p>
     
 <div class="cell border-box-sizing code_cell rendered">
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-intense-fg ansi-bold">---------------------------------------------------------------------------</span>
-<span class="ansi-red-intense-fg ansi-bold">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-intense-fg ansi-bold">&lt;ipython-input-1-1d3635306a5e&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">      1</span> <span class="ansi-red-intense-fg ansi-bold">#export</span>
-<span class="ansi-green-intense-fg ansi-bold">----&gt; 2</span><span class="ansi-yellow-intense-fg ansi-bold"> </span><span class="ansi-green-intense-fg ansi-bold">class</span> Data_Pipe<span class="ansi-yellow-intense-fg ansi-bold">(</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">      3</span>     &#34;&#34;&#34;
-<span class="ansi-green-fg">      4</span>     A Data_Pipe <span class="ansi-green-intense-fg ansi-bold">is</span> used to query data <span class="ansi-green-intense-fg ansi-bold">from</span> a RecordMaster<span class="ansi-yellow-intense-fg ansi-bold">.</span> By adding<span class="ansi-yellow-intense-fg ansi-bold">/</span>substracting portions
-<span class="ansi-green-fg">      5</span>     of the record using DataChunk names<span class="ansi-yellow-intense-fg ansi-bold">,</span> it creates a mask over which specified DataChunks
-
-<span class="ansi-green-intense-fg ansi-bold">&lt;ipython-input-1-1d3635306a5e&gt;</span> in <span class="ansi-cyan-fg">Data_Pipe</span><span class="ansi-blue-intense-fg ansi-bold">()</span>
-<span class="ansi-green-fg">     11</span>         <span class="ansi-yellow-intense-fg ansi-bold">-</span> target_names<span class="ansi-yellow-intense-fg ansi-bold">:</span> Alias<span class="ansi-yellow-intense-fg ansi-bold">,</span> <span class="ansi-green-intense-fg ansi-bold">or</span> list of alias to give to the DataChunk <span class="ansi-green-intense-fg ansi-bold">in</span> the retrieved dictionnary<span class="ansi-yellow-intense-fg ansi-bold">.</span>
-<span class="ansi-green-fg">     12</span>     &#34;&#34;&#34;
-<span class="ansi-green-intense-fg ansi-bold">---&gt; 13</span><span class="ansi-yellow-intense-fg ansi-bold">     </span><span class="ansi-green-intense-fg ansi-bold">def</span> __init__<span class="ansi-yellow-intense-fg ansi-bold">(</span>self<span class="ansi-yellow-intense-fg ansi-bold">,</span> record_master<span class="ansi-yellow-intense-fg ansi-bold">:</span>RecordMaster<span class="ansi-yellow-intense-fg ansi-bold">,</span> data_names<span class="ansi-yellow-intense-fg ansi-bold">:</span>Union<span class="ansi-yellow-intense-fg ansi-bold">[</span>str<span class="ansi-yellow-intense-fg ansi-bold">,</span>list<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">,</span> target_names<span class="ansi-yellow-intense-fg ansi-bold">:</span>Union<span class="ansi-yellow-intense-fg ansi-bold">[</span>str<span class="ansi-yellow-intense-fg ansi-bold">,</span>list<span class="ansi-yellow-intense-fg ansi-bold">]</span><span class="ansi-yellow-intense-fg ansi-bold">=</span><span class="ansi-green-intense-fg ansi-bold">None</span><span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-<span class="ansi-green-fg">     14</span>         self<span class="ansi-yellow-intense-fg ansi-bold">.</span>record_master <span class="ansi-yellow-intense-fg ansi-bold">=</span> record_master
-<span class="ansi-green-fg">     15</span>         <span class="ansi-green-intense-fg ansi-bold">if</span> isinstance<span class="ansi-yellow-intense-fg ansi-bold">(</span>data_names<span class="ansi-yellow-intense-fg ansi-bold">,</span> str<span class="ansi-yellow-intense-fg ansi-bold">)</span><span class="ansi-yellow-intense-fg ansi-bold">:</span>
-
-<span class="ansi-red-intense-fg ansi-bold">NameError</span>: name &#39;RecordMaster&#39; is not defined</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
     {% endraw %}
 
@@ -328,7 +298,7 @@ a same record. The timepoints must be evenly spaced (regular).</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Data_Pipe" class="doc_header"><code>class</code> <code>Data_Pipe</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L347" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Data_Pipe</code>(<strong><code>record_master</code></strong>:<a href="/theonerig/core#RecordMaster"><code>RecordMaster</code></a>, <strong><code>data_names</code></strong>:<code>Union</code>[<code>str</code>, <code>list</code>], <strong><code>target_names</code></strong>:<code>Union</code>[<code>str</code>, <code>list</code>]=<em><code>None</code></em>)</p>
+<h2 id="Data_Pipe" class="doc_header"><code>class</code> <code>Data_Pipe</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L347" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Data_Pipe</code>(<strong><code>record_master</code></strong>:<a href="/theonerig/core#RecordMaster"><code>RecordMaster</code></a>, <strong><code>data_names</code></strong>:<code>Union</code>[<code>str</code>, <code>list</code>], <strong><code>target_names</code></strong>:<code>Union</code>[<code>str</code>, <code>list</code>]=<em><code>None</code></em>, <strong><code>cast_to_np</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>A Data_Pipe is used to query data from a RecordMaster. By adding/substracting portions
 of the record using DataChunk names, it creates a mask over which specified DataChunks
@@ -337,7 +307,8 @@ are retrivied as a dictionary from the Data_Pipe.</p>
 
 <pre><code>- record_master: the RecordMaster from which to retrieve data
 - data_names: Name, or list of names of the DataChunk to retrieve once the masking process is done.
-- target_names: Alias, or list of alias to give to the DataChunk in the retrieved dictionnary.</code></pre>
+- target_names: Alias, or list of alias to give to the DataChunk in the retrieved dictionnary.
+- cast_to_np: boolean to cast the piped data into a numpy array. Can be set directly too in self.cast_to_np</code></pre>
 
 </div>
 
@@ -367,7 +338,7 @@ are retrivied as a dictionary from the Data_Pipe.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="export_record" class="doc_header"><code>export_record</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L532" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>export_record</code>(<strong><code>path</code></strong>, <strong><code>record_master</code></strong>)</p>
+<h4 id="export_record" class="doc_header"><code>export_record</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L545" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>export_record</code>(<strong><code>path</code></strong>, <strong><code>record_master</code></strong>)</p>
 </blockquote>
 <p>Export a Record_Master object to an h5 file, readable outside of this library.</p>
 <p>params:</p>
@@ -396,7 +367,7 @@ are retrivied as a dictionary from the Data_Pipe.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="import_record" class="doc_header"><code>import_record</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L561" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>import_record</code>(<strong><code>path</code></strong>)</p>
+<h4 id="import_record" class="doc_header"><code>import_record</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L574" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>import_record</code>(<strong><code>path</code></strong>)</p>
 </blockquote>
 <p>Import a Record_Master from an h5 file saved by the export_record function of this library.</p>
 <p>params:</p>
