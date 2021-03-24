@@ -608,7 +608,7 @@ def cross_corr_with_lag(spike_counts, behav_signal, behav, conversion_factor_tre
     return crosscorr, corr_peak, p_value_peak, offset_peak, null_dist_corr
 
 # Cell
-def get_inception_generator(imageset_folder, len_set=25, width=500):
+def get_inception_generator(imageset_folder, len_set=25, width=500, height=281):
     """
     Return a function to obtain inception loop images from their index.
 
@@ -625,6 +625,8 @@ def get_inception_generator(imageset_folder, len_set=25, width=500):
         imageset_l.append(image)
 
     def image_yield(idx):
+        if idx==-1:
+            return np.zeros((height, width))+128
         set_idx = idx//25
         img_idx = idx%25
         return imageset_l[set_idx][:,width*img_idx:width*(img_idx+1), 1] #Returns a gray image
