@@ -4,7 +4,7 @@ __all__ = ['extend_sync_timepoints', 'align_sync_timepoints', 'resample_to_timep
            'flip_gratings', 'stim_to_dataChunk', 'phy_results_dict', 'spike_to_dataChunk', 'get_calcium_stack_lenghts',
            'twoP_dataChunks', 'img_2d_fit', 'fill_nan', 'stim_inten_norm', 'group_direction_response',
            'group_chirp_bumps', 'get_repeat_corrected', 'removeSlowDrift', 'time_shift_test_corr',
-           'cross_corr_with_lag', 'buszaki_shank_channels', 'format_pval', 'stim_recap_df']
+           'cross_corr_with_lag', 'get_inception_generator', 'buszaki_shank_channels', 'format_pval', 'stim_recap_df']
 
 # Cell
 import numpy as np
@@ -605,6 +605,30 @@ def cross_corr_with_lag(spike_counts, behav_signal, behav, conversion_factor_tre
     p_value_peak = round((100-scipy.stats.percentileofscore(abs(np.array(null_dist_corr)), abs(corr_peak), kind='strict'))/100,2)
 
     return crosscorr, corr_peak, p_value_peak, offset_peak, null_dist_corr
+
+# Cell
+def get_inception_generator(imageset_folder, len_set=25, width=500):
+    """
+    Return a function to obtain inception loop images from their index.
+
+    params:
+        - imageset_folder: Path to the folder of the image sets
+        - len_set: Number of images concatenated per set
+        - width: image width
+    return:
+        - Function to obtain inception loop images from their index.
+    """
+    imageset_l = []
+    for i, fn in enumerate(glob.glob(os.path.join(imageset_folder,"*.jpg"))): #Images accepted have the dimension (375,500)
+        image = np.array(Image.open(fn))
+        imageset_l.append(image)
+
+    def image_yield(idx):
+        set_idx = idx//25
+        img_idx = idx%25
+        return imageset_l[set_idx][:,width*img_idx:width*(img_idx+1)]
+
+    return image_yield
 
 # Cell
 def buszaki_shank_channels(channel_positions):
