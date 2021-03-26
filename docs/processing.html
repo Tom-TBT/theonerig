@@ -2,11 +2,13 @@
 
 title: processing
 
+
 keywords: fastai
 sidebar: home_sidebar
 
 summary: "Processing the different stream of data to calculate responses of retinal cells"
 description: "Processing the different stream of data to calculate responses of retinal cells"
+nb_path: "02_processing.ipynb"
 ---
 <!--
 
@@ -40,13 +42,6 @@ description: "Processing the different stream of data to calculate responses of 
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -376,7 +371,7 @@ Clustering is made with sklearn.cluster.dbscan.</p>
 <p>Retrieves a one dimensional array of the cells correlations</p>
 <p>params:</p>
 
-<pre><code>- corrcoef_matrix: Correlation matrix from [`corrcoef`](/theonerig/processing#corrcoef)
+<pre><code>- corrcoef_matrix: Correlation matrix from [`corrcoef`](/theonerig/processing.html#corrcoef)
 
 </code></pre>
 <p>return:</p>
@@ -454,7 +449,7 @@ Clustering is made with sklearn.cluster.dbscan.</p>
 <p>Computes the nonlinearity of a single cell</p>
 <p>params:</p>
 
-<pre><code>- stim_ensemble: stimulus ensemble obtained with [`stimulus_ensemble`](/theonerig/processing#stimulus_ensemble)
+<pre><code>- stim_ensemble: stimulus ensemble obtained with [`stimulus_ensemble`](/theonerig/processing.html#stimulus_ensemble)
 - spike_counts: cells activity (without the initial Hw, same as the stimulus ensemble)
 
 </code></pre>
@@ -657,6 +652,13 @@ Clustering is made with sklearn.cluster.dbscan.</p>
 </div>
     {% endraw %}
 
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Direction-and-orientation-selectivity-with-imaginary-numbers">Direction and orientation selectivity with imaginary numbers<a class="anchor-link" href="#Direction-and-orientation-selectivity-with-imaginary-numbers"> </a></h1>
@@ -821,13 +823,6 @@ Clustering is made with sklearn.cluster.dbscan.</p>
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -900,6 +895,13 @@ by using <code>utils.group_direction_response</code>.</p>
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}

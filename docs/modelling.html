@@ -2,11 +2,13 @@
 
 title: modelling
 
+
 keywords: fastai
 sidebar: home_sidebar
 
 summary: "Modelling the response of the retinal cells to the stimuli"
 description: "Modelling the response of the retinal cells to the stimuli"
+nb_path: "03_modelling.ipynb"
 ---
 <!--
 
@@ -34,8 +36,7 @@ description: "Modelling the response of the retinal cells to the stimuli"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Imports required for the documentation and smooth running</span>
-<span class="c1"># of the jupyter notebook, but not needed in the source code</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># of the jupyter notebook, but not needed in the source code</span>
 <span class="kn">from</span> <span class="nn">theonerig.core</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">theonerig.processing</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">theonerig.utils</span> <span class="kn">import</span> <span class="o">*</span>
@@ -65,13 +66,6 @@ description: "Modelling the response of the retinal cells to the stimuli"
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -107,12 +101,18 @@ params:</p>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Examples of sigmoids</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;sigma:1 amp:1 x0:0 y0:0&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;sigma:2 amp:1 x0:0 y0:0&quot;</span><span class="p">)</span>
@@ -143,13 +143,6 @@ params:</p>
 
 </div>
 </div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -189,12 +182,18 @@ params:</p>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Examples of gaussians</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;sigma:1 amp:1 x0:0 y0:0&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;sigma:2 amp:1 x0:0 y0:0&quot;</span><span class="p">)</span>
@@ -233,13 +232,6 @@ params:</p>
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -249,7 +241,7 @@ params:</p>
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="sum_of_gaussian" class="doc_header"><code>sum_of_gaussian</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L42" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>sum_of_gaussian</code>(<strong><code>t</code></strong>, <strong><code>sigma_1</code></strong>, <strong><code>amp_1</code></strong>, <strong><code>x0_1</code></strong>, <strong><code>sigma_2</code></strong>, <strong><code>amp_2</code></strong>, <strong><code>x0_2</code></strong>, <strong><code>y0</code></strong>)</p>
 </blockquote>
-<p>Sum of gaussian, using <a href="/theonerig/modelling#gaussian"><code>gaussian</code></a>
+<p>Sum of gaussian, using <a href="/theonerig/modelling.html#gaussian"><code>gaussian</code></a>
 params:</p>
 
 <pre><code>- t: 1D numpy array at which to evaluate the points
@@ -274,12 +266,18 @@ params:</p>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Examples of sum of gaussians</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sum_of_gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigma_1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">amp_1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">x0_1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
                        <span class="n">sigma_2</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">amp_2</span><span class="o">=-</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">x0_2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;sigma_1:1 amp_1:1 x0_1:0 sigma_2:2 amp_2:-0.5 x0_2:0&quot;</span><span class="p">)</span>
@@ -318,13 +316,6 @@ params:</p>
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -352,6 +343,13 @@ params:</p>
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -406,13 +404,6 @@ params:</p>
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -422,7 +413,7 @@ params:</p>
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="sum_of_2D_gaussian" class="doc_header"><code>sum_of_2D_gaussian</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L81" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>sum_of_2D_gaussian</code>(<strong><code>xz</code></strong>, <strong><code>sigma_x_1</code></strong>, <strong><code>sigma_z_1</code></strong>, <strong><code>amp_1</code></strong>, <strong><code>theta_1</code></strong>, <strong><code>x0_1</code></strong>, <strong><code>z0_1</code></strong>, <strong><code>sigma_x_2</code></strong>, <strong><code>sigma_z_2</code></strong>, <strong><code>amp_2</code></strong>, <strong><code>theta_2</code></strong>, <strong><code>x0_2</code></strong>, <strong><code>z0_2</code></strong>, <strong><code>y0</code></strong>)</p>
 </blockquote>
-<p>Sum of two 2D Gaussian function. For the params, see <a href="/theonerig/modelling#gaussian_2D"><code>gaussian_2D</code></a>.
+<p>Sum of two 2D Gaussian function. For the params, see <a href="/theonerig/modelling.html#gaussian_2D"><code>gaussian_2D</code></a>.
 However, both share the y0 parameter.</p>
 
 </div>
@@ -431,6 +422,13 @@ However, both share the y0 parameter.</p>
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -481,13 +479,6 @@ However, both share the y0 parameter.</p>
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -518,12 +509,18 @@ params:</p>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Examples of sum of gaussians</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">exponential_decay</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;tau:1 baseline:0 amp:1&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">exponential_decay</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;tau:2 baseline:0 amp:1&quot;</span><span class="p">)</span>
@@ -554,13 +551,6 @@ params:</p>
 
 </div>
 </div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -602,12 +592,18 @@ params:</p>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Examples of sum of gaussians</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sin_exponent</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">phi</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">exp</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;freq:0.5 exp:1&quot;</span><span class="p">)</span>
@@ -650,13 +646,6 @@ params:</p>
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -666,7 +655,7 @@ params:</p>
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="sinexp_sigm" class="doc_header"><code>sinexp_sigm</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L117" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>sinexp_sigm</code>(<strong><code>x</code></strong>, <strong><code>sigma</code></strong>, <strong><code>x0</code></strong>, <strong><code>y0</code></strong>, <strong><code>amp</code></strong>, <strong><code>phi</code></strong>, <strong><code>freq</code></strong>, <strong><code>exp</code></strong>)</p>
 </blockquote>
-<p>A sine exponent weighted by a sigmoid. For parameters, see <a href="/theonerig/modelling#sigmoid"><code>sigmoid</code></a> and <a href="/theonerig/modelling#sin_exponent"><code>sin_exponent</code></a>.
+<p>A sine exponent weighted by a sigmoid. For parameters, see <a href="/theonerig/modelling.html#sigmoid"><code>sigmoid</code></a> and <a href="/theonerig/modelling.html#sin_exponent"><code>sin_exponent</code></a>.
 However the amp and y0 (baseline) parameters are shared between the two sub-functions</p>
 
 </div>
@@ -682,12 +671,18 @@ However the amp and y0 (baseline) parameters are shared between the two sub-func
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Examples of sum of gaussians</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">200</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">200</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sinexp_sigm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">phi</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">exp</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;phi=0&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sinexp_sigm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">phi</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">exp</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;phi=3.14&quot;</span><span class="p">)</span>
@@ -729,13 +724,6 @@ However the amp and y0 (baseline) parameters are shared between the two sub-func
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -755,7 +743,7 @@ params:</p>
 </code></pre>
 <p>return:</p>
 
-<pre><code>- A dictionary containing the parameters of the fit for a [`sigmoid`](/theonerig/modelling#sigmoid)
+<pre><code>- A dictionary containing the parameters of the fit for a [`sigmoid`](/theonerig/modelling.html#sigmoid)
 - A quality index of the fit (explained variance of the model)</code></pre>
 
 </div>
@@ -789,7 +777,7 @@ params:</p>
 </code></pre>
 <p>return:</p>
 
-<pre><code>- A dictionary containing the parameters of the fit for a [`sum_of_2D_gaussian`](/theonerig/modelling#sum_of_2D_gaussian)
+<pre><code>- A dictionary containing the parameters of the fit for a [`sum_of_2D_gaussian`](/theonerig/modelling.html#sum_of_2D_gaussian)
 - A quality index of the fit (explained variance of the model)</code></pre>
 
 </div>
@@ -830,7 +818,7 @@ params:</p>
 </code></pre>
 <p>return:</p>
 
-<pre><code>- A dictionary containing the parameters of the fit for a [`sum_of_gaussian`](/theonerig/modelling#sum_of_gaussian)
+<pre><code>- A dictionary containing the parameters of the fit for a [`sum_of_gaussian`](/theonerig/modelling.html#sum_of_gaussian)
 - A quality index of the fit (explained variance of the model)</code></pre>
 
 </div>
@@ -874,7 +862,7 @@ params:</p>
 </code></pre>
 <p>return :</p>
 
-<pre><code>- A dictionary containing the parameters of the fit for a [`sinexp_sigm`](/theonerig/modelling#sinexp_sigm)
+<pre><code>- A dictionary containing the parameters of the fit for a [`sinexp_sigm`](/theonerig/modelling.html#sinexp_sigm)
 - A quality index of the fit (explained variance of the model)</code></pre>
 
 </div>
@@ -901,7 +889,7 @@ params:</p>
 <h4 id="fit_chirp_freq_epoch" class="doc_header"><code>fit_chirp_freq_epoch</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L295" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_chirp_freq_epoch</code>(<strong><code>cell_mean</code></strong>, <strong><code>freqs</code></strong>=<em><code>[1.875, 3.75, 7.5, 15, 30]</code></em>, <strong><code>durations</code></strong>=<em><code>[2, 2, 2, 1, 1]</code></em>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>)</p>
 </blockquote>
 <p>Fit multiple sinexp_sigm to the mean response of a cell to chirp_freq_epoch stimulus.
-Each epoch is fitted independantly by a <a href="/theonerig/modelling#sin_exponent"><code>sin_exponent</code></a>
+Each epoch is fitted independantly by a <a href="/theonerig/modelling.html#sin_exponent"><code>sin_exponent</code></a>
 params:</p>
 
 <pre><code>- cell_mean: Average response of the cell to the chirp_am stimulus
@@ -912,7 +900,7 @@ params:</p>
 </code></pre>
 <p>return :</p>
 
-<pre><code>- List of dictionary containing the parameters of each epoch fit for a [`sin_exponent`](/theonerig/modelling#sin_exponent)
+<pre><code>- List of dictionary containing the parameters of each epoch fit for a [`sin_exponent`](/theonerig/modelling.html#sin_exponent)
 - List of quality index of each epoch fit (explained variance of the model)</code></pre>
 
 </div>
@@ -954,7 +942,7 @@ params:</p>
 </code></pre>
 <p>return:</p>
 
-<pre><code>- A dictionary containing the parameters of the fit for a [`exponential_decay`](/theonerig/modelling#exponential_decay)
+<pre><code>- A dictionary containing the parameters of the fit for a [`exponential_decay`](/theonerig/modelling.html#exponential_decay)
 - A quality index of the fit (explained variance of the model)</code></pre>
 
 </div>
@@ -1016,7 +1004,7 @@ params:</p>
 <h4 id="onoff_transient_index" class="doc_header"><code>onoff_transient_index</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L391" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>onoff_transient_index</code>(<strong><code>cell_response</code></strong>, <strong><code>start_on</code></strong>=<em><code>120</code></em>, <strong><code>stop_on</code></strong>=<em><code>240</code></em>, <strong><code>start_off</code></strong>=<em><code>240</code></em>, <strong><code>stop_off</code></strong>=<em><code>360</code></em>)</p>
 </blockquote>
 <p>Return both on-off and transient indexes of cell response. Transiency index is not always
-ideal to describe the cells response. Consider fitting an exponential decay with <a href="/theonerig/modelling#fit_transiency"><code>fit_transiency</code></a>.
+ideal to describe the cells response. Consider fitting an exponential decay with <a href="/theonerig/modelling.html#fit_transiency"><code>fit_transiency</code></a>.
 params:</p>
 
 <pre><code>- cell_response: response of a cell of shape (time,...)
@@ -1036,6 +1024,13 @@ params:</p>
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}

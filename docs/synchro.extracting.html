@@ -2,11 +2,13 @@
 
 title: synchro.extracting
 
+
 keywords: fastai
 sidebar: home_sidebar
 
 summary: "Function to extract data of an experiment from 3rd party programs"
 description: "Function to extract data of an experiment from 3rd party programs"
+nb_path: "11_synchro.extracting.ipynb"
 ---
 <!--
 
@@ -79,13 +81,6 @@ description: "Function to extract data of an experiment from 3rd party programs"
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -93,7 +88,7 @@ description: "Function to extract data of an experiment from 3rd party programs"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_QDSpy_logs" class="doc_header"><code>get_QDSpy_logs</code><a href="__main__.py#L11" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_QDSpy_logs</code>(<strong><code>log_dir</code></strong>)</p>
+<h4 id="get_QDSpy_logs" class="doc_header"><code>get_QDSpy_logs</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/extracting.py#L16" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_QDSpy_logs</code>(<strong><code>log_dir</code></strong>)</p>
 </blockquote>
 <p>Factory function to generate QDSpy_log objects from all the QDSpy logs of the folder <code>log_dir</code></p>
 
@@ -118,9 +113,9 @@ description: "Function to extract data of an experiment from 3rd party programs"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="QDSpy_log" class="doc_header"><code>class</code> <code>QDSpy_log</code><a href="" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QDSpy_log</code>(<strong><code>log_path</code></strong>)</p>
+<h2 id="QDSpy_log" class="doc_header"><code>class</code> <code>QDSpy_log</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/extracting.py#L24" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QDSpy_log</code>(<strong><code>log_path</code></strong>)</p>
 </blockquote>
-<p>Class defining a QDSpy log. 
+<p>Class defining a QDSpy log.
 It reads the log it represent and extract the stimuli information from it:</p>
 <ul>
 <li>Start and end time</li>
@@ -149,7 +144,7 @@ It reads the log it represent and extract the stimuli information from it:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Stimulus" class="doc_header"><code>class</code> <code>Stimulus</code><a href="" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Stimulus</code>(<strong><code>start</code></strong>)</p>
+<h2 id="Stimulus" class="doc_header"><code>class</code> <code>Stimulus</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/extracting.py#L100" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Stimulus</code>(<strong><code>start</code></strong>)</p>
 </blockquote>
 <p>Stimulus object containing information about it's presentation.</p>
 <ul>
@@ -157,7 +152,7 @@ It reads the log it represent and extract the stimuli information from it:</p>
 <li>stop_time : a datetime object)</li>
 <li>parameters : Parameters extracted from the QDSpy</li>
 <li>md5 : The md5 hash of that compiled version of the stimulus</li>
-<li>name : The name of the stimulus </li>
+<li>name : The name of the stimulus</li>
 </ul>
 
 </div>
@@ -170,9 +165,16 @@ It reads the log it represent and extract the stimuli information from it:</p>
 </div>
     {% endraw %}
 
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>To read QDSpy logs of your experiment, simply provide the folder containing the log you want to read to <a href="/theonerig/synchro.extracting#get_QDSpy_logs"><code>get_QDSpy_logs</code></a></p>
+<p>To read QDSpy logs of your experiment, simply provide the folder containing the log you want to read to <a href="/theonerig/synchro.extracting.html#get_QDSpy_logs"><code>get_QDSpy_logs</code></a></p>
 
 </div>
 </div>
@@ -184,7 +186,7 @@ It reads the log it represent and extract the stimuli information from it:</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#logs = get_QDSpy_logs(&quot;./files/basic_synchro&quot;)</span>
+<div class=" highlight hl-ipython3"><pre><span></span> 
 </pre></div>
 
     </div>
@@ -223,7 +225,7 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#logs[0].stimuli</span>
+<div class=" highlight hl-ipython3"><pre><span></span> 
 </pre></div>
 
     </div>
@@ -270,8 +272,7 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># stim = logs[0].stimuli[5]</span>
-<span class="c1"># print(stim.name, stim.start_time, stim.frame_delay, stim.md5)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># print(stim.name, stim.start_time, stim.frame_delay, stim.md5)</span>
 </pre></div>
 
     </div>
@@ -291,13 +292,6 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 </div>
 </div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -333,11 +327,18 @@ specify informations about a shader when used, like for the moving gratings.</p>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># logs = get_QDSpy_logs(&quot;./files/basic_synchro&quot;)</span>
+<div class=" highlight hl-ipython3"><pre><span></span> 
 </pre></div>
 
     </div>
@@ -376,7 +377,7 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># unpacked = unpack_stim_npy(&quot;./files/basic_synchro/stimulus_data&quot;, &quot;eed21bda540934a428e93897908d049e&quot;)</span>
+<div class=" highlight hl-ipython3"><pre><span></span> 
 </pre></div>
 
     </div>
@@ -400,7 +401,7 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># unpacked[0].shape</span>
+<div class=" highlight hl-ipython3"><pre><span></span> 
 </pre></div>
 
     </div>
@@ -440,7 +441,7 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># unpacked[1][:50]</span>
+<div class=" highlight hl-ipython3"><pre><span></span> 
 </pre></div>
 
     </div>
@@ -477,13 +478,6 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -570,6 +564,13 @@ Each pupil returned is (x,y,width,height,angle,probability)</p>
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}

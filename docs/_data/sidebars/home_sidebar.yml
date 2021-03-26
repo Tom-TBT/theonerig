@@ -11,37 +11,37 @@ entries:
       url: /
     - output: web,pdf
       title: Core
-      url: /core
+      url: core.html
     - output: web,pdf
       title: Utils
-      url: /utils
+      url: utils.html
     - output: web,pdf
       title: processing
-      url: /processing
+      url: processing.html
     - output: web,pdf
       title: modelling
-      url: /modelling
+      url: modelling.html
     - output: web,pdf
       title: plotting
-      url: /plotting
+      url: plotting.html
     - output: web,pdf
       title: database
-      url: /database
+      url: database.html
     - output: web,pdf
       title: synchro.io
-      url: /synchro.io
+      url: synchro.io.html
     - output: web,pdf
       title: synchro.extracting
-      url: /synchro.extracting
+      url: synchro.extracting.html
     - output: web,pdf
       title: synchro.processing
-      url: /synchro.processing
+      url: synchro.processing.html
     - output: web,pdf
       title: leddome
-      url: /leddome
+      url: leddome.html
     - output: web,pdf
       title: Test data loaders
-      url: /testdata
+      url: testdata.html
     output: web
     title: theonerig
   output: web

@@ -2,11 +2,13 @@
 
 title: synchro.processing
 
+
 keywords: fastai
 sidebar: home_sidebar
 
 summary: "Processing functions to align stimuli, detect frame timings and correct errors of the display."
 description: "Processing functions to align stimuli, detect frame timings and correct errors of the display."
+nb_path: "12_synchro.processing.ipynb"
 ---
 <!--
 
@@ -20,13 +22,6 @@ description: "Processing functions to align stimuli, detect frame timings and co
 
 <div class="container" id="notebook-container">
         
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -69,6 +64,13 @@ description: "Processing functions to align stimuli, detect frame timings and co
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 
 <div class="inner_cell">
@@ -90,7 +92,7 @@ description: "Processing functions to align stimuli, detect frame timings and co
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Loading the data... 100%    </pre>
+<pre>Loading the data... 100%      </pre>
 </div>
 </div>
 
@@ -107,13 +109,6 @@ description: "Processing functions to align stimuli, detect frame timings and co
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -138,13 +133,6 @@ description: "Processing functions to align stimuli, detect frame timings and co
 </div>
     {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><a href="/theonerig/synchro.processing#get_first_high"><code>get_first_high</code></a> finds the idx of the first frame higher than the threshold</p>
-
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -152,6 +140,13 @@ description: "Processing functions to align stimuli, detect frame timings and co
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a href="/theonerig/synchro.processing.html#get_first_high"><code>get_first_high</code></a> finds the idx of the first frame higher than the threshold</p>
+
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -264,6 +259,13 @@ DLP is regular and odd time reveal misdetections.</p>
 </div>
     {% endraw %}
 
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>detect_frames do frame detection. Works for camera pulses and photodiode data emitted by a DLP. It does it by:</p>
@@ -330,13 +332,6 @@ DLP is regular and odd time reveal misdetections.</p>
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -376,7 +371,7 @@ DLP is regular and odd time reveal misdetections.</p>
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="cluster_by_epochs" class="doc_header"><code>cluster_by_epochs</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L157" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cluster_by_epochs</code>(<strong><code>data</code></strong>, <strong><code>frame_timepoints</code></strong>, <strong><code>frame_signals</code></strong>, <strong><code>epochs</code></strong>)</p>
 </blockquote>
-<p>Does the same thing as <a href="/theonerig/synchro.processing#cluster_frame_signals"><code>cluster_frame_signals</code></a>, but working on epochs around which the
+<p>Does the same thing as <a href="/theonerig/synchro.processing.html#cluster_frame_signals"><code>cluster_frame_signals</code></a>, but working on epochs around which the
 number of cluster can differ. Useful when a record contains stimuli with different signals sizes.</p>
 
 </div>
@@ -385,6 +380,13 @@ number of cluster can differ. Useful when a record contains stimuli with differe
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -543,13 +545,6 @@ number of cluster can differ. Useful when a record contains stimuli with differe
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -599,6 +594,13 @@ number of cluster can differ. Useful when a record contains stimuli with differe
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 
 <div class="inner_cell">
@@ -632,13 +634,6 @@ number of cluster can differ. Useful when a record contains stimuli with differe
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -655,6 +650,13 @@ number of cluster can differ. Useful when a record contains stimuli with differe
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -737,8 +739,7 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Unpacking the stimulus printed above</span>
-<span class="n">unpacked_checkerboard</span> <span class="o">=</span> <span class="n">unpack_stim_npy</span><span class="p">(</span><span class="s2">&quot;./files/basic_synchro/stimulus_data&quot;</span><span class="p">,</span> <span class="s2">&quot;eed21bda540934a428e93897908d049e&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">unpacked_checkerboard</span> <span class="o">=</span> <span class="n">unpack_stim_npy</span><span class="p">(</span><span class="s2">&quot;./files/basic_synchro/stimulus_data&quot;</span><span class="p">,</span> <span class="s2">&quot;eed21bda540934a428e93897908d049e&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">unpacked_checkerboard</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">unpacked_checkerboard</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">unpacked_checkerboard</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 </pre></div>
 
@@ -838,13 +839,6 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -861,6 +855,13 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -922,13 +923,6 @@ REC [53989]  1 2 3 4 0 1 2 3 4 0 1 2 3 4 0 1 2 3 4 0 1 2 3 4 0 1 2 3 4 0 1 2 3 4
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -939,7 +933,7 @@ REC [53989]  1 2 3 4 0 1 2 3 4 0 1 2 3 4 0 1 2 3 4 0 1 2 3 4 0 1 2 3 4 0 1 2 3 4
 <h4 id="frame_error_correction" class="doc_header"><code>frame_error_correction</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/processing.py#L227" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>frame_error_correction</code>(<strong><code>signals</code></strong>, <strong><code>unpacked</code></strong>, <strong><code>algo</code></strong>=<em><code>'nw'</code></em>, <strong>**<code>kwargs</code></strong>)</p>
 </blockquote>
 <p>Correcting the display stimulus frame values. Shifts are first detected with one of
-<a href="/theonerig/synchro.processing#shift_detection_conv"><code>shift_detection_conv</code></a> or <a href="/theonerig/synchro.processing#shift_detection_NW"><code>shift_detection_NW</code></a> and applied to the stimulus template. Then single frame
+<a href="/theonerig/synchro.processing.html#shift_detection_conv"><code>shift_detection_conv</code></a> or <a href="/theonerig/synchro.processing.html#shift_detection_NW"><code>shift_detection_NW</code></a> and applied to the stimulus template. Then single frame
 mismatch are detected and corrected.</p>
 
 <pre><code>- signals: true signal values recorded
@@ -1063,6 +1057,13 @@ size of the sequences to align.</p>
 </div>
     {% endraw %}
 
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>We correct the stimulus values with frame_error_correction and it gives us back the changes it made to keep track of the errors made.</p>
@@ -1099,13 +1100,6 @@ size of the sequences to align.</p>
 
 </div>
 </div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -1164,6 +1158,13 @@ and <code>frame_replacement</code> to match the new indexing.</p>
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}

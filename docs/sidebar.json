@@ -1,16 +1,16 @@
 {
   "theonerig": {
     "Overview": "/",
-    "Core": "/core",
-    "Utils": "/utils",
-    "processing": "/processing",
-    "modelling": "/modelling",
-    "plotting": "/plotting",
-    "database": "/database",
-    "synchro.io": "/synchro.io",
-    "synchro.extracting": "/synchro.extracting",
-    "synchro.processing": "/synchro.processing",
-    "leddome": "/leddome",
-    "Test data loaders": "/testdata"
+    "Core": "core.html",
+    "Utils": "utils.html",
+    "processing": "processing.html",
+    "modelling": "modelling.html",
+    "plotting": "plotting.html",
+    "database": "database.html",
+    "synchro.io": "synchro.io.html",
+    "synchro.extracting": "synchro.extracting.html",
+    "synchro.processing": "synchro.processing.html",
+    "leddome": "leddome.html",
+    "Test data loaders": "testdata.html"
   }
 }

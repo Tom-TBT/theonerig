@@ -2,11 +2,13 @@
 
 title: Core
 
+
 keywords: fastai
 sidebar: home_sidebar
 
 summary: "Core of this library: DataChunk, RecordMaster, Data_Pipe, and import/export of reM"
 description: "Core of this library: DataChunk, RecordMaster, Data_Pipe, and import/export of reM"
+nb_path: "00_core.ipynb"
 ---
 <!--
 
@@ -64,13 +66,6 @@ description: "Core of this library: DataChunk, RecordMaster, Data_Pipe, and impo
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -101,6 +96,13 @@ params:</p>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 
 <div class="inner_cell">
@@ -124,13 +126,6 @@ params:</p>
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -138,7 +133,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ContiguousRecord" class="doc_header"><code>class</code> <code>ContiguousRecord</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L60" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ContiguousRecord</code>(<strong><code>length</code></strong>:<code>int</code>, <strong><code>signals</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>, <strong><code>main_tp</code></strong>:<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>)</p>
+<h2 id="ContiguousRecord" class="doc_header"><code>class</code> <code>ContiguousRecord</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L60" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ContiguousRecord</code>(<strong><code>length</code></strong>:<code>int</code>, <strong><code>signals</code></strong>:<a href="/theonerig/core.html#DataChunk"><code>DataChunk</code></a>, <strong><code>main_tp</code></strong>:<a href="/theonerig/core.html#DataChunk"><code>DataChunk</code></a>)</p>
 </blockquote>
 <p>Representation of a contiguous recording session to store DataChunk
 of various sources under a single time reference. DataChunk are stored
@@ -155,6 +150,13 @@ respectively "signals" and "main_tp".</p>
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -198,13 +200,6 @@ respectively "signals" and "main_tp".</p>
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -212,7 +207,7 @@ respectively "signals" and "main_tp".</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="RecordMaster" class="doc_header"><code>class</code> <code>RecordMaster</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L217" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>RecordMaster</code>(<strong><code>reference_data_list</code></strong>:<code>Sequence</code>[<code>Tuple</code>[<a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>, <a href="/theonerig/core#DataChunk"><code>DataChunk</code></a>]], <strong><code>frame_rate</code></strong>=<em><code>60</code></em>) :: <code>list</code></p>
+<h2 id="RecordMaster" class="doc_header"><code>class</code> <code>RecordMaster</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L217" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>RecordMaster</code>(<strong><code>reference_data_list</code></strong>:<code>Sequence</code>[<code>Tuple</code>[<a href="/theonerig/core.html#DataChunk"><code>DataChunk</code></a>, <a href="/theonerig/core.html#DataChunk"><code>DataChunk</code></a>]], <strong><code>frame_rate</code></strong>=<em><code>60</code></em>) :: <code>list</code></p>
 </blockquote>
 <p>The RecordMaster class is the top level object managing all
 timeseries. It uses a list of ContiguousRecord to represent
@@ -235,6 +230,13 @@ a same record. The timepoints must be evenly spaced (regular).</p>
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -284,13 +286,6 @@ a same record. The timepoints must be evenly spaced (regular).</p>
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -298,7 +293,7 @@ a same record. The timepoints must be evenly spaced (regular).</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="Data_Pipe" class="doc_header"><code>class</code> <code>Data_Pipe</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L347" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Data_Pipe</code>(<strong><code>record_master</code></strong>:<a href="/theonerig/core#RecordMaster"><code>RecordMaster</code></a>, <strong><code>data_names</code></strong>:<code>Union</code>[<code>str</code>, <code>list</code>], <strong><code>target_names</code></strong>:<code>Union</code>[<code>str</code>, <code>list</code>]=<em><code>None</code></em>, <strong><code>cast_to_np</code></strong>=<em><code>False</code></em>)</p>
+<h2 id="Data_Pipe" class="doc_header"><code>class</code> <code>Data_Pipe</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/core.py#L347" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Data_Pipe</code>(<strong><code>record_master</code></strong>:<a href="/theonerig/core.html#RecordMaster"><code>RecordMaster</code></a>, <strong><code>data_names</code></strong>:<code>Union</code>[<code>str</code>, <code>list</code>], <strong><code>target_names</code></strong>:<code>Union</code>[<code>str</code>, <code>list</code>]=<em><code>None</code></em>, <strong><code>cast_to_np</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>A Data_Pipe is used to query data from a RecordMaster. By adding/substracting portions
 of the record using DataChunk names, it creates a mask over which specified DataChunks
@@ -380,6 +375,13 @@ are retrivied as a dictionary from the Data_Pipe.</p>
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}

@@ -2,11 +2,13 @@
 
 title: plotting
 
+
 keywords: fastai
 sidebar: home_sidebar
 
 summary: "All the plotting"
 description: "All the plotting"
+nb_path: "04_plotting.ipynb"
 ---
 <!--
 
@@ -71,13 +73,6 @@ description: "All the plotting"
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -85,7 +80,7 @@ description: "All the plotting"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_2d_fit" class="doc_header"><code>plot_2d_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L32" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_2d_fit</code>(<strong><code>sta</code></strong>, <strong><code>param_d</code></strong>, <strong><code>QI</code></strong>=<em><code>None</code></em>, <strong><code>fit_f</code></strong>=<em><code>'sum_of_2D_gaussian'</code></em>, <strong><code>imshow_args</code></strong>=<em><code>{'vmin': -1, 'vmax': 1, 'cmap': 'gray'}</code></em>)</p>
+<h4 id="plot_2d_fit" class="doc_header"><code>plot_2d_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L32" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_2d_fit</code>(<strong><code>sta</code></strong>, <strong><code>param_d</code></strong>, <strong><code>QI</code></strong>=<em><code>None</code></em>, <strong><code>fit_f</code></strong>=<em><code>sum_of_2D_gaussian</code></em>, <strong><code>imshow_args</code></strong>=<em><code>{'vmin': -1, 'vmax': 1, 'cmap': 'gray'}</code></em>)</p>
 </blockquote>
 <p>2D STA plotting helper function to quickly check results.</p>
 <p>params:</p>
@@ -120,7 +115,7 @@ description: "All the plotting"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_tSTA_fit" class="doc_header"><code>plot_tSTA_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L55" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_tSTA_fit</code>(<strong><code>sta</code></strong>, <strong><code>param_d</code></strong>, <strong><code>QI</code></strong>=<em><code>None</code></em>, <strong><code>fit_f</code></strong>=<em><code>'sum_of_gaussian'</code></em>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_tSTA_fit" class="doc_header"><code>plot_tSTA_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L55" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_tSTA_fit</code>(<strong><code>sta</code></strong>, <strong><code>param_d</code></strong>, <strong><code>QI</code></strong>=<em><code>None</code></em>, <strong><code>fit_f</code></strong>=<em><code>sum_of_gaussian</code></em>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Helper function to visualize the temporal STA fit.</p>
 <p>params:</p>
@@ -157,7 +152,7 @@ description: "All the plotting"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_chirpam_fit" class="doc_header"><code>plot_chirpam_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L84" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_chirpam_fit</code>(<strong><code>cell_mean</code></strong>, <strong><code>param_d</code></strong>, <strong><code>QI</code></strong>=<em><code>None</code></em>, <strong><code>fit_f</code></strong>=<em><code>'sinexp_sigm'</code></em>, <strong><code>start</code></strong>=<em><code>420</code></em>, <strong><code>stop</code></strong>=<em><code>960</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_chirpam_fit" class="doc_header"><code>plot_chirpam_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L84" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_chirpam_fit</code>(<strong><code>cell_mean</code></strong>, <strong><code>param_d</code></strong>, <strong><code>QI</code></strong>=<em><code>None</code></em>, <strong><code>fit_f</code></strong>=<em><code>sinexp_sigm</code></em>, <strong><code>start</code></strong>=<em><code>420</code></em>, <strong><code>stop</code></strong>=<em><code>960</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Helper function to visualize the fit of a cell response to a chirp_am stimulus.</p>
 <p>params:</p>
@@ -196,7 +191,7 @@ description: "All the plotting"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_chirp_freq_epoch_fit" class="doc_header"><code>plot_chirp_freq_epoch_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L116" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_chirp_freq_epoch_fit</code>(<strong><code>cell_mean</code></strong>, <strong><code>param_d_l</code></strong>, <strong><code>fit_f</code></strong>=<em><code>'sin_exponent'</code></em>, <strong><code>QI_l</code></strong>=<em><code>[None, None, None, None, None]</code></em>, <strong><code>freqs</code></strong>=<em><code>[1.875, 3.75, 7.5, 15, 30]</code></em>, <strong><code>durations</code></strong>=<em><code>[2, 2, 2, 1, 1]</code></em>, <strong><code>start</code></strong>=<em><code>360</code></em>, <strong><code>sampling_rate</code></strong>=<em><code>60</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_chirp_freq_epoch_fit" class="doc_header"><code>plot_chirp_freq_epoch_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L116" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_chirp_freq_epoch_fit</code>(<strong><code>cell_mean</code></strong>, <strong><code>param_d_l</code></strong>, <strong><code>fit_f</code></strong>=<em><code>sin_exponent</code></em>, <strong><code>QI_l</code></strong>=<em><code>[None, None, None, None, None]</code></em>, <strong><code>freqs</code></strong>=<em><code>[1.875, 3.75, 7.5, 15, 30]</code></em>, <strong><code>durations</code></strong>=<em><code>[2, 2, 2, 1, 1]</code></em>, <strong><code>start</code></strong>=<em><code>360</code></em>, <strong><code>sampling_rate</code></strong>=<em><code>60</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Helper function to visualize the fit of a cell response to a chirp_freq_epoch stimulus.</p>
 <p>params:</p>
@@ -237,7 +232,7 @@ description: "All the plotting"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_transient_fit" class="doc_header"><code>plot_transient_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L165" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_transient_fit</code>(<strong><code>cell_mean</code></strong>, <strong><code>param_d</code></strong>, <strong><code>peak</code></strong>, <strong><code>start</code></strong>=<em><code>0</code></em>, <strong><code>stop</code></strong>=<em><code>None</code></em>, <strong><code>QI</code></strong>=<em><code>None</code></em>, <strong><code>fit_f</code></strong>=<em><code>'exponential_decay'</code></em>, <strong><code>sampling_rate</code></strong>=<em><code>60</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_transient_fit" class="doc_header"><code>plot_transient_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L165" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_transient_fit</code>(<strong><code>cell_mean</code></strong>, <strong><code>param_d</code></strong>, <strong><code>peak</code></strong>, <strong><code>start</code></strong>=<em><code>0</code></em>, <strong><code>stop</code></strong>=<em><code>None</code></em>, <strong><code>QI</code></strong>=<em><code>None</code></em>, <strong><code>fit_f</code></strong>=<em><code>exponential_decay</code></em>, <strong><code>sampling_rate</code></strong>=<em><code>60</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Helper function to visualize the transiency fit of a cell response to the ON-OFF stimulus.</p>
 <p>params:</p>
@@ -278,7 +273,7 @@ description: "All the plotting"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_nonlinearity_fit" class="doc_header"><code>plot_nonlinearity_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L200" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_nonlinearity_fit</code>(<strong><code>nonlinearity</code></strong>, <strong><code>param_d</code></strong>, <strong><code>QI</code></strong>=<em><code>None</code></em>, <strong><code>fit_f</code></strong>=<em><code>'sigmoid'</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_nonlinearity_fit" class="doc_header"><code>plot_nonlinearity_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L200" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_nonlinearity_fit</code>(<strong><code>nonlinearity</code></strong>, <strong><code>param_d</code></strong>, <strong><code>QI</code></strong>=<em><code>None</code></em>, <strong><code>fit_f</code></strong>=<em><code>sigmoid</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Helper function to visualize the nonlinearity fit.</p>
 <p>params:</p>
@@ -929,6 +924,13 @@ and plotted as ellipses.</p>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 
 <div class="inner_cell">
@@ -959,13 +961,6 @@ and plotted as ellipses.</p>
 
 </div>
 </div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -1363,6 +1358,13 @@ Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
