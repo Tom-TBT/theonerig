@@ -72,15 +72,17 @@ class ContiguousRecord():
     """
     MAIN_TP = "main_tp"
     SIGNALS = "signals"
-    def __init__(self, length:int, signals:DataChunk, main_tp:DataChunk):
+    def __init__(self, length:int, signals:DataChunk, main_tp:DataChunk, frame_rate:int=60 ):
         """Instanciate a ContiguousRecord.
 
         Parameters:
-            length (int): Number of bins of this record
-            signals (DataChunk): Signals for this record
-            main_tp (DataChunk): Timepoints of the signals for the main device
+            - length (int): Number of bins of this record
+            - signals (DataChunk): Signals for this record
+            - main_tp (DataChunk): Timepoints of the signals for the main device
+            - frame_rate(int): Frame rate in Hz
         """
         self.length = length
+        self._frame_time = 1/frame_rate
         self._data_dict = {}
 
         self[self.SIGNALS] = signals
@@ -132,6 +134,15 @@ class ContiguousRecord():
             if dChunk_l[0].group == group_name:
                 names.append(key)
         return names
+
+    def to_s(self, n_frame):
+        return round(self._frame_time*n_frame,2)
+
+    def to_time_str(self, n_frame):
+        s = int(self.to_s(n_frame))
+        m, s = s//60, str(s%60)
+        h, m = str(m//60), str(m%60)
+        return "{0}:{1}:{2}".format('0'*(2-len(h))+h, '0'*(2-len(m))+m, '0'*(2-len(s))+s)
 
     def __len__(self):
         return self.length
@@ -231,28 +242,30 @@ class RecordMaster(list):
 
     params:
         - reference_data_list: list of (timepoints, signals) arrays.
-        - frame_rate: Frame rate in Hz
+        - frame_rate: Frame rate in Hz, or list of frame rates matching len(reference_data_list)
     """
 
     def __init__(self, reference_data_list: Sequence[Tuple[DataChunk, DataChunk]], frame_rate=60):
 
-        self._frame_time = 1/frame_rate
+        if not hasattr(frame_rate, '__iter__'):
+            frame_rate = [frame_rate]*len(reference_data_list)
+
         self._sep_size   = 1000 #Used for the plotting of multiple sequences
         self._sequences = []
-        for ref_timepoints, ref_signals in reference_data_list:
-            cs = ContiguousRecord(len(ref_timepoints), ref_signals, ref_timepoints)
+        for (ref_timepoints, ref_signals), fr in zip(reference_data_list, frame_rate):
+            cs = ContiguousRecord(len(ref_timepoints), ref_signals, ref_timepoints, fr)
             self._sequences.append(cs)
 
     def set_datachunk(self, dc:DataChunk, name:str, sequence_idx=0):
         """Set the given DataChunk dc for the sequence at sequence_idx under name."""
         self._sequences[sequence_idx][name] = dc
 
-    def append(self, ref_timepoints:DataChunk, ref_signals:DataChunk):
-        cs = ContiguousRecord(len(ref_timepoints), ref_signals, ref_timepoints)
+    def append(self, ref_timepoints:DataChunk, ref_signals:DataChunk, frame_rate=60):
+        cs = ContiguousRecord(len(ref_timepoints), ref_signals, ref_timepoints, frame_rate)
         self._sequences.append(cs)
 
-    def insert(self, idx:int, ref_timepoints:DataChunk, ref_signals:DataChunk):
-        cs = ContiguousRecord(len(ref_timepoints), ref_signals, ref_timepoints)
+    def insert(self, idx:int, ref_timepoints:DataChunk, ref_signals:DataChunk, frame_rate=60):
+        cs = ContiguousRecord(len(ref_timepoints), ref_signals, ref_timepoints, frame_rate)
         self._sequences.insert(idx, cs)
 
     def keys(self):
@@ -308,7 +321,7 @@ class RecordMaster(list):
                     pos = dChunk.idx + cursor
                     ax.barh(name, len(dChunk), left=pos, height=0.8, color=colors[dChunk.group], label=dChunk.group)
                     x = pos + len(dChunk)/2
-                    text = "{0} -> {1} ".format(self.to_time_str(dChunk.idx), self.to_time_str(dChunk.idx+len(dChunk)))
+                    text = "{0} -> {1} ".format(seq.to_time_str(dChunk.idx), seq.to_time_str(dChunk.idx+len(dChunk)))
                     if name not in y_pos_dict.keys():
                         y_pos_dict[name] = y_count
                         y_count+=1
@@ -323,15 +336,6 @@ class RecordMaster(list):
         ax.legend(handles=legend_elements, ncol=5, bbox_to_anchor=(0, 1), loc='lower left', fontsize='small')
 
         ax.set_xlim(-100,cursor)
-
-    def to_s(self, n_frame):
-        return round(self._frame_time*n_frame,2)
-
-    def to_time_str(self, n_frame):
-        s = int(self.to_s(n_frame))
-        m, s = s//60, str(s%60)
-        h, m = str(m//60), str(m%60)
-        return "{0}:{1}:{2}".format('0'*(2-len(h))+h, '0'*(2-len(m))+m, '0'*(2-len(s))+s)
 
     def __str__(self):
         return "["+",\n".join([repr(seq) for seq in self._sequences])+"]"
@@ -551,13 +555,19 @@ def export_record(path, record_master):
     """
     print("Exporting the record master")
     with h5py.File(path, mode="w") as h5_f:
-        h5_f.attrs["_frame_time"] = record_master._frame_time
+        fr = None
+        if hasattr(record_master, '_frame_time'):
+            fr = record_master._frame_time #_frame_time was moved to Contigous_Record
         h5_f.attrs["_sep_size"]   = record_master._sep_size
         for i, contig in enumerate(record_master):
             #create contig
             print("Contiguous sequence",i)
             cntig_ref = h5_f.create_group(str(i))
             cntig_ref.attrs["length"] = contig.length
+            if fr is not None:
+                cntig_ref.attrs["_frame_time"] = fr
+            else:
+                cntig_ref.attrs["_frame_time"] = contig._frame_time
             for key, dc_list in contig._data_dict.items():
                 #create datastream
                 print("...Entering stream",key)
@@ -579,10 +589,13 @@ def import_record(path):
     """
     print("Importing the record master")
     with h5py.File(path, mode="r") as h5_f:
-        record_master = None
+        record_master    = None
+        frame_rate = None
+        if "_frame_time" in h5_f.keys():
+            frame_rate = h5_f["_frame_time"]
         for j, key_contig in enumerate(h5_f.keys()):
             ref_contig = h5_f[key_contig]
-            stream_d = {}
+            stream_d   = {}
             for i, key_dstream in enumerate(ref_contig.keys()):
                 ref_dstream = ref_contig[key_dstream]
                 dchunk_l = []
@@ -603,10 +616,12 @@ def import_record(path):
                     dchunk_l.append(dchunk)
 
                 stream_d[key_dstream] = dchunk_l
+            if not "_frame_time" in h5_f.keys():
+                frame_rate = key_contig["_frame_time"]
             if record_master is None:
-                record_master = RecordMaster([(stream_d["main_tp"][0],stream_d["signals"][0])])
+                record_master = RecordMaster([(stream_d["main_tp"][0],stream_d["signals"][0])], frame_rate=frame_rate)
             else:
-                record_master.append(stream_d["main_tp"][0],stream_d["signals"][0])
+                record_master.append(stream_d["main_tp"][0],stream_d["signals"][0], frame_rate=frame_rate)
             for kstream, vstream in stream_d.items():
                 for k, dc in enumerate(vstream):
                     if kstream in ["main_tp", "signals"] and k==0:
