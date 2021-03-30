@@ -211,7 +211,8 @@ def fit_temporal_sta(sta, frame_rate=60):
         - sta: 1D data to fit
 
     return:
-        - A dictionary containing the parameters of the fit for a `sum_of_gaussian`
+        - A dictionary containing the parameters of the fit for a `sum_of_gaussian`. The parameter with _1 suffix
+        correspond to the closest gaussian to the zero timepoint.
         - A quality index of the fit (explained variance of the model)"""
     argmax = sta.argmax()
     argmin = sta.argmin()
@@ -236,6 +237,10 @@ def fit_temporal_sta(sta, frame_rate=60):
         except RuntimeError: #If a model can't be fitted, we get a runtimeError
             fit  = {"sigma_1":1,"amp_1":0,"x0_1":0,
                     "sigma_2":1,"amp_2":0,"x0_2":0,"y0":0}
+    if fit["x0_1"]< fit["x0_2"]:
+        sig, amp, x0                              = fit["sigma_1"], fit["amp_1"], fit["x0_1"]
+        fit["sigma_1"], fit["amp_1"], fit["x0_1"] = fit["sigma_2"], fit["amp_2"], fit["x0_2"]
+        fit["sigma_2"], fit["amp_2"], fit["x0_2"] = sig, amp, x0
     model = sum_of_gaussian(t, **fit)
     quality_index = 1 - (np.var(sta-model)/np.var(sta))
     return fit, quality_index

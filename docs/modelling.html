@@ -818,7 +818,8 @@ params:</p>
 </code></pre>
 <p>return:</p>
 
-<pre><code>- A dictionary containing the parameters of the fit for a [`sum_of_gaussian`](/theonerig/modelling.html#sum_of_gaussian)
+<pre><code>- A dictionary containing the parameters of the fit for a [`sum_of_gaussian`](/theonerig/modelling.html#sum_of_gaussian). The parameter with _1 suffix
+correspond to the closest gaussian to the zero timepoint.
 - A quality index of the fit (explained variance of the model)</code></pre>
 
 </div>
@@ -849,7 +850,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fit_chirp_am" class="doc_header"><code>fit_chirp_am</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L244" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_chirp_am</code>(<strong><code>cell_mean</code></strong>, <strong><code>start</code></strong>=<em><code>420</code></em>, <strong><code>stop</code></strong>=<em><code>960</code></em>, <strong><code>freq</code></strong>=<em><code>1.5</code></em>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>)</p>
+<h4 id="fit_chirp_am" class="doc_header"><code>fit_chirp_am</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L249" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_chirp_am</code>(<strong><code>cell_mean</code></strong>, <strong><code>start</code></strong>=<em><code>420</code></em>, <strong><code>stop</code></strong>=<em><code>960</code></em>, <strong><code>freq</code></strong>=<em><code>1.5</code></em>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>)</p>
 </blockquote>
 <p>Fit a sinexp_sigm to the mean response of a cell to chirp_am stimulus.
 params:</p>
@@ -886,7 +887,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fit_chirp_freq_epoch" class="doc_header"><code>fit_chirp_freq_epoch</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L295" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_chirp_freq_epoch</code>(<strong><code>cell_mean</code></strong>, <strong><code>freqs</code></strong>=<em><code>[1.875, 3.75, 7.5, 15, 30]</code></em>, <strong><code>durations</code></strong>=<em><code>[2, 2, 2, 1, 1]</code></em>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>)</p>
+<h4 id="fit_chirp_freq_epoch" class="doc_header"><code>fit_chirp_freq_epoch</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L300" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_chirp_freq_epoch</code>(<strong><code>cell_mean</code></strong>, <strong><code>freqs</code></strong>=<em><code>[1.875, 3.75, 7.5, 15, 30]</code></em>, <strong><code>durations</code></strong>=<em><code>[2, 2, 2, 1, 1]</code></em>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>)</p>
 </blockquote>
 <p>Fit multiple sinexp_sigm to the mean response of a cell to chirp_freq_epoch stimulus.
 Each epoch is fitted independantly by a <a href="/theonerig/modelling.html#sin_exponent"><code>sin_exponent</code></a>
@@ -931,7 +932,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fit_transiency" class="doc_header"><code>fit_transiency</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L352" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_transiency</code>(<strong><code>pref_response</code></strong>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>)</p>
+<h4 id="fit_transiency" class="doc_header"><code>fit_transiency</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L357" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_transiency</code>(<strong><code>pref_response</code></strong>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>)</p>
 </blockquote>
 <p>Fit an exponential decay to a 1D input. Used to fit the response of cells to their preferred
 sustained stimulus.
@@ -973,7 +974,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="repetition_quality_index" class="doc_header"><code>repetition_quality_index</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L382" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>repetition_quality_index</code>(<strong><code>cell_response</code></strong>)</p>
+<h4 id="repetition_quality_index" class="doc_header"><code>repetition_quality_index</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L387" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>repetition_quality_index</code>(<strong><code>cell_response</code></strong>)</p>
 </blockquote>
 <p>Return a quality index of cell response to a repeated stimulus.
 params:</p>
@@ -1001,7 +1002,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="onoff_transient_index" class="doc_header"><code>onoff_transient_index</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L391" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>onoff_transient_index</code>(<strong><code>cell_response</code></strong>, <strong><code>start_on</code></strong>=<em><code>120</code></em>, <strong><code>stop_on</code></strong>=<em><code>240</code></em>, <strong><code>start_off</code></strong>=<em><code>240</code></em>, <strong><code>stop_off</code></strong>=<em><code>360</code></em>)</p>
+<h4 id="onoff_transient_index" class="doc_header"><code>onoff_transient_index</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L396" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>onoff_transient_index</code>(<strong><code>cell_response</code></strong>, <strong><code>start_on</code></strong>=<em><code>120</code></em>, <strong><code>stop_on</code></strong>=<em><code>240</code></em>, <strong><code>start_off</code></strong>=<em><code>240</code></em>, <strong><code>stop_off</code></strong>=<em><code>360</code></em>)</p>
 </blockquote>
 <p>Return both on-off and transient indexes of cell response. Transiency index is not always
 ideal to describe the cells response. Consider fitting an exponential decay with <a href="/theonerig/modelling.html#fit_transiency"><code>fit_transiency</code></a>.
