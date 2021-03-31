@@ -18,7 +18,8 @@ def get_dome_positions(mode="cartesian"):
     params:
         - mode: What coordinates to obtain in set ["cartesian", "spherical"]
     return:
-        - LED position of the LED dome, in shape (4, 237)
+        - LED position of the LED dome, in shape (4, 237). shape[0] organized by quarter (q1 to q4) and shape[1] is the
+        concatenation of (left,right)
     """
     stripe_dict = {}
     stripe = np.array([[-0.44162,0.46045,10.07932], [-0.03378,10.07122,0.72211]])*10

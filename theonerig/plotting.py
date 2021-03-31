@@ -362,7 +362,7 @@ def plot_t_sta(sta, pval=None, frame_rate=60, ax=None):
     return ax
 
 # Cell
-def plot_chirp(stim_inten, spike_bins, smooth=True, ax=None):
+def plot_chirp(stim_inten, spike_bins, smooth=True, n_repeats=None, frame_rate=60, ax=None):
     """
     Plot the response to a chirp stimulus (but could be any repeated stimulus, non-shuffled).
     The response is plotted with seaborn's lineplot.
@@ -370,7 +370,9 @@ def plot_chirp(stim_inten, spike_bins, smooth=True, ax=None):
     params:
         - stim_inten: The whole stimulus intensity
         - spike_bins: The cell's response to the whole stimulus
+        - n_repeats: Number of stimulus repetitions. If None, it will try to guess it.
         - smooth: Flag to smooth or not the cell's response
+        - frame_rate: Frame rate of the stimulus
         - ax: The axis for the plot. If None, a new plot is created
 
     return:
@@ -379,8 +381,9 @@ def plot_chirp(stim_inten, spike_bins, smooth=True, ax=None):
     if ax is None:
         fig, ax = plt.subplots()
     #Getting the number of repeats by convolving a part of the stimulus
-    conv_res  = np.convolve(stim_inten[360:600].astype(float), stim_inten.astype(float), mode="full")
-    n_repeats = np.sum(conv_res.max()==conv_res)
+    if n_repeats is None:
+        conv_res  = np.convolve(stim_inten[360:600].astype(float), stim_inten.astype(float), mode="full")
+        n_repeats = np.sum(conv_res.max()==conv_res)
 
     trace = spike_bins.reshape(n_repeats,-1)
     len_    = trace.shape[1]
@@ -389,7 +392,7 @@ def plot_chirp(stim_inten, spike_bins, smooth=True, ax=None):
     for i, repeat_am in enumerate(trace):
         if smooth:
             repeat_am = np.convolve([.333]*3, repeat_am, mode="same")
-        repeat_df = pd.DataFrame(list(zip(np.linspace(0,len_/60,len_),
+        repeat_df = pd.DataFrame(list(zip(np.linspace(0,len_/frame_rate,len_),
                                           [str(i)]*len_,
                                           repeat_am)), columns=["timepoint","repeat","signal"])
         df = df.append(repeat_df, ignore_index=True)
@@ -399,7 +402,7 @@ def plot_chirp(stim_inten, spike_bins, smooth=True, ax=None):
     min_val, max_val = ax.get_ylim()
     ax.set_ylim(min_val , (max_val-min_val)*6/5)
     ax.set(xlabel='', ylabel='')
-    ax.imshow([stim_inten.reshape(n_repeats,-1)[0]], aspect='auto', cmap="gray", extent=(0,len_/60,(max_val-min_val)*6/5,max_val))
+    ax.imshow([stim_inten.reshape(n_repeats,-1)[0]], aspect='auto', cmap="gray", extent=(0,len_/frame_rate,(max_val-min_val)*6/5,max_val))
 
     return ax
 
@@ -797,7 +800,7 @@ def plot_2d_sta(sta, gs=None, pval=None, title="Checkerboard"):
     fig = plt.gcf()
     for i in range(grid_x):
         for j in range(grid_y):
-            if i*grid_y+j==len(sta):
+            if i*grid_y+j>=len(sta):
                 break
             ax = fig.add_subplot(gs[i*grid_y+j])
             ax.imshow(sta[i*grid_y+j], cmap='gray', vmin=-1, vmax=1, interpolation="nearest")
@@ -856,7 +859,7 @@ def plot_dome_checker(sta, s=20, gs=None, pval=None, title="Checkerboard"):
 
     """
     if gs is None:
-        n_col = int(np.sqrt(len(sta))*1.618*(sta.shape[1]/sta.shape[2]))
+        n_col = int(np.sqrt(len(sta))*1.618)
         n_row = len(sta)//n_col
         if n_col*n_row<len(sta):
             n_row += 1
@@ -865,6 +868,8 @@ def plot_dome_checker(sta, s=20, gs=None, pval=None, title="Checkerboard"):
     grid_x, grid_y = gs.get_geometry()
     for i in range(grid_x):
         for j in range(grid_y):
+            if (j+i*grid_y)>=len(sta):
+                break
             ax = plt.subplot(gs[i*grid_y+j], projection='polar')
             plot_dome_flat(get_dome_positions(mode="spherical"), ax=ax,
                            s=s, c=sta[i*grid_y+j], vmin=-1, vmax=1, cmap="gray")
