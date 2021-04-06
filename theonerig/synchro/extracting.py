@@ -55,6 +55,9 @@ class QDSpy_log:
         delay = float(data_line[ind:].split(" ")[1])
         return (index_frame, delay)
 
+    def _extract_name_description(self, data_line):
+        return data_line[data_line.find(':')+1:]
+
     def __repr__(self):
         return "\n".join([str(stim) for stim in self.stimuli])
 
@@ -71,8 +74,12 @@ class QDSpy_log:
         found by this object."""
         with open(self.log_path, 'r', encoding="ISO-8859-1") as log_file:
             for line in log_file:
+                if "Name       :" in line:
+                    data_juice = {"name": self._extract_name_description(line)}
+                elif "Description:" in line:
+                    data_juice.update({"description": self._extract_name_description(line)})
                 if "DATA" in line:
-                    data_juice = self._extract_data(line)
+                    data_juice.update(self._extract_data(line))
                     if 'stimState' in data_juice.keys():
                         if data_juice['stimState'] == "STARTED" :
                             curr_stim = Stimulus(self._extract_time(line))
@@ -117,8 +124,10 @@ class Stimulus:
 
     def set_parameters(self, parameters):
         self.parameters.update(parameters)
-        if "_sName" in parameters.keys():
+        if "_sName" in parameters.keys() and parameters["_sName"]!="NoName":
             self.name = parameters["_sName"]
+        elif "name":
+            self.name = parameters["name"]
         if "stimMD5" in parameters.keys():
             self.md5 = parameters["stimMD5"]
 
