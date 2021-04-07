@@ -56,7 +56,7 @@ class QDSpy_log:
         return (index_frame, delay)
 
     def _extract_name_description(self, data_line):
-        return data_line[data_line.find(':')+1:]
+        return data_line[data_line.find(':')+1:].strip()
 
     def __repr__(self):
         return "\n".join([str(stim) for stim in self.stimuli])
@@ -75,15 +75,16 @@ class QDSpy_log:
         with open(self.log_path, 'r', encoding="ISO-8859-1") as log_file:
             for line in log_file:
                 if "Name       :" in line:
-                    data_juice = {"name": self._extract_name_description(line)}
+                    stim_params = {"name": self._extract_name_description(line)}
                 elif "Description:" in line:
-                    data_juice.update({"description": self._extract_name_description(line)})
+                    stim_params.update({"description": self._extract_name_description(line)})
                 if "DATA" in line:
-                    data_juice.update(self._extract_data(line))
+                    data_juice = self._extract_data(line)
                     if 'stimState' in data_juice.keys():
                         if data_juice['stimState'] == "STARTED" :
                             curr_stim = Stimulus(self._extract_time(line))
-                            curr_stim.set_parameters(data_juice)
+                            stim_params.update(data_juice)
+                            curr_stim.set_parameters(stim_params)
                             self.stimuli.append(curr_stim)
                             stimulus_ON = True
                         elif data_juice['stimState'] == "FINISHED" or data_juice['stimState'] == "ABORTED":
@@ -124,9 +125,9 @@ class Stimulus:
 
     def set_parameters(self, parameters):
         self.parameters.update(parameters)
-        if "_sName" in parameters.keys() and parameters["_sName"]!="NoName":
+        if "_sName" in parameters.keys():
             self.name = parameters["_sName"]
-        elif "name":
+        elif "name" in parameters.keys():
             self.name = parameters["name"]
         if "stimMD5" in parameters.keys():
             self.md5 = parameters["stimMD5"]
