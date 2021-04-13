@@ -119,6 +119,7 @@ class Stimulus:
         self.parameters = {}
         self.md5 = None
         self.name = "NoName"
+        self.filename = ""
 
         self.frame_delay = []
         self.is_aborted = False
@@ -131,6 +132,8 @@ class Stimulus:
             self.name = parameters["name"]
         if "stimMD5" in parameters.keys():
             self.md5 = parameters["stimMD5"]
+        if "stimFileName" in parameters.keys():
+            self.filename = os.path.splitext(os.path.basename(parameters["stimFileName"]))[0]
 
     def __str__(self):
         return "%s %s at %s" %(self.name+" "*(24-len(self.name)),self.md5,self.start_time)
