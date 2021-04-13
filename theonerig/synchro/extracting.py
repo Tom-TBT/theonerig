@@ -133,10 +133,10 @@ class Stimulus:
         if "stimMD5" in parameters.keys():
             self.md5 = parameters["stimMD5"]
         if "stimFileName" in parameters.keys():
-            self.filename = os.path.splitext(os.path.basename(parameters["stimFileName"]))[0]
+            self.filename = parameters["stimFileName"].split('\\')[-1]
 
     def __str__(self):
-        return "%s %s at %s" %(self.name+" "*(24-len(self.name)),self.md5,self.start_time)
+        return "%s %s at %s" %(self.filename+" "*(24-len(self.filename)),self.md5,self.start_time)
 
     def __repr__(self):
         return self.__str__()
