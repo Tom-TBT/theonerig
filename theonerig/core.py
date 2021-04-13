@@ -4,7 +4,7 @@ __all__ = ['DataChunk', 'ContiguousRecord', 'RecordMaster', 'Data_Pipe', 'export
 
 # Cell
 import h5py
-import json
+import json, re
 import numpy as np
 from collections import namedtuple
 from typing import Dict, Tuple, Sequence, Union
@@ -591,8 +591,10 @@ def import_record(path):
     with h5py.File(path, mode="r") as h5_f:
         record_master    = None
         frame_rate = None
-        if "_frame_time" in h5_f.keys():
-            frame_rate = h5_f["_frame_time"]
+        reg         = re.compile("frame_time")
+        fr_time_key = list(filter(reg.search, h5_f.attrs.keys()))
+        if len(fr_time_key)==1:
+            frame_rate = round(1/h5_f.attrs[fr_time_key[0]])
         for j, key_contig in enumerate(h5_f.keys()):
             ref_contig = h5_f[key_contig]
             stream_d   = {}
@@ -616,8 +618,8 @@ def import_record(path):
                     dchunk_l.append(dchunk)
 
                 stream_d[key_dstream] = dchunk_l
-            if not "_frame_time" in h5_f.keys():
-                frame_rate = key_contig["_frame_time"]
+            if len(fr_time_key)==0:
+                frame_rate = round(1/ref_contig.attrs["_frame_time"])
             if record_master is None:
                 record_master = RecordMaster([(stream_d["main_tp"][0],stream_d["signals"][0])], frame_rate=frame_rate)
             else:
