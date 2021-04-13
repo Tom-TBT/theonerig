@@ -296,6 +296,13 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Some stimuli are generated shortly before every display. <code>[`get_synced_file`](/theonerig/synchro.extracting.html#get_synced_file)</code> matches the compiled stimuli from a directory of your choice to the stimulus (<code>stim_id</code>) you are looking at, based on timestamps.</p>
+
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -307,7 +314,49 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="unpack_stim_npy" class="doc_header"><code>unpack_stim_npy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/extracting.py#L142" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>unpack_stim_npy</code>(<strong><code>npy_dir</code></strong>, <strong><code>md5_hash</code></strong>)</p>
+<h4 id="get_synced_file" class="doc_header"><code>get_synced_file</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/extracting.py#L145" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_synced_file</code>(<strong><code>stim_list_dir</code></strong>, <strong><code>stim_id</code></strong>)</p>
+</blockquote>
+<p>Find the stimulus in the stimulus list directory that is temporally closest to the stimulus in the log.
+Works based on the modification time of the stimulus (i.e. expects stimulus to be compiled shortly
+before display).
+Input:</p>
+
+<pre><code>- stim_list_dir: fullpath to stimuli, string
+- stim_id: stimulus read from QDSpy log, theonerig.synchro.extracting.Stimulus object
+</code></pre>
+<p>Output:</p>
+
+<pre><code>- stim: filename of the stimulus that needs loading, str</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="unpack_stim_npy" class="doc_header"><code>unpack_stim_npy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/extracting.py#L184" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>unpack_stim_npy</code>(<strong><code>npy_dir</code></strong>, <strong><code>md5_hash</code></strong>)</p>
 </blockquote>
 <p>Find the stimuli of a given hash key in the npy stimulus folder. The stimuli are in a compressed version
 comprising three files. inten for the stimulus values on the screen, marker for the values of the marker
@@ -489,7 +538,7 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="extract_spyking_circus_results" class="doc_header"><code>extract_spyking_circus_results</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/extracting.py#L181" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>extract_spyking_circus_results</code>(<strong><code>dir_</code></strong>, <strong><code>record_basename</code></strong>)</p>
+<h4 id="extract_spyking_circus_results" class="doc_header"><code>extract_spyking_circus_results</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/extracting.py#L223" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>extract_spyking_circus_results</code>(<strong><code>dir_</code></strong>, <strong><code>record_basename</code></strong>)</p>
 </blockquote>
 <p>Extract the good cells of a record. Overlap with phy_results_dict.</p>
 
@@ -521,7 +570,7 @@ flickering_bars_pr WARNING dt of frame #19477 was 137.235 m
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="extract_best_pupil" class="doc_header"><code>extract_best_pupil</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/extracting.py#L199" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>extract_best_pupil</code>(<strong><code>fn</code></strong>)</p>
+<h4 id="extract_best_pupil" class="doc_header"><code>extract_best_pupil</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/extracting.py#L241" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>extract_best_pupil</code>(<strong><code>fn</code></strong>)</p>
 </blockquote>
 <p>From results of MaskRCNN, go over all or None pupil detected and select the best pupil.
 Each pupil returned is (x,y,width,height,angle,probability)</p>
@@ -554,7 +603,7 @@ Each pupil returned is (x,y,width,height,angle,probability)</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="stack_len_extraction" class="doc_header"><code>stack_len_extraction</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/extracting.py#L216" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stack_len_extraction</code>(<strong><code>stack_info_dir</code></strong>)</p>
+<h4 id="stack_len_extraction" class="doc_header"><code>stack_len_extraction</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/extracting.py#L258" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stack_len_extraction</code>(<strong><code>stack_info_dir</code></strong>)</p>
 </blockquote>
 <p>Extract from ImageJ macro directives the size of the stacks acquired.</p>
 
