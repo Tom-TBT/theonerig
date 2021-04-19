@@ -306,7 +306,7 @@ class RecordMaster(list):
     def __len__(self):
         return len(self._sequences)
 
-    def plot(self, ax=None):
+    def plot(self, ax=None, show_time=True):
         colors = {"sync":"cornflowerblue", "stim":"orange", "data":"yellowgreen", "cell":"plum"}
         cursor = 0
         y_pos_dict = {}
@@ -326,7 +326,8 @@ class RecordMaster(list):
                         y_pos_dict[name] = y_count
                         y_count+=1
                     y_pos = y_pos_dict[name]
-                    ax.text(x, y_pos, text, ha='center', va='center')
+                    if show_time:
+                        ax.text(x, y_pos, text, ha='center', va='center')
             cursor += len(seq) + self._sep_size
 
         legend_elements = [Patch(facecolor=colors["sync"],label='Synchro'),
