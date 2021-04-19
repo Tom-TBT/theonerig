@@ -315,18 +315,30 @@ class RecordMaster(list):
             fig, ax = plt.subplots(figsize=(10, 5))
         ax.invert_yaxis()
         ax.xaxis.set_visible(False)
+
+        #A first iteration through the ContiguousRecords to have all the DataChunk for the sorting
+        groups = {"sync":[],"stim":[],"data":[],"cell":[]}
         for seq in self._sequences:
-            for y, (name, dChunk_l) in enumerate(seq):
+            for name, dChunk_l in seq:
+                dc = dChunk_l[0]
+                if name not in groups[dc.group]:
+                    groups[dc.group].append(name)
+        all_names = []
+        for group_name in ["sync","stim","data","cell"]:
+            all_names += groups[group_name]
+            for dc_name in groups[group_name]:
+                y_pos_dict[dc_name] = y_count
+                y_count+=1
+
+        for seq in self._sequences:
+            for name, dChunk_l in seq:
+                y_pos = y_pos_dict[name]
                 for dChunk in dChunk_l:
                     pos = dChunk.idx + cursor
-                    ax.barh(name, len(dChunk), left=pos, height=0.8, color=colors[dChunk.group], label=dChunk.group)
-                    x = pos + len(dChunk)/2
-                    text = "{0} -> {1} ".format(seq.to_time_str(dChunk.idx), seq.to_time_str(dChunk.idx+len(dChunk)))
-                    if name not in y_pos_dict.keys():
-                        y_pos_dict[name] = y_count
-                        y_count+=1
-                    y_pos = y_pos_dict[name]
+                    ax.barh(y_pos, len(dChunk), left=pos, height=0.8, color=colors[dChunk.group], label=dChunk.group)
                     if show_time:
+                        x = pos + len(dChunk)/2
+                        text = "{0} -> {1} ".format(seq.to_time_str(dChunk.idx), seq.to_time_str(dChunk.idx+len(dChunk)))
                         ax.text(x, y_pos, text, ha='center', va='center')
             cursor += len(seq) + self._sep_size
 
@@ -335,7 +347,8 @@ class RecordMaster(list):
                            Patch(facecolor=colors["stim"],label='Stimulus'),
                            Patch(facecolor=colors["cell"],label='Cell'),]
         ax.legend(handles=legend_elements, ncol=5, bbox_to_anchor=(0, 1), loc='lower left', fontsize='small')
-
+        ax.set_yticks(range(len(all_names)))
+        ax.set_yticklabels(all_names)
         ax.set_xlim(-100,cursor)
 
     def __str__(self):
