@@ -159,6 +159,10 @@ index = {"DataChunk": "00_core.ipynb",
          "get_dome_positions": "13_leddome.ipynb",
          "as_cartesian": "13_leddome.ipynb",
          "as_spherical": "13_leddome.ipynb",
+         "build_wave_stimulus_array": "13_leddome.ipynb",
+         "Quaternion": "13_leddome.ipynb",
+         "get_waves_relative_position": "13_leddome.ipynb",
+         "get_led_relative_position": "13_leddome.ipynb",
          "load_vivo_2p": "99_testdata.ipynb"}
 
 modules = ["core.py",

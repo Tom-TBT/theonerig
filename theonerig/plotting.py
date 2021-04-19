@@ -982,7 +982,7 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
         fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
         gs  = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
         ax_rem  = fig.add_subplot(gs[:10,2:-1])
-        reM.plot(ax_rem)
+        reM.plot(ax=ax_rem)
 
         ax_stim_recap  = fig.add_subplot(gs[11:16,:])
         plot_stim_recap_table(df_stim, ax=ax_stim_recap)
@@ -1117,7 +1117,7 @@ def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, df_stim, cel
         fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
         gs  = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
         ax_rem  = fig.add_subplot(gs[:10,2:-1])
-        reM.plot(ax_rem)
+        reM.plot(ax=ax_rem)
 
         ax_stim_recap  = fig.add_subplot(gs[11:16,:])
         plot_stim_recap_table(df_stim, ax=ax_stim_recap)
@@ -1264,7 +1264,7 @@ def plot_recap_vitro_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_
         fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
         gs  = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
         ax_rem  = fig.add_subplot(gs[:10,2:-1])
-        reM.plot(ax_rem)
+        reM.plot(ax=ax_rem)
 
         ax_stim_recap  = fig.add_subplot(gs[11:16,:])
         plot_stim_recap_table(df_stim)
@@ -1391,7 +1391,7 @@ def plot_recap_vivo_ephy_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_id
         fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
         gs  = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
         ax_rem  = fig.add_subplot(gs[:10,2:-1])
-        reM.plot(ax_rem)
+        reM.plot(ax=ax_rem)
 
         suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id)])
         plt.suptitle(suptitle)
@@ -1515,7 +1515,7 @@ def plot_recap_vivo_ephy_corr_behav(title_dict, reM, phy_dict, cluster_ids, df_s
         fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
         gs  = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
         ax_rem  = fig.add_subplot(gs[:10,2:-1])
-        reM.plot(ax_rem)
+        reM.plot(ax=ax_rem)
 
         ax_stim_recap  = fig.add_subplot(gs[11:16,:])
         plot_stim_recap_table(df_stim, ax=ax_stim_recap)
