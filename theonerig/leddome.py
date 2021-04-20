@@ -319,7 +319,10 @@ def get_waves_relative_position(ref_led_flat_idx, n_waves=100, mode="spherical")
 
     #Rotation of the waves
     rotated_waves      = [rot_quat*(q*rot_conj) for q in quaternions_wave]
-    return np.array([as_spherical((q[1], q[2], q[3])) for q in rotated_waves]) #Converting back to polar system
+    if mode=="spherical":
+        return np.array([as_spherical((q[1], q[2], q[3])) for q in rotated_waves])
+    else:
+        return np.array([(q[1], q[2], q[3]) for q in rotated_waves])
 
 def get_led_relative_position(ref_led_flat_idx, mode="spherical"):
     """
