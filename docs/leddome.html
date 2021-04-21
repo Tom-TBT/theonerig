@@ -47,7 +47,7 @@ nb_path: "13_leddome.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_dome_positions" class="doc_header"><code>get_dome_positions</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/leddome.py#L13" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_dome_positions</code>(<strong><code>mode</code></strong>=<em><code>'cartesian'</code></em>)</p>
+<h4 id="get_dome_positions" class="doc_header"><code>get_dome_positions</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/leddome.py#L15" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_dome_positions</code>(<strong><code>mode</code></strong>=<em><code>'cartesian'</code></em>)</p>
 </blockquote>
 <p>Generates positions of all LEDs of the dome. Position of first and last LED of each stripe
 were estimated in Blender, and other in between LEDs position are interpolated from those two.</p>
@@ -81,12 +81,13 @@ concatenation of (left,right)</code></pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="as_cartesian" class="doc_header"><code>as_cartesian</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/leddome.py#L116" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>as_cartesian</code>(<strong><code>rthetaphi</code></strong>)</p>
+<h4 id="as_cartesian" class="doc_header"><code>as_cartesian</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/leddome.py#L119" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>as_cartesian</code>(<strong><code>rthetaphi</code></strong>, <strong><code>is_radian</code></strong>=<em><code>True</code></em>)</p>
 </blockquote>
 <p>Convert 3D polar coordinate tuple into cartesian coordinates.</p>
 <p>params:</p>
 
 <pre><code>- rthetaphi: Single or list of (r, theta, phi) iterable
+- is_radian: Boolean to specify if in radians or in degrees
 </code></pre>
 <p>return:</p>
 
@@ -113,7 +114,7 @@ concatenation of (left,right)</code></pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="as_spherical" class="doc_header"><code>as_spherical</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/leddome.py#L133" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>as_spherical</code>(<strong><code>xyz</code></strong>)</p>
+<h4 id="as_spherical" class="doc_header"><code>as_spherical</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/leddome.py#L138" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>as_spherical</code>(<strong><code>xyz</code></strong>)</p>
 </blockquote>
 <p>Convert 3D cartesian coordinates tuple into polar coordinate.</p>
 <p>params:</p>
@@ -200,6 +201,156 @@ concatenation of (left,right)</code></pre>
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="build_wave_stimulus_array" class="doc_header"><code>build_wave_stimulus_array</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/leddome.py#L174" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>build_wave_stimulus_array</code>(<strong><code>epoch_sequence</code></strong>, <strong><code>wave_width</code></strong>=<em><code>0.58</code></em>, <strong><code>wave_speed</code></strong>=<em><code>0.58</code></em>, <strong><code>n_frame_epoch</code></strong>=<em><code>640</code></em>, <strong><code>n_frame_isi</code></strong>=<em><code>50</code></em>, <strong><code>frame_rate</code></strong>=<em><code>100</code></em>)</p>
+</blockquote>
+<p>Build the numpy stimulus matrix of the LED values for each frame.
+params:</p>
+
+<pre><code>- epoch_sequence: Sequence of indexes played randomly during the stimulation
+- wave_width: Width of the wave in radians
+- wave_speed: Speed of the wave in radians.s-1
+- n_frame_epoch: Number of frames that an epoch last
+- n_frame_isi: Number of frames during teh inter-stimulus-interval
+- frame_rate: Frame rate of the display
+</code></pre>
+<p>returns:</p>
+
+<pre><code>- LED values for the wave stimulus, in shape (t, 4, 237), where t=n_epoch*(n_frame_epoch+n_frame_isi)</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="Quaternion" class="doc_header"><code>class</code> <code>Quaternion</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/leddome.py#L230" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>Quaternion</code>(<strong><code>q0</code></strong>, <strong><code>qx</code></strong>, <strong><code>qy</code></strong>, <strong><code>qz</code></strong>)</p>
+</blockquote>
+<p>Simplified Quaternion class for rotation of normalized vectors only!</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="get_waves_relative_position" class="doc_header"><code>get_waves_relative_position</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/leddome.py#L289" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_waves_relative_position</code>(<strong><code>ref_led_flat_idx</code></strong>, <strong><code>n_waves</code></strong>=<em><code>100</code></em>, <strong><code>mode</code></strong>=<em><code>'spherical'</code></em>)</p>
+</blockquote>
+<p>Rotate the waves origins to obtain for the ref_led_flat_idx a spherical position of (0,0)
+params:</p>
+
+<pre><code>- ref_led_flat_idx: Flattened index of the reference LED (e.g. obtained with np.argmax on abs STA values)
+- n_waves: Number of waves in the wave stimulus (positions/density of waves determined by this parameter)
+- mode: One of ["spherical", "cartesian"], for the returned position
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The rotated waves position</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="get_led_relative_position" class="doc_header"><code>get_led_relative_position</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/leddome.py#L328" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_led_relative_position</code>(<strong><code>ref_led_flat_idx</code></strong>, <strong><code>mode</code></strong>=<em><code>'spherical'</code></em>)</p>
+</blockquote>
+<p>Rotate the LED positions to obtain for the ref_led_flat_idx a spherical position of (0,0)
+params:</p>
+
+<pre><code>- ref_led_flat_idx: Flattened index of the reference LED (e.g. obtained with np.argmax on abs STA values)
+- mode: One of ["spherical", "cartesian"], for the returned position
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The rotated LED position</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}

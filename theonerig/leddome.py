@@ -6,6 +6,7 @@ __all__ = ['get_dome_positions', 'as_cartesian', 'as_spherical', 'build_wave_sti
 # Cell
 import numpy as np
 import math
+from cmath import *
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
