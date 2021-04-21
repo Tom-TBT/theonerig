@@ -843,7 +843,7 @@ def plot_dome_flat(sph_pos, ax=None, **scatter_args):
     ax.grid(b=False)
     return ax
 
-def plot_dome_checker(sta, s=20, gs=None, pval=None, title="Checkerboard"):
+def plot_dome_checker(sta, s=20, gs=None, pval=None, title="Checkerboard", led_position="default"):
     """
     Plot a single 2D STA or an iterable of 2D STAs for the LED dome
 
@@ -853,11 +853,15 @@ def plot_dome_checker(sta, s=20, gs=None, pval=None, title="Checkerboard"):
         - gs: GridSpec for the plotting. If None, defined automatically
         - pval: Minimal p-value of the whole
         - title: Title to give to the GridSpec
+        - led_position: Led position to plot, in shape (4,237,3)
 
     return:
         - the GridSpec
 
     """
+    if led_position == "default":
+        led_position = get_dome_positions(mode="spherical")
+
     if gs is None:
         n_col = int(np.sqrt(len(sta))*1.618)
         n_row = len(sta)//n_col
@@ -866,12 +870,13 @@ def plot_dome_checker(sta, s=20, gs=None, pval=None, title="Checkerboard"):
         gs = gridspec.GridSpec(n_row, n_col)
 
     grid_x, grid_y = gs.get_geometry()
+
     for i in range(grid_x):
         for j in range(grid_y):
             if (j+i*grid_y)>=len(sta):
                 break
             ax = plt.subplot(gs[i*grid_y+j], projection='polar')
-            plot_dome_flat(get_dome_positions(mode="spherical"), ax=ax,
+            plot_dome_flat(led_position, ax=ax,
                            s=s, c=sta[i*grid_y+j], vmin=-1, vmax=1, cmap="gray")
             if i==0 and j==1:
                 if pval is None:
