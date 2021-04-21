@@ -325,7 +325,7 @@ def twoP_dataChunks(ref_timepoints:DataChunk, frame_timepoints, len_epochs, C_ma
     params:
         - ref_timepoints: Reference timepoints to create the DataChunk
         - frame_timepoints: List of frame timepoints for each sequence of two photon frame recorded.
-        - len_epochs: Lenght of the recorded epochs (<= than the corresponding frame_timepoints)
+        - len_epochs: Lenght of the recorded epochs (<= than the corresponding frame_timepoints). Int of list
         - C_matrix: C_matrix of all frames detected by CaImAn
         - S_matrix: S_matrix of all frames detected by CaImAn
 
@@ -336,6 +336,8 @@ def twoP_dataChunks(ref_timepoints:DataChunk, frame_timepoints, len_epochs, C_ma
     C_datachunk_l = []
     S_datachunk_l = []
     cursor = 0
+    if isinstance(len_epochs, int):
+        len_epochs = [len_epochs]
     for i, len_epoch in enumerate(len_epochs):
         start_idx = np.argmax(ref_timepoints>frame_timepoints[i][0])
         stop_idx  = np.argmax(ref_timepoints>frame_timepoints[i][len_epoch-1])
