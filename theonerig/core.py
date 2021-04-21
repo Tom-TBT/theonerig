@@ -306,7 +306,7 @@ class RecordMaster(list):
     def __len__(self):
         return len(self._sequences)
 
-    def plot(self, ax=None, show_time=True):
+    def plot(self, ax=None, show_time=True, sort_by_name=False):
         colors = {"sync":"cornflowerblue", "stim":"orange", "data":"yellowgreen", "cell":"plum"}
         cursor = 0
         y_pos_dict = {}
@@ -325,6 +325,8 @@ class RecordMaster(list):
                     groups[dc.group].append(name)
         all_names = []
         for group_name in ["sync","stim","data","cell"]:
+            if sort_by_name:
+                groups[group_name].sort()
             all_names += groups[group_name]
             for dc_name in groups[group_name]:
                 y_pos_dict[dc_name] = y_count
