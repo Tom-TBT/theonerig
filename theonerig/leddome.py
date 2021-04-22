@@ -6,8 +6,6 @@ __all__ = ['get_dome_positions', 'as_cartesian', 'as_spherical', 'build_wave_sti
 # Cell
 import numpy as np
 import math
-from cmath import *
-
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
@@ -286,11 +284,11 @@ class Quaternion( object ):
         return out
 
 # Cell
-def get_waves_relative_position(ref_led_flat_idx, n_waves=100, mode="spherical"):
+def get_waves_relative_position(cell_sta_position, n_waves=100, mode="spherical"):
     """
     Rotate the waves origins to obtain for the ref_led_flat_idx a spherical position of (0,0)
     params:
-        - ref_led_flat_idx: Flattened index of the reference LED (e.g. obtained with np.argmax on abs STA values)
+        - cell_sta_position: (theta, phi) Tuple of the cell position in spherical coordinates
         - n_waves: Number of waves in the wave stimulus (positions/density of waves determined by this parameter)
         - mode: One of ["spherical", "cartesian"], for the returned position
     return:
@@ -298,8 +296,8 @@ def get_waves_relative_position(ref_led_flat_idx, n_waves=100, mode="spherical")
     """
     assert mode in ["spherical", "cartesian"], 'Mode must be one of ["spherical", "cartesian"]'
 
-    theta_led = get_dome_positions(mode="spherical")[ref_led_flat_idx//237,ref_led_flat_idx%237,1]
-    phi_led   = get_dome_positions(mode="spherical")[ref_led_flat_idx//237,ref_led_flat_idx%237,2]
+    theta_led = cell_sta_position[0]
+    phi_led   = cell_sta_position[1]
 
     #Creation of the rotation quaternion and it's conjugate
     theta_rot    = np.pi/2; #Theta is fixed, corresponds to the plane touching the dome edge (elevation=0°)

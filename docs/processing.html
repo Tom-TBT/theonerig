@@ -874,7 +874,62 @@ by using <code>utils.group_direction_response</code>.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="peri_saccadic_response" class="doc_header"><code>peri_saccadic_response</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L642" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>peri_saccadic_response</code>(<strong><code>spike_counts</code></strong>, <strong><code>eye_track</code></strong>, <strong><code>motion_threshold</code></strong>=<em><code>5</code></em>, <strong><code>window</code></strong>=<em><code>15</code></em>)</p>
+<h4 id="wave_direction_selectivity" class="doc_header"><code>wave_direction_selectivity</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L642" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>wave_direction_selectivity</code>(<strong><code>wave_array</code></strong>, <strong><code>spike_counts</code></strong>, <strong><code>moving_distance_th</code></strong>=<em><code>1</code></em>, <strong><code>looming_distance_th</code></strong>=<em><code>0.3</code></em>, <strong><code>n_bootstrap</code></strong>=<em><code>1000</code></em>)</p>
+</blockquote>
+<p>Computes the direction, orientation and looming/shrinking indexes of the cells in response to the wave stimulus (in LED dome).</p>
+<p>params:</p>
+
+<pre><code>- wave_array: The indexes of the waves from the record master.
+- spike_counts: The cells response to the waves from the record master.
+- moving_distance_th: Distance threshold in radians above which a stimulus can be considered for the OS and DS.
+- looming_distance_th: Distance threshold in radians bellow which a stimulus can be considered for the looming/shrinking response
+- n_bootstrap: Number of repetition in the bootstraping method to compute the pvalues
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- A tuple containing lists of the cells response, in order:
+    * summed_responses: Summed response of a cell to each wave condition
+    * dir_pref_l: Direction preference vector
+    * dir_idx_l : Direction indexes
+    * dir_pval_l: Direction p_values
+    * ori_pref_l: Orientation preference vector
+    * ori_idx_l : Orientation indexes
+    * ori_pval_l: Orientation p_values
+    * loom_idx_l : Looming indexes
+    * loom_pval_l: Looming p_values
+    * stas_position_l: Position (theta, phi) of the cells receptive fields with the water stimulus
+    * waves_position_l: Relative positions of the waves to the cells STA.</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="peri_saccadic_response" class="doc_header"><code>peri_saccadic_response</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L755" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>peri_saccadic_response</code>(<strong><code>spike_counts</code></strong>, <strong><code>eye_track</code></strong>, <strong><code>motion_threshold</code></strong>=<em><code>5</code></em>, <strong><code>window</code></strong>=<em><code>15</code></em>)</p>
 </blockquote>
 <p>Computes the cell average response around saccades.</p>
 <p>params:</p>
