@@ -220,7 +220,9 @@ def stack_len_extraction(stack_info_dir):
     """Extract from ImageJ macro directives the size of the stacks acquired."""
     ptrn_nFrame = r".*number=(\d*) .*"
     l_epochs = []
-    for fn in glob.glob(os.path.join(stack_info_dir, "*.txt")):
+    fn_list = glob.glob(os.path.join(stack_info_dir, "*.txt"))
+    fn_list.sort()
+    for fn in fn_list:
         with open(fn) as f:
             line = f.readline()
             l_epochs.append(int(re.findall(ptrn_nFrame, line)[0]))
