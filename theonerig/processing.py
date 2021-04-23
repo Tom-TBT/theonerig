@@ -20,6 +20,7 @@ import random
 from .core import *
 from .utils import *
 from .modelling import *
+from .leddome import *
 
 # Cell
 def eyetrack_stim_inten(stim_inten, eye_track,
@@ -652,17 +653,17 @@ def wave_direction_selectivity(wave_array, spike_counts, moving_distance_th=1, l
 
     return:
         - A tuple containing lists of the cells response, in order:
-            * summed_responses: Summed response of a cell to each wave condition
-            * dir_pref_l: Direction preference vector
-            * dir_idx_l : Direction indexes
-            * dir_pval_l: Direction p_values
-            * ori_pref_l: Orientation preference vector
-            * ori_idx_l : Orientation indexes
-            * ori_pval_l: Orientation p_values
-            * loom_idx_l : Looming indexes
-            * loom_pval_l: Looming p_values
-            * stas_position_l: Position (theta, phi) of the cells receptive fields with the water stimulus
-            * waves_position_l: Relative positions of the waves to the cells STA.
+            * [0] summed_responses: Summed response of a cell to each wave condition
+            * [1] dir_pref_l: Direction preference vector
+            * [2] dir_idx_l : Direction indexes
+            * [3] dir_pval_l: Direction p_values
+            * [4] ori_pref_l: Orientation preference vector
+            * [5] ori_idx_l : Orientation indexes
+            * [6] ori_pval_l: Orientation p_values
+            * [7] loom_idx_l : Looming indexes
+            * [8] loom_pval_l: Looming p_values
+            * [9] stas_position_l: Position (theta, phi) of the cells receptive fields with the water stimulus
+            * [10] waves_position_l: Relative positions of the waves to the cells STA.
     """
     tau = np.pi*2
 
@@ -678,6 +679,8 @@ def wave_direction_selectivity(wave_array, spike_counts, moving_distance_th=1, l
         where = np.where(wave_array==i)[0]
         summed_responses[i,:] = np.sum(spike_counts[where,:], axis=0)
 
+    summed_responses = summed_responses.T
+
     dome_positions = get_dome_positions(mode="spherical")
 
     ori_pref_l, dir_pref_l              = [], []
@@ -685,7 +688,7 @@ def wave_direction_selectivity(wave_array, spike_counts, moving_distance_th=1, l
     ori_pval_l, dir_pval_l, loom_pval_l = [], [], []
     stas_position_l, waves_position_l   = [], []
 
-    for sta, cell_responses  in zip(stas_wave, summed_responses.T):
+    for sta, cell_responses  in zip(stas_wave, summed_responses):
         maxidx_sta     = np.argmax(np.abs(sta))
         theta_led      = dome_positions[maxidx_sta//237,maxidx_sta%237,1]
         phi_led        = dome_positions[maxidx_sta//237,maxidx_sta%237,2]
