@@ -5,9 +5,9 @@ __all__ = ['DEFAULT_COLORS', 'plot_2d_fit', 'plot_tSTA_fit', 'plot_chirpam_fit',
            'plot_t_sta', 'plot_chirp', 'plot_spike_template', 'plot_spike_template_MEA', 'plot_autocorrelogram',
            'plot_spike_amplitudes', 'plot_calcium_trace', 'plot_stim_epochs_to_ephy', 'plot_stim_epochs_to_calcium',
            'plot_cell_spatial', 'plot_stim_recap_table', 'plot_composed_A_masks', 'plot_sta_positions', 'plot_2d_sta',
-           'plot_dome_flat', 'plot_dome_checker', 'plot_crosscorr_spikes_behav', 'configure_pyplot_recap',
-           'plot_recap_vivo_ephy', 'plot_recap_vivo_calcium', 'plot_recap_vitro_ephy', 'plot_recap_vivo_ephy_dome',
-           'plot_recap_vivo_ephy_corr_behav']
+           'plot_dome_flat', 'plot_dome_checker', 'plot_omitted_response', 'plot_crosscorr_spikes_behav',
+           'configure_pyplot_recap', 'plot_recap_vivo_ephy', 'plot_recap_vivo_calcium', 'plot_recap_vitro_ephy',
+           'plot_recap_vivo_ephy_dome', 'plot_recap_vivo_ephy_corr_behav']
 
 # Cell
 import matplotlib.pyplot as plt
@@ -927,6 +927,55 @@ def plot_dome_checker(sta, s=20, gs=None, pval=None, title="Checkerboard", led_p
                     ax.set_title(title)
                 else:
                     ax.set_title(title+" p="+format_pval(pval))
+    return gs
+
+# Cell
+def plot_omitted_response(response_d_ON, response_d_OFF, cell_idx, n_fr_cycle=8, gs=None):
+    """
+    Plotting of the averaged response to omitted stimuli (ON & OFF).
+
+    params:
+        - response_d_ON: Dictionnary of the response to ON omitted stimuli (from utils.group_omitted_epochs)
+        - response_d_OFF: Dictionnary of the response to OFF omitted stimuli
+        - cell_idx: index of the cell to plot
+        - n_fr_cycle: Number of frame of (flash + interval between flashes)
+        - gs: Gridspec where to plot the ON and OFF responses. Should have len == 2
+
+    return:
+        - the GridSpec
+    """
+    if gs is None:
+        plt.figure(figsize=(8,5))
+        gs = gridspec.GridSpec(1, 2)
+
+    fig = plt.gcf()
+    keys = list(response_d_ON.keys())
+    keys.sort()
+    ax = fig.add_subplot(gs[0])
+    for i, key in enumerate(keys):
+        shift = (len(keys)-i-1)*1.5 - .5
+        ax.plot(np.mean(response_d_ON[key][cell_idx]+shift, axis=0))
+        ax.imshow([[0]], aspect='auto', cmap="gray", extent=(key*n_fr_cycle,key*n_fr_cycle+n_fr_cycle//2,
+                                                                  shift,shift+1.5), alpha=.2)
+    ax.set_yticks(np.arange(0,(len(keys))*1.5, 1.5))
+    ax.set_yticklabels(keys[::-1])
+    ax.set_title("ON stim / OFF background")
+    ax.set_ylim(-.7,16.2)
+    ax.set_xlim(-5,150)
+    keys = list(response_d_OFF.keys())
+    keys.sort()
+    ax = fig.add_subplot(gs[1])
+    for i, key in enumerate(keys):
+        shift = (len(keys)-i-1)*1.5 - .5
+        ax.plot(np.mean(response_d_OFF[key][cell_idx]+shift, axis=0))
+        ax.imshow([[1]], aspect='auto', cmap="gray", extent=(key*n_fr_cycle,key*n_fr_cycle+n_fr_cycle//2,
+                                                                  shift,shift+1.5), alpha=.2)
+    ax.set_yticks(np.arange(0,(len(keys))*1.5, 1.5))
+    ax.set_yticklabels(keys[::-1])
+    ax.set_title("OFF stim / ON background")
+    ax.set_ylim(-.7,16.2)
+    ax.set_xlim(-5,150)
+
     return gs
 
 # Cell

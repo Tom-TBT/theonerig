@@ -1067,7 +1067,51 @@ and plotted as ellipses.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_crosscorr_spikes_behav" class="doc_header"><code>plot_crosscorr_spikes_behav</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L933" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_crosscorr_spikes_behav</code>(<strong><code>behav</code></strong>, <strong><code>corr_behav_lag</code></strong>, <strong><code>p_value_peak</code></strong>, <strong><code>offset_peak</code></strong>, <strong><code>null_dist_behav</code></strong>, <strong><code>fps</code></strong>=<em><code>60</code></em>, <strong><code>seconds</code></strong>=<em><code>30</code></em>, <strong><code>color_line</code></strong>=<em><code>'black'</code></em>, <strong><code>title</code></strong>=<em><code>'visual stim'</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_omitted_response" class="doc_header"><code>plot_omitted_response</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L933" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_omitted_response</code>(<strong><code>response_d_ON</code></strong>, <strong><code>response_d_OFF</code></strong>, <strong><code>cell_idx</code></strong>, <strong><code>n_fr_cycle</code></strong>=<em><code>8</code></em>, <strong><code>gs</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Plotting of the averaged response to omitted stimuli (ON &amp; OFF).</p>
+<p>params:</p>
+
+<pre><code>- response_d_ON: Dictionnary of the response to ON omitted stimuli (from utils.group_omitted_epochs)
+- response_d_OFF: Dictionnary of the response to OFF omitted stimuli
+- cell_idx: index of the cell to plot
+- n_fr_cycle: Number of frame of (flash + interval between flashes)
+- gs: Gridspec where to plot the ON and OFF responses. Should have len == 2
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- the GridSpec</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="plot_crosscorr_spikes_behav" class="doc_header"><code>plot_crosscorr_spikes_behav</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L982" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_crosscorr_spikes_behav</code>(<strong><code>behav</code></strong>, <strong><code>corr_behav_lag</code></strong>, <strong><code>p_value_peak</code></strong>, <strong><code>offset_peak</code></strong>, <strong><code>null_dist_behav</code></strong>, <strong><code>fps</code></strong>=<em><code>60</code></em>, <strong><code>seconds</code></strong>=<em><code>30</code></em>, <strong><code>color_line</code></strong>=<em><code>'black'</code></em>, <strong><code>title</code></strong>=<em><code>'visual stim'</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Cross-correlation with lag plotting helper function.</p>
 <p>params:</p>
@@ -1116,7 +1160,7 @@ and plotted as ellipses.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_pyplot_recap" class="doc_header"><code>configure_pyplot_recap</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L970" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_pyplot_recap</code>(<strong><code>small_size</code></strong>=<em><code>14</code></em>, <strong><code>medium_size</code></strong>=<em><code>18</code></em>, <strong><code>bigger_size</code></strong>=<em><code>24</code></em>)</p>
+<h4 id="configure_pyplot_recap" class="doc_header"><code>configure_pyplot_recap</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1019" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_pyplot_recap</code>(<strong><code>small_size</code></strong>=<em><code>14</code></em>, <strong><code>medium_size</code></strong>=<em><code>18</code></em>, <strong><code>bigger_size</code></strong>=<em><code>24</code></em>)</p>
 </blockquote>
 <p>Set the fontsize and other style of matplotlib and seaborn for the recap plots.
 Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
@@ -1149,7 +1193,7 @@ Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_vivo_ephy" class="doc_header"><code>plot_recap_vivo_ephy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L994" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>water</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
+<h4 id="plot_recap_vivo_ephy" class="doc_header"><code>plot_recap_vivo_ephy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1043" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>water</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
 </blockquote>
 <p>Plot the recap pdf of in vivo electrophy records.</p>
 <p>params:</p>
@@ -1197,7 +1241,7 @@ Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_vivo_calcium" class="doc_header"><code>plot_recap_vivo_calcium</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1128" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_calcium</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>A_matrix</code></strong>, <strong><code>cell_traces</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_indexes</code></strong>=<em><code>None</code></em>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>water</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
+<h4 id="plot_recap_vivo_calcium" class="doc_header"><code>plot_recap_vivo_calcium</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1177" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_calcium</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>A_matrix</code></strong>, <strong><code>cell_traces</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_indexes</code></strong>=<em><code>None</code></em>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>water</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
 </blockquote>
 <p>Plot the recap pdf of in vivo calcium records.</p>
 <p>params:</p>
@@ -1245,7 +1289,7 @@ Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_vitro_ephy" class="doc_header"><code>plot_recap_vitro_ephy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1277" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vitro_ephy</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
+<h4 id="plot_recap_vitro_ephy" class="doc_header"><code>plot_recap_vitro_ephy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1326" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vitro_ephy</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
 </blockquote>
 <p>Plot the recap pdf of in vitro electrophy records.</p>
 <p>params:</p>
@@ -1292,7 +1336,7 @@ Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_vivo_ephy_dome" class="doc_header"><code>plot_recap_vivo_ephy_dome</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1403" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy_dome</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl_100Hz</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl_200Hz</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>wave</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
+<h4 id="plot_recap_vivo_ephy_dome" class="doc_header"><code>plot_recap_vivo_ephy_dome</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1452" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy_dome</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl_100Hz</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl_200Hz</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>wave</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
 </blockquote>
 <p>Plot the recap pdf of in vivo electrophy records with the LED dome as stimuluation device.</p>
 <p>params:</p>
@@ -1338,7 +1382,7 @@ Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_vivo_ephy_corr_behav" class="doc_header"><code>plot_recap_vivo_ephy_corr_behav</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1521" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy_corr_behav</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>behavs</code></strong>, <strong><code>conversion_factor_treadmill</code></strong>=<em><code>6.25</code></em>, <strong><code>removeslowdrifts</code></strong>=<em><code>True</code></em>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>water</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot_corr_behav.pdf'</code></em>)</p>
+<h4 id="plot_recap_vivo_ephy_corr_behav" class="doc_header"><code>plot_recap_vivo_ephy_corr_behav</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1570" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy_corr_behav</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>behavs</code></strong>, <strong><code>conversion_factor_treadmill</code></strong>=<em><code>6.25</code></em>, <strong><code>removeslowdrifts</code></strong>=<em><code>True</code></em>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>water</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot_corr_behav.pdf'</code></em>)</p>
 </blockquote>
 <p>Plot the recap pdf of in vivo electrophy records.</p>
 <p>params:</p>

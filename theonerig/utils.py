@@ -4,8 +4,8 @@ __all__ = ['extend_sync_timepoints', 'align_sync_timepoints', 'resample_to_timep
            'flip_stimulus', 'flip_gratings', 'stim_to_dataChunk', 'phy_results_dict', 'spike_to_dataChunk',
            'get_calcium_stack_lenghts', 'twoP_dataChunks', 'img_2d_fit', 'fill_nan', 'stim_inten_norm',
            'group_direction_response', 'group_chirp_bumps', 'get_repeat_corrected', 'removeSlowDrift',
-           'time_shift_test_corr', 'cross_corr_with_lag', 'get_inception_generator', 'buszaki_shank_channels',
-           'format_pval', 'stim_recap_df']
+           'time_shift_test_corr', 'cross_corr_with_lag', 'get_inception_generator', 'group_omitted_epochs',
+           'buszaki_shank_channels', 'format_pval', 'stim_recap_df']
 
 # Cell
 import numpy as np
@@ -662,6 +662,77 @@ def get_inception_generator(imageset_folder, len_set=25, width=500, height=281):
         return imageset_l[set_idx][:,width*img_idx:width*(img_idx+1), 1] #Returns a gray image
 
     return image_yield
+
+# Cell
+def group_omitted_epochs(stim_inten, spike_counts, n_fr_flash=4, n_fr_interflash=4, n_fr_isi=100):
+    """
+    Group the cells reponse to the different omitted stimulus epochs conditions (n_flashes)
+
+    params:
+        - stim_inten: The intensities of the omitted stimulus in shape (t)
+        - spike_counts: Spikes counts of the cells in shape (t, n_cell)
+        - n_fr_flash: Duration of a flash (ON flash during OFF baseline, OFF flash during ON baseline)
+        - n_fr_interflash: Number of frames between two flashes (during an epoch)
+        - n_fr_isi: Number of frames between two epochs
+    return:
+        - response_d_ON, response_d_OFF: Dictionnaries of the cells responses for different number of flashes repetions. Each contain an array of shape (n_cell, n_repeats, len_epoch+n_fr_isi).
+    """
+    starts_ON    = []
+    stops_ON     = []
+    n_flashes_ON = []
+
+    counter   = 1
+    i         = 0
+    starts_ON.append(i)
+    while i < len(stim_inten)-(n_fr_flash+n_fr_interflash):
+        if stim_inten[i+(n_fr_flash*2+n_fr_interflash)]:
+            break
+        if stim_inten[i+(n_fr_flash+n_fr_interflash)]:
+            counter += 1
+            i+=(n_fr_flash+n_fr_interflash)
+        else:
+            stops_ON.append(i+(n_fr_flash+n_fr_interflash))
+            n_flashes_ON.append(counter)
+            counter = 1
+            i += (n_fr_flash+n_fr_interflash+n_fr_isi)
+            starts_ON.append(i)
+
+    #Switching to the omitted OFF
+    starts_OFF    = [starts_ON.pop()]
+    stops_OFF     = []
+    n_flashes_OFF = []
+    while i < len(stim_inten)-(n_fr_flash+n_fr_interflash):
+        if stim_inten[i+(n_fr_flash*2+n_fr_interflash)]==0:
+            counter += 1
+            i+=(n_fr_flash+n_fr_interflash)
+        else:
+            stops_OFF.append(i+(n_fr_flash+n_fr_interflash))
+            n_flashes_OFF.append(counter)
+            counter = 1
+            i += (n_fr_flash+n_fr_interflash+n_fr_isi)
+            starts_OFF.append(i)
+    starts_OFF.pop()
+
+    starts_ON     = np.array(starts_ON)
+    stops_ON      = np.array(stops_ON)
+    n_flashes_ON  = np.array(n_flashes_ON)
+    starts_OFF    = np.array(starts_OFF)
+    stops_OFF     = np.array(stops_OFF)
+    n_flashes_OFF = np.array(n_flashes_OFF)
+
+    response_d_ON, response_d_OFF = {}, {}
+    for n_repeat in set(n_flashes_ON):
+        where_cond = np.where(n_flashes_ON==n_repeat)[0]
+        tmp        = np.array([spike_counts[start:stop+n_fr_isi] for start, stop in zip(starts_ON[where_cond],
+                                                                                  stops_ON[where_cond])])
+        response_d_ON[n_repeat] = np.transpose(tmp, (2, 0, 1))
+    for n_repeat in set(n_flashes_OFF):
+        where_cond = np.where(n_flashes_OFF==n_repeat)[0]
+        tmp        = np.array([spike_counts[start:stop+n_fr_isi] for start, stop in zip(starts_OFF[where_cond],
+                                                                                  stops_OFF[where_cond])])
+        response_d_OFF[n_repeat] = np.transpose(tmp, (2, 0, 1))
+
+    return response_d_ON, response_d_OFF
 
 # Cell
 def buszaki_shank_channels(channel_positions):

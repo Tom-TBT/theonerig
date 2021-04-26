@@ -914,6 +914,49 @@ Return cross-correlation array, null-distribution array and values for plotting.
 </div>
     {% endraw %}
 
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="group_omitted_epochs" class="doc_header"><code>group_omitted_epochs</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L667" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>group_omitted_epochs</code>(<strong><code>stim_inten</code></strong>, <strong><code>spike_counts</code></strong>, <strong><code>n_fr_flash</code></strong>=<em><code>4</code></em>, <strong><code>n_fr_interflash</code></strong>=<em><code>4</code></em>, <strong><code>n_fr_isi</code></strong>=<em><code>100</code></em>)</p>
+</blockquote>
+<p>Group the cells reponse to the different omitted stimulus epochs conditions (n_flashes)</p>
+<p>params:</p>
+
+<pre><code>- stim_inten: The intensities of the omitted stimulus in shape (t)
+- spike_counts: Spikes counts of the cells in shape (t, n_cell)
+- n_fr_flash: Duration of a flash (ON flash during OFF baseline, OFF flash during ON baseline)
+- n_fr_interflash: Number of frames between two flashes (during an epoch)
+- n_fr_isi: Number of frames between two epochs
+</code></pre>
+<p>return:</p>
+
+<pre><code>- response_d_ON, response_d_OFF: Dictionnaries of the cells responses for different number of flashes repetions. Each contain an array of shape (n_cell, n_repeats, len_epoch+n_fr_isi).</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Plotting-utils">Plotting utils<a class="anchor-link" href="#Plotting-utils"> </a></h1>
@@ -931,7 +974,7 @@ Return cross-correlation array, null-distribution array and values for plotting.
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="buszaki_shank_channels" class="doc_header"><code>buszaki_shank_channels</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L667" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>buszaki_shank_channels</code>(<strong><code>channel_positions</code></strong>)</p>
+<h4 id="buszaki_shank_channels" class="doc_header"><code>buszaki_shank_channels</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L738" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>buszaki_shank_channels</code>(<strong><code>channel_positions</code></strong>)</p>
 </blockquote>
 <p>Group the channels of a Buzsaki32 silicone probe into their shanks
 from the channel position.</p>
@@ -972,7 +1015,7 @@ from the channel position.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="format_pval" class="doc_header"><code>format_pval</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L695" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>format_pval</code>(<strong><code>pval</code></strong>, <strong><code>significant_figures</code></strong>=<em><code>2</code></em>)</p>
+<h4 id="format_pval" class="doc_header"><code>format_pval</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L766" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>format_pval</code>(<strong><code>pval</code></strong>, <strong><code>significant_figures</code></strong>=<em><code>2</code></em>)</p>
 </blockquote>
 <p>Helper function to format pvalue into string.</p>
 
@@ -1004,7 +1047,7 @@ from the channel position.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="stim_recap_df" class="doc_header"><code>stim_recap_df</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L702" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stim_recap_df</code>(<strong><code>reM</code></strong>)</p>
+<h4 id="stim_recap_df" class="doc_header"><code>stim_recap_df</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L773" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stim_recap_df</code>(<strong><code>reM</code></strong>)</p>
 </blockquote>
 <p>Extract stimuli parameters (originally from the Database) to put them into a
 dataframe that will be displayed in the recapitulation plot.</p>
