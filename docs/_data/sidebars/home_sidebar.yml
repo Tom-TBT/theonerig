@@ -28,6 +28,9 @@ entries:
       title: database
       url: database.html
     - output: web,pdf
+      title: 'Eye tracking '
+      url: eyetrack.html
+    - output: web,pdf
       title: synchro.io
       url: synchro.io.html
     - output: web,pdf
