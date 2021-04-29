@@ -297,11 +297,12 @@ def fit_chirp_am(cell_mean, start=420, stop=960, freq=1.5, frame_rate=60):
     quality_index = 1 - (np.var(to_fit-model)/np.var(to_fit))
     return best_fit, quality_index
 
-def fit_chirp_freq_epoch(cell_mean, freqs=[1.875,3.75,7.5,15,30], durations=[2,2,2,1,1], frame_rate=60):
+def fit_chirp_freq_epoch(cell_mean, start=360, freqs=[1.875,3.75,7.5,15,30], durations=[2,2,2,1,1], frame_rate=60):
     """Fit multiple sinexp_sigm to the mean response of a cell to chirp_freq_epoch stimulus.
     Each epoch is fitted independantly by a `sin_exponent`
     params:
         - cell_mean: Average response of the cell to the chirp_am stimulus
+        - start:     Index in the cell mean where to start the fitting
         - freqs:     Frequencies of each epoch in Hz
         - durations: Duration of each epoch in seconds
         - freq:      Frequency of the amplitude modulation of the stimulus
@@ -312,11 +313,11 @@ def fit_chirp_freq_epoch(cell_mean, freqs=[1.875,3.75,7.5,15,30], durations=[2,2
     best_fit_l = []
     qualityidx_l = []
 
-    cursor = 360 #Start of the freqs
+    cursor = start #Start of the freqs
 
     #We fit each freqency epoch with a cos function
     for freq, dur in zip(freqs, durations):
-        n_rep, n_fr = int(dur*freq), int(60/freq)
+        n_rep, n_fr = int(dur*freq), int(frame_rate/freq)
         edgecut = 10
         cursor += edgecut
         len_fit = n_rep*n_fr - edgecut
