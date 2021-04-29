@@ -47,7 +47,7 @@ nb_path: "06_eyetrack.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="interpolate_screen_pos" class="doc_header"><code>interpolate_screen_pos</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/eyetrack.py#L10" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>interpolate_screen_pos</code>(<strong><code>screen_pos</code></strong>, <strong><code>xnew</code></strong>, <strong><code>ynew</code></strong>, <strong><code>kind</code></strong>=<em><code>'linear'</code></em>)</p>
+<h4 id="interpolate_screen_pos" class="doc_header"><code>interpolate_screen_pos</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/eyetrack.py#L11" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>interpolate_screen_pos</code>(<strong><code>screen_pos</code></strong>, <strong><code>xnew</code></strong>, <strong><code>ynew</code></strong>, <strong><code>kind</code></strong>=<em><code>'linear'</code></em>)</p>
 </blockquote>
 <p>Interpolate the position of the xnew and ynew pixels from the original screen_pos.
 <a href="/theonerig/eyetrack.html#interpolate_checker_pos"><code>interpolate_checker_pos</code></a> should be used instead as it's more user friendly.
@@ -82,7 +82,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="interpolate_checker_pos" class="doc_header"><code>interpolate_checker_pos</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/eyetrack.py#L29" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>interpolate_checker_pos</code>(<strong><code>screen_pos</code></strong>, <strong><code>width_box</code></strong>, <strong><code>height_box</code></strong>, <strong><code>kind</code></strong>=<em><code>'linear'</code></em>)</p>
+<h4 id="interpolate_checker_pos" class="doc_header"><code>interpolate_checker_pos</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/eyetrack.py#L30" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>interpolate_checker_pos</code>(<strong><code>screen_pos</code></strong>, <strong><code>width_box</code></strong>, <strong><code>height_box</code></strong>, <strong><code>kind</code></strong>=<em><code>'linear'</code></em>)</p>
 </blockquote>
 <p>Interpolate the centre of the checkerboard pixels from the screen calibrated position.
 params:</p>
@@ -90,6 +90,46 @@ params:</p>
 <pre><code>- screen_pos: Screen positions in shape (16, 9, 2) obtained from calibration (from 80x80 pixel checker corners on a 1280x720px screen)
 - width_box: Width in pixel of a box
 - height_box: Height in pixel of a box</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="split_eye_events" class="doc_header"><code>split_eye_events</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/eyetrack.py#L47" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>split_eye_events</code>(<strong><code>eye_tracking</code></strong>, <strong><code>eps</code></strong>=<em><code>2</code></em>)</p>
+</blockquote>
+<p>Split the record where the eye moves. Detection done with clustering on X,Y and time of the eye position.</p>
+<p>params:</p>
+
+<pre><code>- eye_tracking: Eye traking array of the ellipse fit, in shape (t, (x,y,width,height,angle))
+- eps: Distance to detect eye movements. Adjust this parameter if results are not satisfying
+</code></pre>
+<p>return:</p>
+
+<pre><code>- move_indexes, blink_indexes, noise_indexes</code></pre>
 
 </div>
 
