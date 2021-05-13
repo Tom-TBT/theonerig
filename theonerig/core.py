@@ -308,9 +308,6 @@ class RecordMaster(list):
 
     def plot(self, ax=None, show_time=True, sort_by_name=False):
         colors = {"sync":"cornflowerblue", "stim":"orange", "data":"yellowgreen", "cell":"plum"}
-        cursor = 0
-        y_pos_dict = {}
-        y_count    = 0
         if ax is None:
             fig, ax = plt.subplots(figsize=(10, 5))
         ax.invert_yaxis()
@@ -318,12 +315,17 @@ class RecordMaster(list):
 
         #A first iteration through the ContiguousRecords to have all the DataChunk for the sorting
         groups = {"sync":[],"stim":[],"data":[],"cell":[]}
+        frame_times = []
         for seq in self._sequences:
+            frame_times.append(seq._frame_time)
             for name, dChunk_l in seq:
                 dc = dChunk_l[0]
                 if name not in groups[dc.group]:
                     groups[dc.group].append(name)
+
         all_names = []
+        y_pos_dict = {}
+        y_count    = 0
         for group_name in ["sync","stim","data","cell"]:
             if sort_by_name:
                 groups[group_name].sort()
@@ -332,17 +334,20 @@ class RecordMaster(list):
                 y_pos_dict[dc_name] = y_count
                 y_count+=1
 
-        for seq in self._sequences:
+        frametime_ratios = [fr_t/max(frame_times) for fr_t in frame_times]
+        cursor = 0
+        for i, seq in enumerate(self._sequences):
+            fr_ratio = frametime_ratios[i]
             for name, dChunk_l in seq:
                 y_pos = y_pos_dict[name]
                 for dChunk in dChunk_l:
                     pos = dChunk.idx + cursor
-                    ax.barh(y_pos, len(dChunk), left=pos, height=0.8, color=colors[dChunk.group], label=dChunk.group)
+                    ax.barh(y_pos, len(dChunk)*fr_ratio, left=pos*fr_ratio, height=0.8, color=colors[dChunk.group], label=dChunk.group)
                     if show_time:
                         x = pos + len(dChunk)/2
                         text = "{0} -> {1} ".format(seq.to_time_str(dChunk.idx), seq.to_time_str(dChunk.idx+len(dChunk)))
-                        ax.text(x, y_pos, text, ha='center', va='center')
-            cursor += len(seq) + self._sep_size
+                        ax.text(x*fr_ratio, y_pos, text, ha='center', va='center')
+            cursor += (len(seq))*fr_ratio + self._sep_size
 
         legend_elements = [Patch(facecolor=colors["sync"],label='Synchro'),
                            Patch(facecolor=colors["data"],label='Data'),

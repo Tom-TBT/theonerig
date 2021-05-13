@@ -3,7 +3,7 @@
 __all__ = ['eyetrack_stim_inten', 'saccade_distances', 'smooth_eye_position', 'process_sta_batch', 'staEst_fromBins',
            'process_sta_batch_large', 'cross_correlation', 'corrcoef', 'flatten_corrcoef', 'stimulus_ensemble',
            'process_nonlinearity', 'activity_histogram', 'cross_distances', 'cross_distances_sta', 'paired_distances',
-           'paired_distances_sta', 'direction_selectivity', 'peri_saccadic_response']
+           'paired_distances_sta', 'direction_selectivity', 'wave_direction_selectivity', 'peri_saccadic_response']
 
 # Cell
 from functools import partial
@@ -20,6 +20,7 @@ import random
 from .core import *
 from .utils import *
 from .modelling import *
+from .leddome import *
 
 # Cell
 def eyetrack_stim_inten(stim_inten, eye_track,
@@ -306,7 +307,7 @@ def process_sta_batch_large(stim_inten, spike_counts, Hw=30, Fw=2, return_pval=F
     stim_inten = stim_inten.reshape((len_stim,-1))
     print("Computing the STA part by part:")
     for i, batch_pos in enumerate(range(0, n_spatial_dim, bs)):
-        print(str(round(100*batch_pos/n_spatial_dim,2))+"%      ", end="\n", flush=True)
+        print(str(round(100*batch_pos/n_spatial_dim,2))+"%      ", end="\r", flush=True)
         #Computing STA on partial portions of the screen sequentially
         stim_part = stim_inten_norm(stim_inten[:, batch_pos:batch_pos+bs]).T
         sub_sta = staEst_fromBins(stim_part, spike_counts, Hw, Fw=Fw)
@@ -637,6 +638,121 @@ def direction_selectivity(grouped_spikes_d, n_bootstrap=1000):
         res_d[cond] = (sum_rep_spike, dir_pref, ds_idx, ori_pref, ori_idx, p_val_dir, p_val_ori)
 
     return res_d
+
+# Cell
+def wave_direction_selectivity(wave_array, spike_counts, moving_distance_th=1, looming_distance_th=.3, n_bootstrap=1000):
+    """
+    Computes the direction, orientation and looming/shrinking indexes of the cells in response to the wave stimulus (in LED dome).
+
+    params:
+        - wave_array: The indexes of the waves from the record master.
+        - spike_counts: The cells response to the waves from the record master.
+        - moving_distance_th: Distance threshold in radians above which a stimulus can be considered for the OS and DS.
+        - looming_distance_th: Distance threshold in radians bellow which a stimulus can be considered for the looming/shrinking response
+        - n_bootstrap: Number of repetition in the bootstraping method to compute the pvalues
+
+    return:
+        - A tuple containing lists of the cells response, in order:
+            * [0] summed_responses: Summed response of a cell to each wave condition
+            * [1] dir_pref_l: Direction preference vector
+            * [2] dir_idx_l : Direction indexes
+            * [3] dir_pval_l: Direction p_values
+            * [4] ori_pref_l: Orientation preference vector
+            * [5] ori_idx_l : Orientation indexes
+            * [6] ori_pval_l: Orientation p_values
+            * [7] loom_idx_l : Looming indexes
+            * [8] loom_pval_l: Looming p_values
+            * [9] stas_position_l: Position (theta, phi) of the cells receptive fields with the water stimulus
+            * [10] waves_position_l: Relative positions of the waves to the cells STA.
+    """
+    tau = np.pi*2
+
+    indexes, order = np.unique(wave_array, return_index=True)
+    epoch_sequence = indexes[1:][np.argsort(order[1:])]
+    wave_inten     = build_wave_stimulus_array(epoch_sequence)
+    stas_wave      = process_sta_batch(wave_inten, spike_counts, Hw=1, Fw=0, return_pval=False)
+    #Hw of 1 because there is a high temporal correlation in the stimulus, so that's enough to find the RF
+
+    summed_responses = np.zeros((100, spike_counts.shape[1]))
+
+    for i in indexes[1:]: #Iterate from 0 to n_wave-1
+        where = np.where(wave_array==i)[0]
+        summed_responses[i,:] = np.sum(spike_counts[where,:], axis=0)
+
+    summed_responses = summed_responses.T
+
+    dome_positions = get_dome_positions(mode="spherical")
+
+    ori_pref_l, dir_pref_l              = [], []
+    ori_idx_l, dir_idx_l, loom_idx_l    = [], [], []
+    ori_pval_l, dir_pval_l, loom_pval_l = [], [], []
+    stas_position_l, waves_position_l   = [], []
+
+    for sta, cell_responses  in zip(stas_wave, summed_responses):
+        maxidx_sta     = np.argmax(np.abs(sta))
+        theta_led      = dome_positions[maxidx_sta//237,maxidx_sta%237,1]
+        phi_led        = dome_positions[maxidx_sta//237,maxidx_sta%237,2]
+        relative_waves = get_waves_relative_position((theta_led, phi_led), mode="spherical")
+
+        stas_position_l.append((theta_led, phi_led))
+        waves_position_l.append(relative_waves)
+
+        waves_distance = relative_waves[:,1]
+        waves_angle    = (relative_waves[:,2]+tau)%(tau) #Set the angle in the (0,2pi) range
+
+        looming_mask   = (waves_distance<looming_distance_th)
+        shrink_mask    = (waves_distance>np.pi-looming_distance_th)
+        waves_mask     = (waves_distance>moving_distance_th) & (waves_distance<np.pi-moving_distance_th)
+
+        vectors_dir  = np.exp(waves_angle*1j)  #Create vectors using imaginary numbers
+        vectors_ori  = np.exp(waves_angle*1j*2)#x2 gather the vectors with opposite directions
+        dir_pref     = np.nan_to_num((vectors_dir[waves_mask] * cell_responses[waves_mask]).sum() / cell_responses[waves_mask].sum())
+        ori_pref     = np.nan_to_num((vectors_ori[waves_mask] * cell_responses[waves_mask]).sum() / cell_responses[waves_mask].sum())
+        ds_idx       = abs(dir_pref)
+        os_idx       = abs(ori_pref)
+
+        looming_response   = (cell_responses[looming_mask]).sum()
+        shrinking_response = (cell_responses[shrink_mask]).sum()
+        looming_idx        = (looming_response-shrinking_response)/(looming_response+shrinking_response)
+
+        ori_pref_l.append(ori_pref); dir_pref_l.append(dir_pref)
+        ori_idx_l.append(os_idx); dir_idx_l.append(ds_idx)
+        loom_idx_l.append(looming_idx)
+
+        np.random.seed(1)
+        rand_ori_idx_l  = np.empty(n_bootstrap)
+        rand_dir_idx_l  = np.empty(n_bootstrap)
+        rand_loom_idx_l = np.empty(n_bootstrap)
+        for i in range(n_bootstrap):
+            shuffled_response = cell_responses.copy()
+            np.random.shuffle(shuffled_response)
+
+            rand_dir_pref     = np.nan_to_num((vectors_dir[waves_mask] * shuffled_response[waves_mask]).sum() / shuffled_response[waves_mask].sum())
+            rand_ori_pref     = np.nan_to_num((vectors_ori[waves_mask] * shuffled_response[waves_mask]).sum() / shuffled_response[waves_mask].sum())
+            rand_dir_idx_l[i] = abs(rand_dir_pref)
+            rand_ori_idx_l[i] = abs(rand_ori_pref)
+
+            rand_looming_response   = (shuffled_response[looming_mask]).sum()
+            rand_shrinking_response = (shuffled_response[shrink_mask]).sum()
+            rand_loom_idx_l[i]      = (rand_looming_response-rand_shrinking_response)/(rand_looming_response+rand_shrinking_response)
+
+        #Same calculation of pval as in Baden et al 2016
+        p_val_dir  = 1 - (np.sum(rand_dir_idx_l<ds_idx)/n_bootstrap)
+        p_val_ori  = 1 - (np.sum(rand_ori_idx_l<os_idx)/n_bootstrap)
+        p_val_loom = 1 - (np.sum(np.abs(rand_loom_idx_l)<abs(looming_idx))/n_bootstrap)
+
+        ori_pval_l.append(p_val_ori); dir_pval_l.append(p_val_dir); loom_pval_l.append(p_val_loom)
+
+        # original orientation, by divinding the phase of the vector by two
+        polar_ori_pref = polar(ori_pref)
+        new_vector     = ((polar_ori_pref[1]+tau)%tau)/2 #Convert to positive radian angle and divide by two
+        ori_pref       = rect(polar_ori_pref[0], new_vector)
+
+    return (summed_responses,
+            dir_pref_l, dir_idx_l, dir_pval_l,
+            ori_pref_l, ori_idx_l, ori_pval_l,
+            loom_idx_l, loom_pval_l,
+            stas_position_l, waves_position_l)
 
 # Cell
 def peri_saccadic_response(spike_counts, eye_track, motion_threshold=5, window=15):
