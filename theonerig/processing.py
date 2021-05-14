@@ -416,6 +416,11 @@ def stimulus_ensemble(stim_inten, Hw=30, x=0, y=0, w=None, h=None):
         - Flatten stimulus ensemble of size (len(stim_inten)-Hw, w*h)
     """
     stim_inten = stim_inten_norm(stim_inten)
+    if len(stim_inten.shape) == 1:
+        stim_inten = stim_inten[..., np.newaxis, np.newaxis]
+    elif len(stim_inten.shape) == 2:
+        stim_inten = stim_inten[..., np.newaxis]
+
     if w is None:
         w = stim_inten.shape[2]
     if h is None:
@@ -426,50 +431,54 @@ def stimulus_ensemble(stim_inten, Hw=30, x=0, y=0, w=None, h=None):
     if np.all(np.in1d(stim_inten, [-1,0,1])):
         dtype = "int8"
     stim_ensmbl = np.zeros((len(stim_inten)-Hw, (xmax-xmin)*(ymax-ymin)*Hw), dtype=dtype)
-    for i in range(Hw, len(stim_inten)):
+    for i in range(Hw+1, len(stim_inten)):
         flat_stim         = np.ndarray.flatten(stim_inten[i-Hw:i,
                                                           ymin:ymax,
                                                           xmin:xmax])
-        stim_ensmbl[i-Hw] = flat_stim
+        stim_ensmbl[i-(Hw+1)] = flat_stim
     return stim_ensmbl
 
-def process_nonlinearity(stim_ensemble, spike_counts):
+def process_nonlinearity(stim_inten, spike_counts, bins, sta):
     """
-    Computes the nonlinearity of a single cell
+    Computes the nonlinearity of a single cell. The STA of the cell is in L2 normalization, which
+    should restrict the histogram values.
 
     params:
-        - stim_ensemble: stimulus ensemble obtained with `stimulus_ensemble`
-        - spike_counts: cells activity (without the initial Hw, same as the stimulus ensemble)
+        - stim_inten: stimulus intensity in shape (t, y, x)
+        - spike_counts: cells activity in shape (t,)
+        - bins: bins in which the transformed stimuli ensembles are set. (usually between -6 and 6)
+        - sta:  The STA to convolve with stim_inten. Undergoes a L2 normalization.
 
     return:
         - nonlinearity of the cell.
     """
-    assert len(stim_ensemble)==len(spike_counts)
-    stim_ensmbl_mean  = np.mean(stim_ensemble,axis=0)#np.mean(spike_triggering_stimuli,axis=0)
-    spike_ensmbl_mean = np.average(stim_ensemble, axis=0, weights=spike_counts)
-    middle_vec = np.mean(np.stack((stim_ensmbl_mean, spike_ensmbl_mean)), axis=0)
+    assert len(stim_inten)==len(spike_counts)
+    stim_inten    = stim_inten_norm(np.array(stim_inten))
+    spike_counts  = np.array(spike_counts)[len(sta):]
 
-    pca = PCA(n_components=2)
-    fit = pca.fit(np.stack((stim_ensmbl_mean,
-                            spike_ensmbl_mean,
-                            middle_vec)))
-    stim_ensemble_tranfo = fit.transform(stim_ensemble)
+    sta = sta.copy()
+    sta /= np.sqrt(np.sum(sta**2)) #L2 normalization
 
     if np.max(spike_counts)<1:#We have probabilities, not spike counts. Need to make it integers
-        mask        = np.where(spike_counts > 0)[0]
-        nonzero_min = np.min(spike_counts[mask])
-        discretized = spike_counts/nonzero_min
-        spike_bins  = ((10*discretized)/(np.max(discretized))).astype(int)
+        mask         = np.where(spike_counts > 0)[0]
+        nonzero_min  = np.min(spike_counts[mask])
+        discretized  = spike_counts/nonzero_min
+        spike_counts = ((10*discretized)/(np.max(discretized))).astype(int)
 
-    spike_ensembl = stim_ensemble_tranfo[np.where(spike_counts)[0]]
+    # Convolving the STA with the stimulus comes back as doing matmul between stim ensemble and STA
+    # but it's much more memory efficient this way
+    stim_ensemble_tranfo   = sp.signal.fftconvolve(sta[::-1], stim_inten, mode="valid", axes=0)[1:]
+    stim_ensemble_tranfo   = np.sum(stim_ensemble_tranfo, axis=tuple(range(1,sta.ndim)))
 
-    xaxis      = np.linspace(np.min(stim_ensemble_tranfo),np.max(stim_ensemble_tranfo),101)
-    hist_all   = np.histogram(stim_ensemble_tranfo, bins=xaxis)[0]
-    hist_trigg = np.histogram(spike_ensembl, bins=xaxis)[0]
+    spike_counts           = spike_counts.astype(int)
+    spike_ensemble_transfo = np.repeat(stim_ensemble_tranfo, spike_counts)
+
+    hist_all   = np.histogram(stim_ensemble_tranfo, bins=bins)[0]
+    hist_trigg = np.histogram(spike_ensemble_transfo, bins=bins)[0]
 
     nonlin = hist_trigg/hist_all
+    nonlin = np.nan_to_num(fill_nan(nonlin))
 
-    nonlin = fill_nan(nonlin)
     return nonlin
 
 

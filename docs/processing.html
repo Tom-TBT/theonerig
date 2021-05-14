@@ -444,13 +444,16 @@ Clustering is made with sklearn.cluster.dbscan.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="process_nonlinearity" class="doc_header"><code>process_nonlinearity</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L436" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>process_nonlinearity</code>(<strong><code>stim_ensemble</code></strong>, <strong><code>spike_counts</code></strong>)</p>
+<h4 id="process_nonlinearity" class="doc_header"><code>process_nonlinearity</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L441" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>process_nonlinearity</code>(<strong><code>stim_inten</code></strong>, <strong><code>spike_counts</code></strong>, <strong><code>bins</code></strong>, <strong><code>sta</code></strong>)</p>
 </blockquote>
-<p>Computes the nonlinearity of a single cell</p>
+<p>Computes the nonlinearity of a single cell. The STA of the cell is in L2 normalization, which
+should restrict the histogram values.</p>
 <p>params:</p>
 
-<pre><code>- stim_ensemble: stimulus ensemble obtained with [`stimulus_ensemble`](/theonerig/processing.html#stimulus_ensemble)
-- spike_counts: cells activity (without the initial Hw, same as the stimulus ensemble)
+<pre><code>- stim_inten: stimulus intensity in shape (t, y, x)
+- spike_counts: cells activity in shape (t,)
+- bins: bins in which the transformed stimuli ensembles are set. (usually between -6 and 6)
+- sta:  The STA to convolve with stim_inten. Undergoes a L2 normalization.
 
 </code></pre>
 <p>return:</p>
@@ -485,7 +488,7 @@ Clustering is made with sklearn.cluster.dbscan.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="activity_histogram" class="doc_header"><code>activity_histogram</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L477" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>activity_histogram</code>(<strong><code>spike_counts</code></strong>)</p>
+<h4 id="activity_histogram" class="doc_header"><code>activity_histogram</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L486" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>activity_histogram</code>(<strong><code>spike_counts</code></strong>)</p>
 </blockquote>
 <p>Retrieve an histogram of the individual cells activity.</p>
 <p>params:</p>
@@ -525,7 +528,7 @@ Clustering is made with sklearn.cluster.dbscan.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="cross_distances" class="doc_header"><code>cross_distances</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L493" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cross_distances</code>(<strong><code>masks</code></strong>)</p>
+<h4 id="cross_distances" class="doc_header"><code>cross_distances</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L502" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cross_distances</code>(<strong><code>masks</code></strong>)</p>
 </blockquote>
 <p>Computes cross distances from the center of mass of a list of mask.</p>
 <p>params:</p>
@@ -558,7 +561,7 @@ Clustering is made with sklearn.cluster.dbscan.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="cross_distances_sta" class="doc_header"><code>cross_distances_sta</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L511" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cross_distances_sta</code>(<strong><code>fits</code></strong>, <strong><code>sta_shape</code></strong>, <strong><code>f</code></strong>)</p>
+<h4 id="cross_distances_sta" class="doc_header"><code>cross_distances_sta</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L520" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cross_distances_sta</code>(<strong><code>fits</code></strong>, <strong><code>sta_shape</code></strong>, <strong><code>f</code></strong>)</p>
 </blockquote>
 <p>Computes cross distances between STAs</p>
 <p>params:</p>
@@ -593,7 +596,7 @@ Clustering is made with sklearn.cluster.dbscan.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="paired_distances" class="doc_header"><code>paired_distances</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L531" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>paired_distances</code>(<strong><code>masks_1</code></strong>, <strong><code>masks_2</code></strong>)</p>
+<h4 id="paired_distances" class="doc_header"><code>paired_distances</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L540" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>paired_distances</code>(<strong><code>masks_1</code></strong>, <strong><code>masks_2</code></strong>)</p>
 </blockquote>
 <p>Compute the distance between two masks</p>
 <p>params:</p>
@@ -627,7 +630,7 @@ Clustering is made with sklearn.cluster.dbscan.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="paired_distances_sta" class="doc_header"><code>paired_distances_sta</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L549" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>paired_distances_sta</code>(<strong><code>sta_fits_1</code></strong>, <strong><code>sta_fits_2</code></strong>, <strong><code>sta_shape</code></strong>, <strong><code>f</code></strong>)</p>
+<h4 id="paired_distances_sta" class="doc_header"><code>paired_distances_sta</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L558" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>paired_distances_sta</code>(<strong><code>sta_fits_1</code></strong>, <strong><code>sta_fits_2</code></strong>, <strong><code>sta_shape</code></strong>, <strong><code>f</code></strong>)</p>
 </blockquote>
 <p>Compute the distance between two STAs.</p>
 <p>params:</p>
@@ -830,7 +833,7 @@ Clustering is made with sklearn.cluster.dbscan.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="direction_selectivity" class="doc_header"><code>direction_selectivity</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L577" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>direction_selectivity</code>(<strong><code>grouped_spikes_d</code></strong>, <strong><code>n_bootstrap</code></strong>=<em><code>1000</code></em>)</p>
+<h4 id="direction_selectivity" class="doc_header"><code>direction_selectivity</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L586" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>direction_selectivity</code>(<strong><code>grouped_spikes_d</code></strong>, <strong><code>n_bootstrap</code></strong>=<em><code>1000</code></em>)</p>
 </blockquote>
 <p>Compute the direction selectivity index of cells in the given dict containing for each condition as
 the keys, an array of shape (n_angle, n_repeat, trial_len, n_cell). Such dictionnary can be obtained
@@ -874,7 +877,7 @@ by using <code>utils.group_direction_response</code>.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="wave_direction_selectivity" class="doc_header"><code>wave_direction_selectivity</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L643" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>wave_direction_selectivity</code>(<strong><code>wave_array</code></strong>, <strong><code>spike_counts</code></strong>, <strong><code>moving_distance_th</code></strong>=<em><code>1</code></em>, <strong><code>looming_distance_th</code></strong>=<em><code>0.3</code></em>, <strong><code>n_bootstrap</code></strong>=<em><code>1000</code></em>)</p>
+<h4 id="wave_direction_selectivity" class="doc_header"><code>wave_direction_selectivity</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L652" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>wave_direction_selectivity</code>(<strong><code>wave_array</code></strong>, <strong><code>spike_counts</code></strong>, <strong><code>moving_distance_th</code></strong>=<em><code>1</code></em>, <strong><code>looming_distance_th</code></strong>=<em><code>0.3</code></em>, <strong><code>n_bootstrap</code></strong>=<em><code>1000</code></em>)</p>
 </blockquote>
 <p>Computes the direction, orientation and looming/shrinking indexes of the cells in response to the wave stimulus (in LED dome).</p>
 <p>params:</p>
@@ -929,7 +932,7 @@ by using <code>utils.group_direction_response</code>.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="peri_saccadic_response" class="doc_header"><code>peri_saccadic_response</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L758" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>peri_saccadic_response</code>(<strong><code>spike_counts</code></strong>, <strong><code>eye_track</code></strong>, <strong><code>motion_threshold</code></strong>=<em><code>5</code></em>, <strong><code>window</code></strong>=<em><code>15</code></em>)</p>
+<h4 id="peri_saccadic_response" class="doc_header"><code>peri_saccadic_response</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/processing.py#L767" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>peri_saccadic_response</code>(<strong><code>spike_counts</code></strong>, <strong><code>eye_track</code></strong>, <strong><code>motion_threshold</code></strong>=<em><code>5</code></em>, <strong><code>window</code></strong>=<em><code>15</code></em>)</p>
 </blockquote>
 <p>Computes the cell average response around saccades.</p>
 <p>params:</p>
