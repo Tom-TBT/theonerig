@@ -5,9 +5,11 @@ __all__ = ['DEFAULT_COLORS', 'plot_2d_fit', 'plot_tSTA_fit', 'plot_chirpam_fit',
            'plot_t_sta', 'plot_chirp', 'plot_spike_template', 'plot_spike_template_MEA', 'plot_autocorrelogram',
            'plot_spike_amplitudes', 'plot_calcium_trace', 'plot_stim_epochs_to_ephy', 'plot_stim_epochs_to_calcium',
            'plot_cell_spatial', 'plot_stim_recap_table', 'plot_composed_A_masks', 'plot_sta_positions', 'plot_2d_sta',
-           'plot_dome_flat', 'plot_dome_checker', 'plot_omitted_response', 'plot_crosscorr_spikes_behav',
-           'configure_pyplot_recap', 'plot_recap_vivo_ephy', 'plot_recap_vivo_calcium', 'plot_recap_vitro_ephy',
-           'plot_recap_vivo_ephy_dome', 'plot_recap_vivo_ephy_corr_behav']
+           'plot_dome_flat', 'plot_dome_checker', 'plot_omitted_response', 'plot_sta_pixelcorr', 'plot_svd',
+           'plot_nonlin', 'plot_crosscorr_spikes_behav', 'configure_pyplot_recap', 'plot_recap_vivo_ephy',
+           'plot_recap_vivo_calcium', 'plot_recap_vitro_ephy', 'plot_recap_vivo_ephy_dome',
+           'plot_recap_vivo_ephy_corr_behav', 'plot_recap_wholeField', 'plot_recap_wholeField_dome',
+           'plot_recap_wholeField_vitroHiroki']
 
 # Cell
 import matplotlib.pyplot as plt
@@ -920,6 +922,7 @@ def plot_dome_checker(sta, s=20, gs=None, pval=None, title="Checkerboard", led_p
             if (j+i*grid_y)>=len(sta):
                 break
             ax = plt.subplot(gs[i*grid_y+j], projection='polar')
+            ax.set_facecolor((.45, .45, .45))
             plot_dome_flat(led_position, ax=ax,
                            s=s, c=sta[i*grid_y+j], vmin=-1, vmax=1, cmap="gray")
             if i==0 and j==1:
@@ -977,6 +980,78 @@ def plot_omitted_response(response_d_ON, response_d_OFF, cell_idx, n_fr_cycle=8,
     ax.set_xlim(-5,150)
 
     return gs
+
+# Cell
+def plot_sta_pixelcorr(sta, stim_name=None, ax_corr=None, ax_hist=None):
+    """
+    Plot the correlation matrix between the sta's pixels, and their value distribution with a histogram.
+
+    return:
+        - The axis of the two plots, (ax_corr, ax_hist)
+
+    """
+    if ax_corr is None and ax_hist is None:
+        fig, axes = plt.subplots(ncols=2, figsize=(8,4))
+        ax_corr   = axes[0]
+        ax_hist   = axes[1]
+    fig = plt.gcf()
+
+    corrmat   = np.corrcoef(sta.reshape(len(sta),-1).T)
+    tmp       = corrmat.copy()
+    diag_idxs = np.diag_indices(len(tmp))
+    tmp[diag_idxs] = 0
+    mean_corr = np.sum(tmp)/(tmp.size-len(diag_idxs[0]))
+    flat_corr = []
+    for i in range(len(corrmat)):
+        flat_corr.extend(corrmat[i,:i])
+    ax_corr.imshow(corrmat, vmin=-1, vmax=1, cmap="viridis")
+
+    ax_hist.hist(flat_corr, bins=np.arange(-1,1,0.05))
+
+    if stim_name is None:
+        ax_corr.set_title("Correlation matrix")
+        ax_hist.set_title("Correlation distrib")
+    else:
+        ax_corr.set_title(stim_name +" correlation matrix")
+        ax_hist.set_title(stim_name +" correlation distrib")
+    return ax_corr, ax_hist
+
+def plot_svd(sta, ax=None):
+    """
+    Plot a histogram of the singular value decomposition of an STA.
+    params:
+        - sta: The STA to decompose
+
+    return:
+        - The axis of the figure
+    """
+    if ax is None:
+        fig, ax = plt.subplots()
+    t = sta.shape[0]
+    sta_flat = sta.reshape(t, -1).T
+    U, D, VT = np.linalg.svd(sta_flat, full_matrices=False)
+    ax.bar(np.arange(len(D)), D**2/np.sum(D**2))
+    ax.set_title("Singular values (max: "+str(round(D[0],2))+")")
+
+    return ax
+
+def plot_nonlin(nonlinearity, bins, label=None, ax=None):
+    """
+    Plot a nonlinearity with the bins that were used (in L2 norm)
+    params:
+        - nonlinearity: The nonlinearity to plot
+        - bins: Bins used by `process_nonlinearity` to make that nonlinearity
+        - label: Label of this trace
+        - ax: Axis where to plot the figure. If None, a new figure is created
+
+    return:
+        - The axis of the figure
+    """
+    if ax is None:
+        fig, ax = plt.subplots()
+    x = (bins[1:]+bins[:-1])/2
+    ax.plot(x, nonlinearity, label=label)
+    return ax
 
 # Cell
 def plot_crosscorr_spikes_behav(behav, corr_behav_lag, p_value_peak, offset_peak, null_dist_behav, fps=60, seconds=30, color_line='black', title='visual stim', ax=None):
@@ -1768,6 +1843,317 @@ def plot_recap_vivo_ephy_corr_behav(title_dict, reM, phy_dict, cluster_ids, df_s
 
     if removeslowdrifts == 0:
         print("Slowdrifts were not removed from signals to perform the correlation analysis.")
+
+    sns.set()
+    plt.rcdefaults()
+    print()
+
+# Cell
+def plot_recap_wholeField(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_db_ids=None,
+                         checkerboard=None, fullfield_fl=None, chirp_am=None, nonlin_fff=None, nonlin_chk=None,
+                         chirp_fm=None, water=None, export_path="./wholefield_recap_plot.pdf"):
+    """
+    Plot the recap pdf of cells for wholefieldness evaluation
+
+    params:
+    """
+    print("Generating the recap plot")
+    configure_pyplot_recap()
+
+    shanks_idx = buszaki_shank_channels(phy_dict["channel_positions"])
+    cond = title_dict["condition"]
+    date = title_dict["date"]
+    record_name = title_dict["record_name"]
+    record_id = title_dict["record_id"]
+
+    if cell_db_ids is None:
+        cell_db_ids = [-1]*len(cluster_ids)
+
+    with PdfPages(export_path) as pp:
+
+        #Plotting Cover
+        fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
+        gs  = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
+        ax_rem  = fig.add_subplot(gs[:10,2:-1])
+        reM.plot(ax=ax_rem)
+
+        ax_stim_recap  = fig.add_subplot(gs[11:16,:])
+        plot_stim_recap_table(df_stim, ax=ax_stim_recap)
+        suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id)])
+        plt.suptitle(suptitle)
+
+        pp.savefig()
+        plt.close()
+
+        for cluster, cell_id in zip(cluster_ids, cell_db_ids):
+            reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][str(cluster)]#np.where(cluster==cluster_ids)[0][0]
+
+            fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
+            suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id),
+                                   "Cluster n°"+str(cluster), "Cell id n°"+str(cell_id)])
+            plt.suptitle(suptitle)
+
+            mask_cluster = phy_dict["spike_clusters"]==cluster
+            cluster_composition = np.unique(phy_dict["spike_templates"][mask_cluster])
+
+            gs = gridspec.GridSpec(28, 21, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
+
+            #Template on electrodes
+            cell_loc_ax = fig.add_subplot(gs[0:4,0:2])
+            plot_spike_template(cluster_composition, phy_dict["templates"], shanks_idx, phy_dict["channel_positions"], ax=cell_loc_ax)
+
+            #Autocorrelogram
+            autocorr_ax = fig.add_subplot(gs[0:4,3:7])
+            plot_autocorrelogram(cluster, phy_dict["spike_times"], phy_dict["spike_clusters"],
+                                 bin_ms=.001, sampling_rate=30000, tails=30, ax=autocorr_ax)
+
+            #Spike amplitude across time
+            sp_amp_ax = fig.add_subplot(gs[0:4,8:])
+            plot_spike_amplitudes(cluster, phy_dict["spike_templates"], phy_dict["spike_clusters"],
+                                  phy_dict["spike_times"], phy_dict["amplitudes"], ax=sp_amp_ax)
+            plot_stim_epochs_to_ephy(reM, y_pos=-0.05, ax=sp_amp_ax)
+
+            #Checkerboard STA
+            if checkerboard is not None:
+                pval_checker = checkerboard[1][reM_cell_idx]
+                pval_checker = np.min(pval_checker[pval_checker!=0])
+                inner_grid = gridspec.GridSpecFromSubplotSpec(4, 2,
+                            subplot_spec=gs[5:12,0:6], wspace=.09, hspace=.13)
+                plot_2d_sta(checkerboard[0][reM_cell_idx][-8:], pval=pval_checker, gs=inner_grid, title="Checkerboard")
+            #Water STA
+            if water is not None:
+                pval_water = water[1][reM_cell_idx]
+                pval_water = np.min(pval_water[pval_water!=0])
+                inner_grid = gridspec.GridSpecFromSubplotSpec(4, 2,
+                            subplot_spec=gs[5:12,7:13], wspace=.09, hspace=.13)
+                plot_2d_sta(water[0][reM_cell_idx][-8:], pval=pval_water, gs=inner_grid, title="Water")
+
+            #Fullfield flickering STA
+            if fullfield_fl is not None:
+                pval_fffl = fullfield_fl[1][reM_cell_idx]
+                pval_fffl = np.min(pval_fffl[pval_fffl!=0])
+                sp_amp_ax = fig.add_subplot(gs[5:12,14:])
+                plot_t_sta(fullfield_fl[0][reM_cell_idx], pval=pval_fffl, ax=sp_amp_ax)
+
+            #Wholefieldness evaluation
+            if checkerboard is not None:
+                ax_corr = fig.add_subplot(gs[13:17,0:4])
+                ax_hist = fig.add_subplot(gs[13:17,5:10])
+                plot_sta_pixelcorr(checkerboard[0][reM_cell_idx][-8:], stim_name="checkerboard",
+                                   ax_corr=ax_corr, ax_hist=ax_hist)
+
+                ax_svd  = fig.add_subplot(gs[13:17,11:15])
+                plot_svd(checkerboard[0][reM_cell_idx][-8:], ax=ax_svd)
+            #Nonlinearity
+            if nonlin_chk is not None or nonlin_fff is not None:
+                ax = fig.add_subplot(gs[13:17,16:])
+                if nonlin_chk is not None:
+                    plot_nonlin(nonlin_chk[0][reM_cell_idx], bins=nonlin_chk[1], label="checkerboard", ax=ax)
+                if nonlin_fff is not None:
+                    plot_nonlin(nonlin_fff[0][reM_cell_idx], bins=nonlin_fff[1], label="fullfield_flicker", ax=ax)
+                ax.legend()
+                ax.set_title("Nonlinearity")
+
+            #Chirp_FM
+            if chirp_fm is not None:
+                chirpfm_ax = fig.add_subplot(gs[18:21,:])
+                plot_chirp(chirp_fm[0], chirp_fm[1][:,reM_cell_idx], smooth=False, ax=chirpfm_ax)
+                chirpfm_ax.set_title("Chirp FM")
+
+            #Chirp_AM
+            if chirp_am is not None:
+                chirpam_ax = fig.add_subplot(gs[22:25,:])
+                plot_chirp(chirp_am[0], chirp_am[1][:,reM_cell_idx], smooth=False, ax=chirpam_ax)
+                chirpam_ax.set_title("Chirp AM")
+
+
+            pp.savefig()
+            plt.close()
+
+            print("Cell cluster n°",cluster,"done")
+
+    sns.set()
+    plt.rcdefaults()
+    print()
+
+def plot_recap_wholeField_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_ids=None,
+                         checkerboard=None, fullfield_fl=None, chirp_am=None, nonlin_fff=None, nonlin_chk=None,
+                         chirp_fm=None, water=None, export_path="./wholefield_recap_plot.pdf"):
+    """
+    Plot the recap pdf of cells for wholefieldness evaluation (with LED dome)
+
+    params:
+
+    """
+    print("Generating the recap plot")
+    configure_pyplot_recap()
+
+    shanks_idx = buszaki_shank_channels(phy_dict["channel_positions"])
+    cond = title_dict["condition"]
+    date = title_dict["date"]
+    record_name = title_dict["record_name"]
+    record_id = title_dict["record_id"]
+
+    if cell_db_ids is None:
+        cell_db_ids = [-1]*len(cluster_ids)
+
+    with PdfPages(export_path) as pp:
+
+        #Plotting Cover
+        fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
+        gs  = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
+        ax_rem  = fig.add_subplot(gs[:10,2:-1])
+        reM.plot(ax=ax_rem)
+
+        suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id)])
+        plt.suptitle(suptitle)
+
+        pp.savefig()
+        plt.close()
+
+        for cluster, cell_id in zip(cluster_ids, cell_db_ids):
+            reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][str(cluster)]#np.where(cluster==cluster_ids)[0][0]
+
+            fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
+            suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id),
+                                   "Cluster n°"+str(cluster), "Cell id n°"+str(cell_id)])
+            plt.suptitle(suptitle)
+
+            mask_cluster = phy_dict["spike_clusters"]==cluster
+            cluster_composition = np.unique(phy_dict["spike_templates"][mask_cluster])
+
+            gs = gridspec.GridSpec(28, 21, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
+
+            #Template on electrodes
+            cell_loc_ax = fig.add_subplot(gs[0:4,0:2])
+            plot_spike_template(cluster_composition, phy_dict["templates"], shanks_idx, phy_dict["channel_positions"], ax=cell_loc_ax)
+
+            #Autocorrelogram
+            autocorr_ax = fig.add_subplot(gs[0:4,3:7])
+            plot_autocorrelogram(cluster, phy_dict["spike_times"], phy_dict["spike_clusters"],
+                                 bin_ms=.001, sampling_rate=30000, tails=30, ax=autocorr_ax)
+
+            #Spike amplitude across time
+            sp_amp_ax = fig.add_subplot(gs[0:4,8:])
+            plot_spike_amplitudes(cluster, phy_dict["spike_templates"], phy_dict["spike_clusters"],
+                                  phy_dict["spike_times"], phy_dict["amplitudes"], ax=sp_amp_ax)
+            plot_stim_epochs_to_ephy(reM, y_pos=-0.05, ax=sp_amp_ax)
+
+            #Checkerboard STA
+            if checkerboard is not None:
+                pval_checker = checkerboard[1][reM_cell_idx]
+                pval_checker = np.min(pval_checker[pval_checker!=0])
+                inner_grid = gridspec.GridSpecFromSubplotSpec(4, 4,
+                            subplot_spec=gs[5:12,0:6], wspace=.09, hspace=.13)
+                plot_dome_checker(checkerboard[0][reM_cell_idx][-16:], pval=pval_checker, s=1, gs=inner_grid, title="Checkerboard")
+
+            #Fullfield flickering STA
+            if fullfield_fl is not None:
+                pval_fffl = fullfield_fl[1][reM_cell_idx]
+                pval_fffl = np.min(pval_fffl[pval_fffl!=0])
+                sp_amp_ax = fig.add_subplot(gs[5:12,14:])
+                plot_t_sta(fullfield_fl[0][reM_cell_idx], pval=pval_fffl, ax=sp_amp_ax)
+
+            #Wholefieldness evaluation
+            if checkerboard is not None:
+                ax_corr = fig.add_subplot(gs[13:17,0:4])
+                ax_hist = fig.add_subplot(gs[13:17,5:10])
+                plot_sta_pixelcorr(checkerboard[0][reM_cell_idx][-8:], stim_name="checkerboard",
+                                   ax_corr=ax_corr, ax_hist=ax_hist)
+
+                ax_svd  = fig.add_subplot(gs[13:17,11:15])
+                plot_svd(checkerboard[0][reM_cell_idx][-8:], ax=ax_svd)
+            #Nonlinearity
+            if nonlin_chk is not None or nonlin_fff is not None:
+                ax = fig.add_subplot(gs[13:17,16:])
+                if nonlin_chk is not None:
+                    plot_nonlin(nonlin_chk[0][reM_cell_idx], bins=nonlin_chk[1], label="checkerboard", ax=ax)
+                if nonlin_fff is not None:
+                    plot_nonlin(nonlin_fff[0][reM_cell_idx], bins=nonlin_fff[1], label="fullfield_flicker", ax=ax)
+                ax.legend()
+                ax.set_title("Nonlinearity")
+
+            #Chirp_FM
+            if chirp_fm is not None:
+                chirpfm_ax = fig.add_subplot(gs[18:21,:])
+                plot_chirp(chirp_fm[0], chirp_fm[1][:,reM_cell_idx], smooth=False, ax=chirpfm_ax)
+                chirpfm_ax.set_title("Chirp FM")
+
+            #Chirp_AM
+            if chirp_am is not None:
+                chirpam_ax = fig.add_subplot(gs[22:25,:])
+                plot_chirp(chirp_am[0], chirp_am[1][:,reM_cell_idx], smooth=False, ax=chirpam_ax)
+                chirpam_ax.set_title("Chirp AM")
+
+
+            pp.savefig()
+            plt.close()
+
+            print("Cell cluster n°",cluster,"done")
+
+    sns.set()
+    plt.rcdefaults()
+    print()
+
+# Cell
+def plot_recap_wholeField_vitroHiroki(title_dict, cells_idxs, checkerboard=None, nonlin_chk=None,
+                                     export_path="./wholefield_recap_plot.pdf"):
+    """
+    Plot the recap pdf of vitroHirokiChecker cells for wholefieldness evaluation
+
+    params:
+        - title_dict: A dictionnary containing the str info for the title: keys(condition, date, record_name, record_id)
+        - cells_idx: A list of the cells index to plot
+        - checkerboard: A matrix of STA of cells to the checkerboard stimulus of shape (n_cell, 16, height, width)
+        - export_path: The path for a pdf file to be exported. If None, the plot is displayed.
+    """
+    print("Generating the recap plot")
+    configure_pyplot_recap()
+
+    cond = title_dict["condition"]
+    date = title_dict["date"]
+    record_name = title_dict["record_name"]
+    record_id = title_dict["record_id"]
+
+    with PdfPages(export_path) as pp:
+
+        for cells_idx in cells_idxs:
+            fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
+            suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id),
+                                   "Cell n°"+str(cells_idx)])
+            plt.suptitle(suptitle)
+
+            gs = gridspec.GridSpec(28, 21, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
+
+            #Checkerboard STA
+            if checkerboard is not None:
+                pval_checker = checkerboard[1][cells_idx]
+                pval_checker = np.min(pval_checker[pval_checker!=0])
+                inner_grid = gridspec.GridSpecFromSubplotSpec(6, 5,
+                            subplot_spec=gs[5:12,0:], wspace=.09, hspace=.13)
+                plot_2d_sta(checkerboard[0][cells_idx], pval=pval_checker, gs=inner_grid, title="Checkerboard")
+
+            #Wholefieldness evaluation
+            if checkerboard is not None:
+                ax_corr = fig.add_subplot(gs[13:17,0:4])
+                ax_hist = fig.add_subplot(gs[13:17,5:10])
+                plot_sta_pixelcorr(checkerboard[0][cells_idx], stim_name="checkerboard",
+                                   ax_corr=ax_corr, ax_hist=ax_hist)
+
+                ax_svd  = fig.add_subplot(gs[13:17,11:15])
+                plot_svd(checkerboard[0][cells_idx], ax=ax_svd)
+
+            #Nonlinearity
+            if nonlin_chk is not None:
+                ax = fig.add_subplot(gs[13:17,16:])
+                plot_nonlin(nonlin_chk[0][cells_idx], bins=nonlin_chk[1], label="checkerboard", ax=ax)
+                ax.legend()
+                ax.set_title("Nonlinearity")
+
+            pp.savefig()
+            plt.close()
+
+            print("Cell n°",cells_idx,"done")
 
     sns.set()
     plt.rcdefaults()
