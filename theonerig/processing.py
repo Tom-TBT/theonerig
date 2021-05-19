@@ -473,6 +473,7 @@ def process_nonlinearity(stim_inten, spike_counts, bins, stas, p_norm=2):
     # The discretisation of the calcium imaging is done here globally (for all cells together)
     # If it's not what you want, either do the discretisation inside the loop bellow, or discretise the S_matrix
     # before passing it to this function
+
     if np.max(spike_counts)<1:
         mask         = np.where(spike_counts > 0)
         nonzero_min  = np.min(spike_counts[mask])
@@ -483,6 +484,9 @@ def process_nonlinearity(stim_inten, spike_counts, bins, stas, p_norm=2):
 
     for i, (sta, sp_count) in enumerate(zip(stas, spike_counts.T)):
         sta /= np.power(np.sum(np.power(np.abs(sta), p_norm)), 1/p_norm) # p-norm
+
+        if not sp_count.any(): #No spikes
+            continue
 
         if compute_with_dotprod:
             #This one is faster, but requires the stim_ensemble to fit the computer memory
@@ -496,7 +500,11 @@ def process_nonlinearity(stim_inten, spike_counts, bins, stas, p_norm=2):
         hist_trigg = np.histogram(filtered_sptrigg, bins=bins)[0]
 
         nonlin = hist_trigg/hist_all
-        nonlin = np.nan_to_num(fill_nan(nonlin))
+
+        if np.count_nonzero(~np.isnan(nonlin))<2: #Less than two values in the nonlin, cannot fill the gaps
+            nonlin = np.nan_to_num(nonlin)
+        else:
+            nonlin = np.nan_to_num(fill_nan(nonlin))
 
         nonlins[i] = nonlin
 
