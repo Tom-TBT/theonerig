@@ -439,7 +439,7 @@ def stimulus_ensemble(stim_inten, Hw=30, x=0, y=0, w=None, h=None):
         stim_ensmbl[i] = flat_stim
     return stim_ensmbl
 
-def process_nonlinearity(stim_inten, spike_counts, bins, stas, p_norm=1):
+def process_nonlinearity(stim_inten, spike_counts, bins, stas, p_norm=2):
     """
     Computes the nonlinearity of a single cell. The STA of the cell is in L2 normalization, which
     should restrict the histogram values.
@@ -449,7 +449,9 @@ def process_nonlinearity(stim_inten, spike_counts, bins, stas, p_norm=1):
         - spike_counts: cells activity in shape (t, n_cell)
         - bins: bins in which the transformed stimuli ensembles are set. (usually between -6 and 6)
         - stas:  The STAs to convolve with stim_inten in shape (n_cell, Hw, ...)
-        - p_norm: Power for the normalization. https://en.wikipedia.org/wiki/Norm_(mathematics)#p-norm
+        - p_norm: Power for the normalization. https://en.wikipedia.org/wiki/Norm_(mathematics)#p-norm :
+            1 -> can compare nonlinearites of stimuli with different dimensionality
+            2 -> Common L2 normalization for STAs
 
     return:
         - nonlinearity of the cell.
