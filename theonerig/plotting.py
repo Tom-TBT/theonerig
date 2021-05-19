@@ -1165,8 +1165,11 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
         pp.savefig()
         plt.close()
 
+        cell_idx_cast = str
+        if type(list(reM["S_matrix"][0].attrs["cell_map"].keys())[0]) is int:
+            cell_idx_cast = int
         for cluster, cell_id in zip(cluster_ids, cell_db_ids):
-            reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][str(cluster)]#np.where(cluster==cluster_ids)[0][0]
+            reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][cell_idx_cast(cluster)]#np.where(cluster==cluster_ids)[0][0]
 
             fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
             suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id),
@@ -1447,8 +1450,11 @@ def plot_recap_vitro_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_
         pp.savefig()
         plt.close()
 
+        cell_idx_cast = str
+        if type(list(reM["S_matrix"][0].attrs["cell_map"].keys())[0]) is int:
+            cell_idx_cast = int
         for cluster, cell_id in zip(cluster_ids, cell_db_ids):
-            reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][str(cluster)]#np.where(cluster==cluster_ids)[0][0]
+            reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][cell_idx_cast(cluster)]#np.where(cluster==cluster_ids)[0][0]
 
             fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
             suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id),
@@ -1571,8 +1577,11 @@ def plot_recap_vivo_ephy_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_id
         pp.savefig()
         plt.close()
 
+        cell_idx_cast = str
+        if type(list(reM["S_matrix"][0].attrs["cell_map"].keys())[0]) is int:
+            cell_idx_cast = int
         for cluster, cell_id in zip(cluster_ids, cell_db_ids):
-            reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][cluster]#np.where(cluster==cluster_ids)[0][0]
+            reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][cell_idx_cast(cluster)]#np.where(cluster==cluster_ids)[0][0]
 
             fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
             suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id),
@@ -1697,8 +1706,11 @@ def plot_recap_vivo_ephy_corr_behav(title_dict, reM, phy_dict, cluster_ids, df_s
         pp.savefig()
         plt.close()
 
+        cell_idx_cast = str
+        if type(list(reM["S_matrix"][0].attrs["cell_map"].keys())[0]) is int:
+            cell_idx_cast = int
         for cluster, cell_id in zip(cluster_ids, cell_db_ids):
-            reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][cluster]#np.where(cluster==cluster_ids)[0][0]
+            reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][cell_idx_cast(cluster)]#np.where(cluster==cluster_ids)[0][0]
 
             fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
             suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id),
@@ -1885,8 +1897,11 @@ def plot_recap_wholeField(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_
         pp.savefig()
         plt.close()
 
+        cell_idx_cast = str
+        if type(list(reM["S_matrix"][0].attrs["cell_map"].keys())[0]) is int:
+            cell_idx_cast = int
         for cluster, cell_id in zip(cluster_ids, cell_db_ids):
-            reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][str(cluster)]#np.where(cluster==cluster_ids)[0][0]
+            reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][cell_idx_cast(cluster)]#np.where(cluster==cluster_ids)[0][0]
 
             fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
             suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id),
@@ -2011,8 +2026,11 @@ def plot_recap_wholeField_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_i
         pp.savefig()
         plt.close()
 
+        cell_idx_cast = str
+        if type(list(reM["S_matrix"][0].attrs["cell_map"].keys())[0]) is int:
+            cell_idx_cast = int
         for cluster, cell_id in zip(cluster_ids, cell_db_ids):
-            reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][str(cluster)]#np.where(cluster==cluster_ids)[0][0]
+            reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][cell_idx_cast(cluster)]#np.where(cluster==cluster_ids)[0][0]
 
             fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
             suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id),
