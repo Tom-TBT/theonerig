@@ -172,7 +172,7 @@ def fit_spatial_sta(sta):
     init_fit_center   = (  1,     1,    sta[argmax],  0,   argmax[1],  argmax[0], 0)
     data_tofit          = sta.reshape(-1)
     if np.isnan(sp.sum(sta)): #We check that the sta exists, otherwise return default zero model
-        res  = {"sigma_x_1": 1, "sigma_z_1":1, "amp_1":0, "theta_1":0, "x0_1":0, "z0_1":0,
+        fit  = {"sigma_x_1": 1, "sigma_z_1":1, "amp_1":0, "theta_1":0, "x0_1":0, "z0_1":0,
                 "sigma_x_2": 1, "sigma_z_2":1, "amp_2":0, "theta_2":0, "x0_2":0, "z0_2":0, "y0":0}
     else:
         try:
@@ -226,7 +226,7 @@ def fit_temporal_sta(sta, frame_rate=60):
                 (len(sta)*4,  2,    1/frame_rate,     len(sta)*4,   2,     1/frame_rate,    1 ))
 
     if np.isnan(sp.sum(sta)): #We check that the sta exists, otherwise return default zero model
-        res  = {"sigma_1":1,"amp_1":0,"x0_1":0,
+        fit  = {"sigma_1":1,"amp_1":0,"x0_1":0,
                 "sigma_2":1,"amp_2":0,"x0_2":0,"y0":0}
     else:
         try:
