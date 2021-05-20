@@ -409,11 +409,12 @@ def stimulus_ensemble(stim_inten, Hw=30, x=0, y=0, w=None, h=None):
         - Hw: Lenght in frames of the history window, including the 0 timepoint
         - x: Left position of the window where to get the ensemble from
         - y: Up position of the window where to get the ensemble from
-        - w: Width of the window where to get the ensemble from
-        - h: Height of the window where to get the ensemble from
+        - w: Width of the window where to get the ensemble from. If None, is set to stim_inten.shape[2]
+        - h: Height of the window where to get the ensemble from. If None, is set to stim_inten.shape[1]
 
     return:
-        - Flatten stimulus ensemble of size (len(stim_inten)-Hw, w*h)
+        - Flatten stimulus ensemble of size (len(stim_inten)-(Hw-1), w*h*Hw). To obtain the corresponding cell activity,
+        slice it like so: slice(Hw-1, None)
     """
     stim_inten = stim_inten_norm(stim_inten)
     if len(stim_inten.shape) == 1:
@@ -430,56 +431,84 @@ def stimulus_ensemble(stim_inten, Hw=30, x=0, y=0, w=None, h=None):
     dtype = stim_inten.dtype
     if np.all(np.in1d(stim_inten, [-1,0,1])):
         dtype = "int8"
-    stim_ensmbl = np.zeros((len(stim_inten)-Hw, (xmax-xmin)*(ymax-ymin)*Hw), dtype=dtype)
-    for i in range(Hw+1, len(stim_inten)):
-        flat_stim         = np.ndarray.flatten(stim_inten[i-Hw:i,
+    stim_ensmbl = np.zeros((len(stim_inten)-(Hw-1), (xmax-xmin)*(ymax-ymin)*Hw), dtype=dtype)
+    for i in range(0, len(stim_inten)-(Hw-1)):
+        flat_stim         = np.ndarray.flatten(stim_inten[i:i+Hw,
                                                           ymin:ymax,
                                                           xmin:xmax])
-        stim_ensmbl[i-(Hw+1)] = flat_stim
+        stim_ensmbl[i] = flat_stim
     return stim_ensmbl
 
-def process_nonlinearity(stim_inten, spike_counts, bins, sta):
+def process_nonlinearity(stim_inten, spike_counts, bins, stas, p_norm=2):
     """
     Computes the nonlinearity of a single cell. The STA of the cell is in L2 normalization, which
     should restrict the histogram values.
 
     params:
         - stim_inten: stimulus intensity in shape (t, y, x)
-        - spike_counts: cells activity in shape (t,)
+        - spike_counts: cells activity in shape (t, n_cell)
         - bins: bins in which the transformed stimuli ensembles are set. (usually between -6 and 6)
-        - sta:  The STA to convolve with stim_inten. Undergoes a L2 normalization.
+        - stas:  The STAs to convolve with stim_inten in shape (n_cell, Hw, ...)
+        - p_norm: Power for the normalization. https://en.wikipedia.org/wiki/Norm_(mathematics)#p-norm :
+            1 -> can compare nonlinearites of stimuli with different dimensionality
+            2 -> Common L2 normalization for STAs
 
     return:
         - nonlinearity of the cell.
     """
     assert len(stim_inten)==len(spike_counts)
     stim_inten    = stim_inten_norm(np.array(stim_inten))
-    spike_counts  = np.array(spike_counts)[len(sta):]
 
-    sta = sta.copy()
-    sta /= np.sqrt(np.sum(sta**2)) #L2 normalization
+    nonlins = np.empty((len(stas), len(bins)-1))
 
-    if np.max(spike_counts)<1:#We have probabilities, not spike counts. Need to make it integers
-        mask         = np.where(spike_counts > 0)[0]
+    compute_with_dotprod = False
+    try:
+        stim_ensemble = stimulus_ensemble(stim_inten, Hw=stas.shape[1])
+        compute_with_dotprod = True
+    except MemoryError as err:
+        print("Not enough memory to generate the stimulus ensemble, "+
+              "computing nonlinearity with cross-correlation (will be slower)")
+
+    #In the case of calcium imaging, we have probabilities, not spike counts. Need to make it integers
+    # The discretisation of the calcium imaging is done here globally (for all cells together)
+    # If it's not what you want, either do the discretisation inside the loop bellow, or discretise the S_matrix
+    # before passing it to this function
+
+    if np.max(spike_counts)<1:
+        mask         = np.where(spike_counts > 0)
         nonzero_min  = np.min(spike_counts[mask])
         discretized  = spike_counts/nonzero_min
         spike_counts = ((10*discretized)/(np.max(discretized))).astype(int)
 
-    # Convolving the STA with the stimulus comes back as doing matmul between stim ensemble and STA
-    # but it's much more memory efficient this way
-    stim_ensemble_tranfo   = sp.signal.fftconvolve(sta[::-1], stim_inten, mode="valid", axes=0)[1:]
-    stim_ensemble_tranfo   = np.sum(stim_ensemble_tranfo, axis=tuple(range(1,sta.ndim)))
+    spike_counts  = np.array(spike_counts)[stas.shape[1]-1:].astype(int)
 
-    spike_counts           = spike_counts.astype(int)
-    spike_ensemble_transfo = np.repeat(stim_ensemble_tranfo, spike_counts)
+    for i, (sta, sp_count) in enumerate(zip(stas, spike_counts.T)):
+        sta /= np.power(np.sum(np.power(np.abs(sta), p_norm)), 1/p_norm) # p-norm
 
-    hist_all   = np.histogram(stim_ensemble_tranfo, bins=bins)[0]
-    hist_trigg = np.histogram(spike_ensemble_transfo, bins=bins)[0]
+        if not sp_count.any(): #No spikes
+            continue
 
-    nonlin = hist_trigg/hist_all
-    nonlin = np.nan_to_num(fill_nan(nonlin))
+        if compute_with_dotprod:
+            #This one is faster, but requires the stim_ensemble to fit the computer memory
+            filtered_stim = stim_ensemble@sta.reshape(-1)
+        else:
+            filtered_stim = np.squeeze(sp.signal.correlate(stim_inten, sta, mode="valid"))
 
-    return nonlin
+        filtered_sptrigg = np.repeat(filtered_stim, sp_count)
+
+        hist_all   = np.histogram(filtered_stim, bins=bins)[0]
+        hist_trigg = np.histogram(filtered_sptrigg, bins=bins)[0]
+
+        nonlin = hist_trigg/hist_all
+
+        if np.count_nonzero(~np.isnan(nonlin))<2: #Less than two values in the nonlin, cannot fill the gaps
+            nonlin = np.nan_to_num(nonlin)
+        else:
+            nonlin = np.nan_to_num(fill_nan(nonlin))
+
+        nonlins[i] = nonlin
+
+    return nonlins
 
 
 # Cell
