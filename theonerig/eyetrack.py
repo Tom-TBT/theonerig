@@ -69,7 +69,7 @@ def split_eye_events(eye_tracking, eps=2):
     return move_indexes, blink_indexes, noise_indexes
 
 # Cell
-def get_spherical_map(screen_pos, input_res=(281, 500), output_res=(360, 640), k_side=2):
+def get_spherical_map(screen_pos, input_res=(281, 500), output_res=(360, 640), k_side=2, filling_pol="nonzero"):
     """
     Generate the mapping from normal image to an image projected on a spherical screen
     params:
@@ -77,9 +77,15 @@ def get_spherical_map(screen_pos, input_res=(281, 500), output_res=(360, 640), k
         - input_res: resolution of the input image
         - output_res: resolution of the output image
         - k_side: Kernel side's size to fill holes in the mapped image (2 -> 5*5 kernel)
+        - filling_pol: Filling policy for the empty values, to which `f_fill` of `apply_spherical_map` will be applied
+            nonzero: indexes of all nonzero elements
+            closest: index of the closest nonzero element
+
     returns:
         - A mapping to be used in `apply_spherical_map`
     """
+    assert filling_pol in ["nonzero", "closest"]
+
     screen_interp = interpolate_screen_pos(screen_pos, np.linspace(0,16, input_res[1], endpoint=True),
                                                        np.linspace(0, 9, input_res[0], endpoint=True))
     y_inres, x_inres = input_res
@@ -106,7 +112,13 @@ def get_spherical_map(screen_pos, input_res=(281, 500), output_res=(360, 640), k
             fill_x_l.append(x)
             fill_y_l.append(y)
             nonz_y, nonz_x = np.nonzero(area)
-            nonzeros_l.append((nonz_y+ylow, nonz_x+xlow)) #store the nonzero slicing for later filling
+            if filling_pol=="nonzero":
+                nonzeros_l.append((nonz_y+ylow, nonz_x+xlow)) #store the nonzero slicing for later filling
+            elif filling_pol=="closest":
+                xx, yy = np.meshgrid(np.arange(xlow,xhig), np.arange(ylow,yhig))
+                distances = np.sqrt((yy-y)**2+(xx-x)**2)
+                idx_min   = np.argmin(distances[nonz_y, nonz_x])
+                nonzeros_l.append(([nonz_y[idx_min]+ylow], [nonz_x[idx_min]+xlow]))
 
     return (y_map, x_map), (fill_y_l, fill_x_l, nonzeros_l)
 
