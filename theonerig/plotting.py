@@ -230,7 +230,7 @@ def plot_nonlinearity_fit(nonlinearity, param_d, QI=None, fit_f=sigmoid, ax=None
 
 # Cell
 def plot_ds_wheel(ds_dict, cell_idx, ax=None, arrow_params={"width":.13,
-                        "head_length":10, "length_includes_head":True, "lw":2, "zorder":5,
+                        "length_includes_head":True, "lw":2, "zorder":5,
                         "alpha":0.5, "edgecolor":'black'}):
     """
     Polar plot for direction and orientation response of a cell processed by `processing.direction_selectivity`.
@@ -294,7 +294,9 @@ def plot_ds_wheel(ds_dict, cell_idx, ax=None, arrow_params={"width":.13,
                 label=label)
 
     x_uplim = ax.get_ylim()[1]
+    arrow_params["head_length"] = best_di[0]*x_uplim/6
     ds_arrow = ax.arrow(best_di[1], x_uplim/500, 0,  best_di[0]*x_uplim, label="Best DI", facecolor='tab:purple', **arrow_params)
+    arrow_params["head_length"] = best_oi[0]*x_uplim/6
     os_arrow = ax.arrow(best_oi[1], x_uplim/500, 0,  best_oi[0]*x_uplim, label="Best OI", facecolor='tab:green', **arrow_params)
     legend_obj, legend_label = ax.get_legend_handles_labels()
     #For double legend box, need to add manually the artist for the first legend
