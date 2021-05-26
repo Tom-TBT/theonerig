@@ -5,7 +5,7 @@ __all__ = ['extend_sync_timepoints', 'align_sync_timepoints', 'resample_to_timep
            'get_calcium_stack_lenghts', 'twoP_dataChunks', 'img_2d_fit', 'fill_nan', 'stim_inten_norm',
            'group_direction_response', 'group_chirp_bumps', 'get_repeat_corrected', 'removeSlowDrift',
            'time_shift_test_corr', 'cross_corr_with_lag', 'get_inception_generator', 'group_omitted_epochs',
-           'buszaki_shank_channels', 'format_pval', 'stim_recap_df']
+           'get_shank_channels', 'format_pval', 'stim_recap_df']
 
 # Cell
 import numpy as np
@@ -735,31 +735,33 @@ def group_omitted_epochs(stim_inten, spike_counts, n_fr_flash=4, n_fr_interflash
     return response_d_ON, response_d_OFF
 
 # Cell
-def buszaki_shank_channels(channel_positions):
+def get_shank_channels(channel_positions, shank_dist_th=80):
     """
     Group the channels of a Buzsaki32 silicone probe into their shanks
     from the channel position.
 
     params:
         - channel_positions: List of channel positions
+        - shank_dist_th: Distance between channels in X to rule if on same shank or not
 
     return:
         - array of grouped channel index of shape (n_shank(4), n_channel(8))
     """
-    shank_1_mask = channel_positions[:,0]<180
-    shank_1_idx  = np.argwhere(shank_1_mask)[:,0]
-    shank_2_mask = (channel_positions[:,0]<380) & np.invert(shank_1_mask)
-    shank_2_idx  = np.argwhere(shank_2_mask)[:,0]
-    shank_4_mask = channel_positions[:,0]>580
-    shank_4_idx  = np.argwhere(shank_4_mask)[:,0]
-    shank_3_mask = (channel_positions[:,0]>380) & np.invert(shank_4_mask)
-    shank_3_idx  = np.argwhere(shank_3_mask)[:,0]
+    found      = np.zeros(len(channel_positions))
+    shank_pos  = []
+    chann_pos  = []
 
-    shanks_idx = np.zeros((4,8), dtype=int) - 1 #Initialize with -1 in case of channel missing
-    shanks_idx[0,:len(shank_1_idx)] = shank_1_idx
-    shanks_idx[1,:len(shank_2_idx)] = shank_2_idx
-    shanks_idx[2,:len(shank_3_idx)] = shank_3_idx
-    shanks_idx[3,:len(shank_4_idx)] = shank_4_idx
+    while not np.all(found):
+        next_idx   = np.argmin(found)
+        next_pos   = channel_positions[next_idx][0] #getting the X position of the electrode
+        this_shank = np.where(np.abs(channel_positions[:,0]-next_pos)<shank_dist_th)[0]
+        chann_pos.append(this_shank)
+        shank_pos.append(next_pos)
+        found[this_shank] = 1
+
+    shanks_idx = np.zeros((len(shank_pos), len(this_shank)), dtype=int) - 1 #Initialize with -1 in case of channel missing
+    for i, order in enumerate(np.argsort(shank_pos)):
+        shanks_idx[i,:len(chann_pos[order])] = chann_pos[order]
     return shanks_idx
 
 # Cell

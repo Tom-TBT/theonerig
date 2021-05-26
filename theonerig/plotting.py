@@ -462,7 +462,7 @@ def plot_spike_template(cluster_composition, templates, shanks_idx, channel_posi
     params:
         - cluster_composition: List of phy format clusters corresponding to that cell
         - templates: All templates of phy format
-        - shanks_idx: Idx of shanks for the channels obtained with `utils.buszaki_shank_channels`
+        - shanks_idx: Idx of shanks for the channels obtained with `utils.get_shank_channels`
         - channel_positions: Positions of the channels by idx from phy format
         - ax: The axis for the plot. If None, a new plot is created
 
@@ -1142,7 +1142,7 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
     print("Generating the recap plot")
     configure_pyplot_recap()
 
-    shanks_idx = buszaki_shank_channels(phy_dict["channel_positions"])
+    shanks_idx = get_shank_channels(phy_dict["channel_positions"])
     cond = title_dict["condition"]
     date = title_dict["date"]
     record_name = title_dict["record_name"]
@@ -1196,7 +1196,7 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
             sp_amp_ax = fig.add_subplot(gs[0:4,8:])
             plot_spike_amplitudes(cluster, phy_dict["spike_templates"], phy_dict["spike_clusters"],
                                   phy_dict["spike_times"], phy_dict["amplitudes"], ax=sp_amp_ax)
-            plot_stim_epochs_to_ephy(reM, y_pos=-0.05, ax=sp_amp_ax)
+            plot_stim_epochs_to_ephy(reM, y_pos=0.2, ax=sp_amp_ax)
 
             #Checkerboard STA
             if checkerboard is not None:
@@ -1556,7 +1556,7 @@ def plot_recap_vivo_ephy_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_id
     print("Generating the recap plot")
     configure_pyplot_recap()
 
-    shanks_idx = buszaki_shank_channels(phy_dict["channel_positions"])
+    shanks_idx = get_shank_channels(phy_dict["channel_positions"])
     cond = title_dict["condition"]
     date = title_dict["date"]
     record_name = title_dict["record_name"]
@@ -1683,7 +1683,7 @@ def plot_recap_vivo_ephy_corr_behav(title_dict, reM, phy_dict, cluster_ids, df_s
     print("Generating the recap plot")
     configure_pyplot_recap()
 
-    shanks_idx = buszaki_shank_channels(phy_dict["channel_positions"])
+    shanks_idx = get_shank_channels(phy_dict["channel_positions"])
     cond = title_dict["condition"]
     date = title_dict["date"]
     record_name = title_dict["record_name"]
@@ -1874,7 +1874,7 @@ def plot_recap_wholeField(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_
     print("Generating the recap plot")
     configure_pyplot_recap()
 
-    shanks_idx = buszaki_shank_channels(phy_dict["channel_positions"])
+    shanks_idx = get_shank_channels(phy_dict["channel_positions"])
     cond = title_dict["condition"]
     date = title_dict["date"]
     record_name = title_dict["record_name"]
@@ -1928,7 +1928,7 @@ def plot_recap_wholeField(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_
             sp_amp_ax = fig.add_subplot(gs[0:4,8:])
             plot_spike_amplitudes(cluster, phy_dict["spike_templates"], phy_dict["spike_clusters"],
                                   phy_dict["spike_times"], phy_dict["amplitudes"], ax=sp_amp_ax)
-            plot_stim_epochs_to_ephy(reM, y_pos=-0.05, ax=sp_amp_ax)
+            plot_stim_epochs_to_ephy(reM, y_pos=0.2, ax=sp_amp_ax)
 
             #Checkerboard STA
             if checkerboard is not None:
@@ -2005,7 +2005,7 @@ def plot_recap_wholeField_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_i
     print("Generating the recap plot")
     configure_pyplot_recap()
 
-    shanks_idx = buszaki_shank_channels(phy_dict["channel_positions"])
+    shanks_idx = get_shank_channels(phy_dict["channel_positions"])
     cond = title_dict["condition"]
     date = title_dict["date"]
     record_name = title_dict["record_name"]
@@ -2057,7 +2057,7 @@ def plot_recap_wholeField_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_i
             sp_amp_ax = fig.add_subplot(gs[0:4,8:])
             plot_spike_amplitudes(cluster, phy_dict["spike_templates"], phy_dict["spike_clusters"],
                                   phy_dict["spike_times"], phy_dict["amplitudes"], ax=sp_amp_ax)
-            plot_stim_epochs_to_ephy(reM, y_pos=-0.05, ax=sp_amp_ax)
+            plot_stim_epochs_to_ephy(reM, y_pos=0.2, ax=sp_amp_ax)
 
             #Checkerboard STA
             if checkerboard is not None:

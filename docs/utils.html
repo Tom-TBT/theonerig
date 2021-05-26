@@ -974,13 +974,14 @@ Return cross-correlation array, null-distribution array and values for plotting.
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="buszaki_shank_channels" class="doc_header"><code>buszaki_shank_channels</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L738" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>buszaki_shank_channels</code>(<strong><code>channel_positions</code></strong>)</p>
+<h4 id="get_shank_channels" class="doc_header"><code>get_shank_channels</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L738" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_shank_channels</code>(<strong><code>channel_positions</code></strong>, <strong><code>shank_dist_th</code></strong>=<em><code>80</code></em>)</p>
 </blockquote>
 <p>Group the channels of a Buzsaki32 silicone probe into their shanks
 from the channel position.</p>
 <p>params:</p>
 
 <pre><code>- channel_positions: List of channel positions
+- shank_dist_th: Distance between channels in X to rule if on same shank or not
 
 </code></pre>
 <p>return:</p>
@@ -1015,7 +1016,7 @@ from the channel position.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="format_pval" class="doc_header"><code>format_pval</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L766" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>format_pval</code>(<strong><code>pval</code></strong>, <strong><code>significant_figures</code></strong>=<em><code>2</code></em>)</p>
+<h4 id="format_pval" class="doc_header"><code>format_pval</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L768" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>format_pval</code>(<strong><code>pval</code></strong>, <strong><code>significant_figures</code></strong>=<em><code>2</code></em>)</p>
 </blockquote>
 <p>Helper function to format pvalue into string.</p>
 
@@ -1047,7 +1048,7 @@ from the channel position.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="stim_recap_df" class="doc_header"><code>stim_recap_df</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L773" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stim_recap_df</code>(<strong><code>reM</code></strong>)</p>
+<h4 id="stim_recap_df" class="doc_header"><code>stim_recap_df</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L775" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stim_recap_df</code>(<strong><code>reM</code></strong>)</p>
 </blockquote>
 <p>Extract stimuli parameters (originally from the Database) to put them into a
 dataframe that will be displayed in the recapitulation plot.</p>
