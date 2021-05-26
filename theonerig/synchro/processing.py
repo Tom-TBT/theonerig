@@ -248,7 +248,7 @@ def match_starting_position(frame_timepoints, frame_signals, stim_signals, estim
     """
     stim_matching_len = min(600, np.where(np.diff(stim_signals)!=0)[0][50]) #Way of getting the 50th change in the signals
     idx_estimate = np.argmax(frame_timepoints>estimate_start)
-    search_slice = slice(max(0, idx_estimate-search_size), min(idx_estimate+search_size, len(frame_signals)))
+    search_slice = slice(max(0, idx_estimate-search_size-frame_signals.idx), min(idx_estimate+search_size-frame_signals.idx, len(frame_signals)))
     return search_slice.start + np.argmax(np.correlate(frame_signals[search_slice],
                                                        stim_signals[:stim_matching_len]))
 
