@@ -234,15 +234,21 @@ def get_position_estimate(stim_time, record_time, sampling_rate):
         return (stim_time - record_time).seconds * sampling_rate
 
 # Cell
-def match_starting_position(frame_timepoints, frame_signals, stim_signals, estimate_start):
+def match_starting_position(frame_timepoints, frame_signals, stim_signals, estimate_start, search_size=1000):
+    """
+    Search the best matching index between frame_signals and stim_signals.
+    params:
+        - frame_timepoints: Indexes of the frames in the record
+        - frame_signals: Signals of the detected frames
+        - stim_signals: Expected stimulus signals
+        - estimate_start: Estimated start index
+        - search_size: Stimulus is searched in frame_signals[idx_estimate-search_size: idx_estimate+search_size]
+    return:
+        - best match for the starting position of the stimulus
+    """
     stim_matching_len = min(600, np.where(np.diff(stim_signals)!=0)[0][50]) #Way of getting the 50th change in the signals
-    #But not higher than 600 (correspond to 10s, and is necessary for moving gratings)
-#     stim_matching_len = 50
     idx_estimate = np.argmax(frame_timepoints>estimate_start)
-    search_slice = slice(max(0, idx_estimate-1000), min(idx_estimate+1000, len(frame_signals)))
-#     diff_signals = np.diff(frame_signals[search_slice])
-#     diff_stim    = np.diff(stim_signals[:stim_matching_len])
-#     return search_slice.start + np.argmax(np.correlate(diff_signals, diff_stim))
+    search_slice = slice(max(0, idx_estimate-search_size-frame_signals.idx), min(idx_estimate+search_size-frame_signals.idx, len(frame_signals)))
     return search_slice.start + np.argmax(np.correlate(frame_signals[search_slice],
                                                        stim_signals[:stim_matching_len]))
 
