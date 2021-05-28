@@ -272,6 +272,10 @@ def phy_results_dict(phy_dir):
     res_dict["spike_templates"] = np.load(phy_dir+"/spike_templates.npy")
     res_dict["spike_times"] = np.load(phy_dir+"/spike_times.npy")
     res_dict["templates"] = np.load(phy_dir+"/templates.npy")
+    if os.path.isfile(phy_dir+"/channel_shanks.npy"): #Newer version of phy/spyking-circus
+        res_dict["channel_shanks"] = np.load(phy_dir+"/channel_shanks.npy")
+        res_dict["template_ind"]   = np.load(phy_dir+"/template_ind.npy")
+
     return res_dict
 
 def spike_to_dataChunk(spike_timepoints, ref_timepoints:DataChunk) -> DataChunk:

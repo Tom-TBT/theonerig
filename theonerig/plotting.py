@@ -455,7 +455,7 @@ def plot_chirp(stim_inten, spike_bins, smooth=True, n_repeats=None, frame_rate=6
     return ax
 
 # Cell
-def plot_spike_template(cluster_composition, templates, shanks_idx, channel_positions, ax=None):
+def plot_spike_template(cluster_composition, phy_dict, shanks_idx, cluster_idx, ax=None):
     """
     Plot the spike template obtained with phy for a silicone probe.
 
@@ -473,26 +473,61 @@ def plot_spike_template(cluster_composition, templates, shanks_idx, channel_posi
     if ax is None:
         fig, ax = plt.subplots()
 
-    tmp = cluster_composition[0]
-    n_points = 30
-    mask_trace = np.arange(templates.shape[1]//2-10,
-                           templates.shape[1]//2+(n_points-10))
+    templates         = phy_dict["templates"]
+    channel_map       = phy_dict["channel_map"]
+    channel_positions = phy_dict["channel_positions"]
+    new_phy_version   = "template_ind" in phy_dict.keys()
+    if new_phy_version:
+        template_ind = phy_dict["template_ind"]
+    template_idx = cluster_composition[0]
+    n_points     = 30
+    mask_trace   = np.arange(templates.shape[1]//2-10,
+                             templates.shape[1]//2+(n_points-10))
 
-    template_pos = np.where(np.abs(templates[tmp])
-                            == np.max(np.abs(templates[tmp])))[1][0]
-    template_shank = np.where(shanks_idx==template_pos)[0][0]
-    selected_channels = shanks_idx[template_shank]
-    selected_channels = selected_channels[selected_channels!=-1] #Removing the disabled channels
-    shank_templates = templates[:,:,selected_channels]
+    if new_phy_version:
+        template_shank    = np.where(shanks_idx==template_ind[cluster_idx][0])[0][0]
+        shank_templates   = templates
+        selected_channels = shanks_idx[template_shank]
+        selected_channels = selected_channels[selected_channels!=-1]
 
-    min_x = np.min(channel_positions[selected_channels][:,0])
-    for i, pos in enumerate(channel_positions[selected_channels]):
-        for j, cell in enumerate(cluster_composition):
+        min_x = np.min(channel_positions[selected_channels][:,0])-5
+        max_x = np.max(channel_positions[selected_channels][:,0])+n_points+5
+        min_y = np.min(channel_positions[selected_channels][:,1])-abs(np.min(shank_templates))-5
+        max_y = np.max(channel_positions[selected_channels][:,1])+abs(np.max(shank_templates))+5
+        for j, templ in enumerate(cluster_composition):
             color = DEFAULT_COLORS[j%len(DEFAULT_COLORS)]
-            ax.plot(np.arange(n_points)+pos[0]-min_x, shank_templates[cell,mask_trace,i]*4+pos[1], c=color)
-    ax.set_title("Shank "+str(template_shank+1))
+            for i, chann_idx in enumerate(template_ind[templ]):
+                if chann_idx==-1:
+                    break
+                pos = channel_positions[chann_idx]
+                ax.plot(np.arange(n_points)+pos[0], shank_templates[templ,mask_trace,i]*4+pos[1], c=color)
+                if j==0:
+                    name_chann = str(channel_map[chann_idx])
+                    ax.text(pos[0]-3, pos[1]-2, name_chann)
+        ax.set_ylim(min_y, max_y)
+        ax.set_xlim(min_x, max_x)
+        ax.set_title("Shank "+str(template_shank+1))
+        ax.set_xticks([])
 
-    return ax
+    else:
+        tmp            = np.abs( templates[template_idx]) == np.max(np.abs(templates[template_idx]) )
+        template_pos   = np.where(tmp)[1][0]
+        template_shank = np.where(shanks_idx==template_pos)[0][0]
+        selected_channels = shanks_idx[template_shank]
+        selected_channels = selected_channels[selected_channels!=-1] #Removing the disabled channels
+        shank_templates   = templates[:,:,selected_channels]
+
+        selected_map = channel_map[selected_channels]
+        min_x = np.min(channel_positions[selected_channels][:,0])
+        for j, templ in enumerate(cluster_composition):
+            color = DEFAULT_COLORS[j%len(DEFAULT_COLORS)]
+            for i, pos in enumerate(channel_positions[selected_channels]):
+                ax.plot(np.arange(n_points)+pos[0]-min_x, shank_templates[templ,mask_trace,i]*4+pos[1], c=color)
+                if j==0:
+                    name_chann = str(selected_map[i])
+                    ax.text(pos[0]-3-min_x, pos[1]-2, name_chann)
+        ax.set_title("Shank "+str(template_shank+1))
+        ax.set_xticks([])
 
 def plot_spike_template_MEA(cluster_composition, templates, channel_positions, ax=None):
     """
@@ -508,6 +543,7 @@ def plot_spike_template_MEA(cluster_composition, templates, channel_positions, a
         - The axis of the plot
 
     """
+    print("WARNING: plot_spike_template_MEA don't work for spike sortings obtained with phy2")
     if ax is None:
         fig, ax = plt.subplots()
 
@@ -1185,7 +1221,7 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
 
             #Template on electrodes
             cell_loc_ax = fig.add_subplot(gs[0:4,0:2])
-            plot_spike_template(cluster_composition, phy_dict["templates"], shanks_idx, phy_dict["channel_positions"], ax=cell_loc_ax)
+            plot_spike_template(cluster_composition, phy_dict, shanks_idx, cluster, ax=cell_loc_ax)
 
             #Autocorrelogram
             autocorr_ax = fig.add_subplot(gs[0:4,3:7])
@@ -1597,7 +1633,7 @@ def plot_recap_vivo_ephy_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_id
 
             #Template on electrodes
             cell_loc_ax = fig.add_subplot(gs[0:4,0:2])
-            plot_spike_template(cluster_composition, phy_dict["templates"], shanks_idx, phy_dict["channel_positions"], cell_loc_ax)
+            plot_spike_template(cluster_composition, phy_dict, shanks_idx, cluster, ax=cell_loc_ax)
 
             #Autocorrelogram
             autocorr_ax = fig.add_subplot(gs[0:4,3:7])
@@ -1726,7 +1762,7 @@ def plot_recap_vivo_ephy_corr_behav(title_dict, reM, phy_dict, cluster_ids, df_s
 
             #Template on electrodes
             cell_loc_ax = fig.add_subplot(gs[0:4,0:2])
-            plot_spike_template(cluster_composition, phy_dict["templates"], shanks_idx, phy_dict["channel_positions"], ax=cell_loc_ax)
+            plot_spike_template(cluster_composition, phy_dict, shanks_idx, cluster, ax=cell_loc_ax)
 
             #Autocorrelogram
             autocorr_ax = fig.add_subplot(gs[0:4,3:7])
@@ -1917,7 +1953,7 @@ def plot_recap_wholeField(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_
 
             #Template on electrodes
             cell_loc_ax = fig.add_subplot(gs[0:4,0:2])
-            plot_spike_template(cluster_composition, phy_dict["templates"], shanks_idx, phy_dict["channel_positions"], ax=cell_loc_ax)
+            plot_spike_template(cluster_composition, phy_dict, shanks_idx, cluster, ax=cell_loc_ax)
 
             #Autocorrelogram
             autocorr_ax = fig.add_subplot(gs[0:4,3:7])
@@ -2046,7 +2082,7 @@ def plot_recap_wholeField_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_i
 
             #Template on electrodes
             cell_loc_ax = fig.add_subplot(gs[0:4,0:2])
-            plot_spike_template(cluster_composition, phy_dict["templates"], shanks_idx, phy_dict["channel_positions"], ax=cell_loc_ax)
+            plot_spike_template(cluster_composition, phy_dict, shanks_idx, cluster, ax=cell_loc_ax)
 
             #Autocorrelogram
             autocorr_ax = fig.add_subplot(gs[0:4,3:7])
