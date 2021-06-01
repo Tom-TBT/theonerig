@@ -455,15 +455,14 @@ def plot_chirp(stim_inten, spike_bins, smooth=True, n_repeats=None, frame_rate=6
     return ax
 
 # Cell
-def plot_spike_template(cluster_composition, phy_dict, shanks_idx, cluster_idx, ax=None):
+def plot_spike_template(cluster_composition, phy_dict, shanks_idx, ax=None):
     """
     Plot the spike template obtained with phy for a silicone probe.
 
     params:
         - cluster_composition: List of phy format clusters corresponding to that cell
-        - templates: All templates of phy format
+        - phy_dict: Phy result dictionnary
         - shanks_idx: Idx of shanks for the channels obtained with `utils.get_shank_channels`
-        - channel_positions: Positions of the channels by idx from phy format
         - ax: The axis for the plot. If None, a new plot is created
 
     return:
@@ -485,7 +484,7 @@ def plot_spike_template(cluster_composition, phy_dict, shanks_idx, cluster_idx, 
                              templates.shape[1]//2+(n_points-10))
 
     if new_phy_version:
-        template_shank    = np.where(shanks_idx==template_ind[cluster_idx][0])[0][0]
+        template_shank    = np.where(shanks_idx==template_ind[cluster_composition[0]][0])[0][0]
         shank_templates   = templates
         selected_channels = shanks_idx[template_shank]
         selected_channels = selected_channels[selected_channels!=-1]
@@ -1221,7 +1220,7 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
 
             #Template on electrodes
             cell_loc_ax = fig.add_subplot(gs[0:4,0:2])
-            plot_spike_template(cluster_composition, phy_dict, shanks_idx, cluster, ax=cell_loc_ax)
+            plot_spike_template(cluster_composition, phy_dict, shanks_idx, ax=cell_loc_ax)
 
             #Autocorrelogram
             autocorr_ax = fig.add_subplot(gs[0:4,3:7])
@@ -1633,7 +1632,7 @@ def plot_recap_vivo_ephy_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_id
 
             #Template on electrodes
             cell_loc_ax = fig.add_subplot(gs[0:4,0:2])
-            plot_spike_template(cluster_composition, phy_dict, shanks_idx, cluster, ax=cell_loc_ax)
+            plot_spike_template(cluster_composition, phy_dict, shanks_idx, ax=cell_loc_ax)
 
             #Autocorrelogram
             autocorr_ax = fig.add_subplot(gs[0:4,3:7])
@@ -1762,7 +1761,7 @@ def plot_recap_vivo_ephy_corr_behav(title_dict, reM, phy_dict, cluster_ids, df_s
 
             #Template on electrodes
             cell_loc_ax = fig.add_subplot(gs[0:4,0:2])
-            plot_spike_template(cluster_composition, phy_dict, shanks_idx, cluster, ax=cell_loc_ax)
+            plot_spike_template(cluster_composition, phy_dict, shanks_idx, ax=cell_loc_ax)
 
             #Autocorrelogram
             autocorr_ax = fig.add_subplot(gs[0:4,3:7])
@@ -1953,7 +1952,7 @@ def plot_recap_wholeField(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_
 
             #Template on electrodes
             cell_loc_ax = fig.add_subplot(gs[0:4,0:2])
-            plot_spike_template(cluster_composition, phy_dict, shanks_idx, cluster, ax=cell_loc_ax)
+            plot_spike_template(cluster_composition, phy_dict, shanks_idx, ax=cell_loc_ax)
 
             #Autocorrelogram
             autocorr_ax = fig.add_subplot(gs[0:4,3:7])
@@ -2082,7 +2081,7 @@ def plot_recap_wholeField_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_i
 
             #Template on electrodes
             cell_loc_ax = fig.add_subplot(gs[0:4,0:2])
-            plot_spike_template(cluster_composition, phy_dict, shanks_idx, cluster, ax=cell_loc_ax)
+            plot_spike_template(cluster_composition, phy_dict, shanks_idx, ax=cell_loc_ax)
 
             #Autocorrelogram
             autocorr_ax = fig.add_subplot(gs[0:4,3:7])
