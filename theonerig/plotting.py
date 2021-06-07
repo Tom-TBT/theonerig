@@ -1213,7 +1213,7 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
                                    "Cluster n°"+str(cluster), "Cell id n°"+str(cell_id)])
             plt.suptitle(suptitle)
 
-            mask_cluster = phy_dict["spike_clusters"]==cluster
+            mask_cluster        = phy_dict["spike_clusters"]==cluster
             cluster_composition = np.unique(phy_dict["spike_templates"][mask_cluster])
 
             gs = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
