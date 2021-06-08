@@ -456,7 +456,7 @@ spike_templates, spike_times, templates)</code></pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="twoP_dataChunks" class="doc_header"><code>twoP_dataChunks</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L325" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>twoP_dataChunks</code>(<strong><code>ref_timepoints</code></strong>:<a href="/theonerig/core.html#DataChunk"><code>DataChunk</code></a>, <strong><code>frame_timepoints</code></strong>, <strong><code>len_epochs</code></strong>, <strong><code>C_matrix</code></strong>, <strong><code>S_matrix</code></strong>)</p>
+<h4 id="twoP_dataChunks" class="doc_header"><code>twoP_dataChunks</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L325" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>twoP_dataChunks</code>(<strong><code>ref_timepoints</code></strong>:<a href="/theonerig/core.html#DataChunk"><code>DataChunk</code></a>, <strong><code>frame_timepoints</code></strong>, <strong><code>len_epochs</code></strong>, <strong>*<code>args</code></strong>)</p>
 </blockquote>
 <p>Factory function for two photon data.</p>
 <p>params:</p>
@@ -464,14 +464,12 @@ spike_templates, spike_times, templates)</code></pre>
 <pre><code>- ref_timepoints: Reference timepoints to create the DataChunk
 - frame_timepoints: List of frame timepoints for each sequence of two photon frame recorded.
 - len_epochs: Lenght of the recorded epochs (&lt;= than the corresponding frame_timepoints). Int of list
-- C_matrix: C_matrix of all frames detected by CaImAn
-- S_matrix: S_matrix of all frames detected by CaImAn
+- args: matrices of all frames detected by CaImAn. (give as many as you want to synchronise)
 
 </code></pre>
 <p>return:</p>
 
-<pre><code>- C_datachunk_l: A list of C_matrix datachunks
-- S_datachunk_l: A list of S_matrix datachunks</code></pre>
+<pre><code>- tuple containing the synchronised matrices in the order it was given</code></pre>
 
 </div>
 
@@ -507,7 +505,7 @@ spike_templates, spike_times, templates)</code></pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="img_2d_fit" class="doc_header"><code>img_2d_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L361" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>img_2d_fit</code>(<strong><code>shape</code></strong>, <strong><code>param_d</code></strong>, <strong><code>f</code></strong>)</p>
+<h4 id="img_2d_fit" class="doc_header"><code>img_2d_fit</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L358" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>img_2d_fit</code>(<strong><code>shape</code></strong>, <strong><code>param_d</code></strong>, <strong><code>f</code></strong>)</p>
 </blockquote>
 <p>Helper function to generate the 2D image of a fit.</p>
 <p>params:</p>
@@ -544,7 +542,7 @@ spike_templates, spike_times, templates)</code></pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fill_nan" class="doc_header"><code>fill_nan</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L375" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fill_nan</code>(<strong><code>A</code></strong>)</p>
+<h4 id="fill_nan" class="doc_header"><code>fill_nan</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L372" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fill_nan</code>(<strong><code>A</code></strong>)</p>
 </blockquote>
 <p>Fill nan values with interpolation. Credits to BRYAN WOODS@StackOverflow</p>
 
@@ -582,7 +580,7 @@ spike_templates, spike_times, templates)</code></pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="stim_inten_norm" class="doc_header"><code>stim_inten_norm</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L386" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stim_inten_norm</code>(<strong><code>stim_inten</code></strong>)</p>
+<h4 id="stim_inten_norm" class="doc_header"><code>stim_inten_norm</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L383" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stim_inten_norm</code>(<strong><code>stim_inten</code></strong>)</p>
 </blockquote>
 <p>Normalize a stimulus with intensity in the 8bit range (0-255) to -1 to 1 range.</p>
 
@@ -614,7 +612,7 @@ spike_templates, spike_times, templates)</code></pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="group_direction_response" class="doc_header"><code>group_direction_response</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L397" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>group_direction_response</code>(<strong><code>stim_prop</code></strong>, <strong><code>spike_counts</code></strong>, <strong><code>n_repeat</code></strong>, <strong><code>n_cond</code></strong>=<em><code>32</code></em>)</p>
+<h4 id="group_direction_response" class="doc_header"><code>group_direction_response</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L394" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>group_direction_response</code>(<strong><code>stim_prop</code></strong>, <strong><code>spike_counts</code></strong>, <strong><code>n_repeat</code></strong>, <strong><code>n_cond</code></strong>=<em><code>32</code></em>)</p>
 </blockquote>
 <p>Group the cells responses from shuffled grating stimulus repetitions. Retrieves a dictionnary
 with a key for each condition.</p>
@@ -658,7 +656,7 @@ with a key for each condition.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="group_chirp_bumps" class="doc_header"><code>group_chirp_bumps</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L436" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>group_chirp_bumps</code>(<strong><code>stim_inten</code></strong>, <strong><code>spike_counts</code></strong>, <strong><code>n_repeat</code></strong>)</p>
+<h4 id="group_chirp_bumps" class="doc_header"><code>group_chirp_bumps</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L433" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>group_chirp_bumps</code>(<strong><code>stim_inten</code></strong>, <strong><code>spike_counts</code></strong>, <strong><code>n_repeat</code></strong>)</p>
 </blockquote>
 <p>Find the cells response to the OFF-ON-OFF initial parts of the chirps.</p>
 <p>params:</p>
@@ -700,7 +698,7 @@ with a key for each condition.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_repeat_corrected" class="doc_header"><code>get_repeat_corrected</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L489" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_repeat_corrected</code>(<strong><code>stim_inten</code></strong>, <strong><code>spike_counts</code></strong>, <strong><code>n_repeats</code></strong>=<em><code>10</code></em>)</p>
+<h4 id="get_repeat_corrected" class="doc_header"><code>get_repeat_corrected</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L486" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_repeat_corrected</code>(<strong><code>stim_inten</code></strong>, <strong><code>spike_counts</code></strong>, <strong><code>n_repeats</code></strong>=<em><code>10</code></em>)</p>
 </blockquote>
 <p>Apply shifts (detected during synchro) to the chirp repetition.</p>
 <p>params:</p>
@@ -743,7 +741,7 @@ with a key for each condition.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="removeSlowDrift" class="doc_header"><code>removeSlowDrift</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L528" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>removeSlowDrift</code>(<strong><code>traces</code></strong>, <strong><code>fps</code></strong>=<em><code>60</code></em>, <strong><code>window</code></strong>=<em><code>80</code></em>, <strong><code>percentile</code></strong>=<em><code>8</code></em>)</p>
+<h4 id="removeSlowDrift" class="doc_header"><code>removeSlowDrift</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L525" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>removeSlowDrift</code>(<strong><code>traces</code></strong>, <strong><code>fps</code></strong>=<em><code>60</code></em>, <strong><code>window</code></strong>=<em><code>80</code></em>, <strong><code>percentile</code></strong>=<em><code>8</code></em>)</p>
 </blockquote>
 <p>Remove slow drifts from behavioral temporal traces such as locomotion speed obtained from the treadmill signal
 or pupil size obtained from the eye_tracking signal, by extracting a specified percentile within moving window from the signal.</p>
@@ -787,7 +785,7 @@ or pupil size obtained from the eye_tracking signal, by extracting a specified p
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="time_shift_test_corr" class="doc_header"><code>time_shift_test_corr</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L562" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>time_shift_test_corr</code>(<strong><code>spike_counts</code></strong>, <strong><code>behav_signal</code></strong>, <strong><code>n_tests</code></strong>=<em><code>500</code></em>, <strong><code>seed</code></strong>=<em><code>1</code></em>)</p>
+<h4 id="time_shift_test_corr" class="doc_header"><code>time_shift_test_corr</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L559" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>time_shift_test_corr</code>(<strong><code>spike_counts</code></strong>, <strong><code>behav_signal</code></strong>, <strong><code>n_tests</code></strong>=<em><code>500</code></em>, <strong><code>seed</code></strong>=<em><code>1</code></em>)</p>
 </blockquote>
 <p>Compute the null distribution of correlation between behavioral signal and spiking signal with a time shift test.</p>
 <p>params:</p>
@@ -830,7 +828,7 @@ or pupil size obtained from the eye_tracking signal, by extracting a specified p
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="cross_corr_with_lag" class="doc_header"><code>cross_corr_with_lag</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L588" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cross_corr_with_lag</code>(<strong><code>spike_counts</code></strong>, <strong><code>behav_signal</code></strong>, <strong><code>behav</code></strong>, <strong><code>conversion_factor_treadmill</code></strong>=<em><code>None</code></em>, <strong><code>removeslowdrift</code></strong>=<em><code>True</code></em>, <strong><code>fps</code></strong>=<em><code>60</code></em>, <strong><code>seconds</code></strong>=<em><code>30</code></em>)</p>
+<h4 id="cross_corr_with_lag" class="doc_header"><code>cross_corr_with_lag</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L585" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>cross_corr_with_lag</code>(<strong><code>spike_counts</code></strong>, <strong><code>behav_signal</code></strong>, <strong><code>behav</code></strong>, <strong><code>conversion_factor_treadmill</code></strong>=<em><code>None</code></em>, <strong><code>removeslowdrift</code></strong>=<em><code>True</code></em>, <strong><code>fps</code></strong>=<em><code>60</code></em>, <strong><code>seconds</code></strong>=<em><code>30</code></em>)</p>
 </blockquote>
 <p>Compute cross-correlation with lag between behavioral signal and spiking signal.
 Process signals, compute null distribution of the correlation with a time shift test and values .
@@ -884,7 +882,7 @@ Return cross-correlation array, null-distribution array and values for plotting.
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_inception_generator" class="doc_header"><code>get_inception_generator</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L645" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_inception_generator</code>(<strong><code>imageset_folder</code></strong>, <strong><code>len_set</code></strong>=<em><code>25</code></em>, <strong><code>width</code></strong>=<em><code>500</code></em>, <strong><code>height</code></strong>=<em><code>281</code></em>)</p>
+<h4 id="get_inception_generator" class="doc_header"><code>get_inception_generator</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L642" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_inception_generator</code>(<strong><code>imageset_folder</code></strong>, <strong><code>len_set</code></strong>=<em><code>25</code></em>, <strong><code>width</code></strong>=<em><code>500</code></em>, <strong><code>height</code></strong>=<em><code>281</code></em>)</p>
 </blockquote>
 <p>Return a function to obtain inception loop images from their index.</p>
 <p>params:</p>
@@ -925,7 +923,7 @@ Return cross-correlation array, null-distribution array and values for plotting.
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="group_omitted_epochs" class="doc_header"><code>group_omitted_epochs</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L671" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>group_omitted_epochs</code>(<strong><code>stim_inten</code></strong>, <strong><code>spike_counts</code></strong>, <strong><code>n_fr_flash</code></strong>=<em><code>4</code></em>, <strong><code>n_fr_interflash</code></strong>=<em><code>4</code></em>, <strong><code>n_fr_isi</code></strong>=<em><code>100</code></em>)</p>
+<h4 id="group_omitted_epochs" class="doc_header"><code>group_omitted_epochs</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L668" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>group_omitted_epochs</code>(<strong><code>stim_inten</code></strong>, <strong><code>spike_counts</code></strong>, <strong><code>n_fr_flash</code></strong>=<em><code>4</code></em>, <strong><code>n_fr_interflash</code></strong>=<em><code>4</code></em>, <strong><code>n_fr_isi</code></strong>=<em><code>100</code></em>)</p>
 </blockquote>
 <p>Group the cells reponse to the different omitted stimulus epochs conditions (n_flashes)</p>
 <p>params:</p>
@@ -974,7 +972,7 @@ Return cross-correlation array, null-distribution array and values for plotting.
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_shank_channels" class="doc_header"><code>get_shank_channels</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L742" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_shank_channels</code>(<strong><code>channel_positions</code></strong>, <strong><code>shank_dist_th</code></strong>=<em><code>80</code></em>)</p>
+<h4 id="get_shank_channels" class="doc_header"><code>get_shank_channels</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L739" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_shank_channels</code>(<strong><code>channel_positions</code></strong>, <strong><code>shank_dist_th</code></strong>=<em><code>80</code></em>)</p>
 </blockquote>
 <p>Group the channels of a Buzsaki32 silicone probe into their shanks
 from the channel position.</p>
@@ -1016,7 +1014,7 @@ from the channel position.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="format_pval" class="doc_header"><code>format_pval</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L772" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>format_pval</code>(<strong><code>pval</code></strong>, <strong><code>significant_figures</code></strong>=<em><code>2</code></em>)</p>
+<h4 id="format_pval" class="doc_header"><code>format_pval</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L769" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>format_pval</code>(<strong><code>pval</code></strong>, <strong><code>significant_figures</code></strong>=<em><code>2</code></em>)</p>
 </blockquote>
 <p>Helper function to format pvalue into string.</p>
 
@@ -1048,7 +1046,7 @@ from the channel position.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="stim_recap_df" class="doc_header"><code>stim_recap_df</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L779" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stim_recap_df</code>(<strong><code>reM</code></strong>)</p>
+<h4 id="stim_recap_df" class="doc_header"><code>stim_recap_df</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/utils.py#L776" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>stim_recap_df</code>(<strong><code>reM</code></strong>)</p>
 </blockquote>
 <p>Extract stimuli parameters (originally from the Database) to put them into a
 dataframe that will be displayed in the recapitulation plot.</p>
