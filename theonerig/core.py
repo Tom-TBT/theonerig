@@ -413,9 +413,13 @@ class Data_Pipe():
             plt.figure()
             factor = 1
         cursor = 0
-        for i,seq in enumerate(self.record_master):
-            plt.plot(range(cursor,cursor+len(seq)), self._masks[i]*factor-1, c='tab:blue')
-            cursor += len(seq) + self.record_master._sep_size
+        frame_times      = [seq._frame_time for seq in self.record_master._sequences]
+        frametime_ratios = [fr_t/max(frame_times) for fr_t in frame_times]
+        for i, seq in enumerate(self.record_master):
+            fr = frametime_ratios[i]
+            x  = np.linspace(cursor, cursor+len(seq)*fr, len(seq), endpoint=False)
+            plt.plot(x, self._masks[i]*factor-1, c='tab:blue')
+            cursor += len(seq)*fr + self.record_master._sep_size
 
     def copy(self):
         """

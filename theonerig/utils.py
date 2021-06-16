@@ -272,6 +272,10 @@ def phy_results_dict(phy_dir):
     res_dict["spike_templates"] = np.load(phy_dir+"/spike_templates.npy")
     res_dict["spike_times"] = np.load(phy_dir+"/spike_times.npy")
     res_dict["templates"] = np.load(phy_dir+"/templates.npy")
+    if os.path.isfile(phy_dir+"/channel_shanks.npy"): #Newer version of phy/spyking-circus
+        res_dict["channel_shanks"] = np.load(phy_dir+"/channel_shanks.npy")
+        res_dict["template_ind"]   = np.load(phy_dir+"/template_ind.npy")
+
     return res_dict
 
 def spike_to_dataChunk(spike_timepoints, ref_timepoints:DataChunk) -> DataChunk:
@@ -318,7 +322,7 @@ def get_calcium_stack_lenghts(folder):
             record_lenghts.append(int(re.findall(pattern_nFrame, line)[0]))
     return record_lenghts
 
-def twoP_dataChunks(ref_timepoints:DataChunk, frame_timepoints, len_epochs, C_matrix, S_matrix):
+def twoP_dataChunks(ref_timepoints:DataChunk, frame_timepoints, len_epochs, *args):
     """
     Factory function for two photon data.
 
@@ -326,32 +330,29 @@ def twoP_dataChunks(ref_timepoints:DataChunk, frame_timepoints, len_epochs, C_ma
         - ref_timepoints: Reference timepoints to create the DataChunk
         - frame_timepoints: List of frame timepoints for each sequence of two photon frame recorded.
         - len_epochs: Lenght of the recorded epochs (<= than the corresponding frame_timepoints). Int of list
-        - C_matrix: C_matrix of all frames detected by CaImAn
-        - S_matrix: S_matrix of all frames detected by CaImAn
+        - args: matrices of all frames detected by CaImAn. (give as many as you want to synchronise)
 
     return:
-        - C_datachunk_l: A list of C_matrix datachunks
-        - S_datachunk_l: A list of S_matrix datachunks
+        - tuple containing the synchronised matrices in the order it was given
     """
-    C_datachunk_l = []
-    S_datachunk_l = []
+    assert len(args)>=1, "no matrix to be synchronised was given"
+    res_l = [[] for i in range(len(args))]
     cursor = 0
     if isinstance(len_epochs, int):
         len_epochs = [len_epochs]
     for i, len_epoch in enumerate(len_epochs):
         start_idx = np.argmax(ref_timepoints>frame_timepoints[i][0])
         stop_idx  = np.argmax(ref_timepoints>frame_timepoints[i][len_epoch-1])
-        sub_C, sub_S = C_matrix.T[cursor:cursor+len_epoch], S_matrix.T[cursor:cursor+len_epoch]
+        for k, matrix in enumerate(args):
+            sub_mat = matrix.T[cursor:cursor+len_epoch]
+
+            f = interpolate.interp1d(range(len_epoch), sub_mat, axis=0)
+            res_l[k].append(DataChunk(data=f(np.linspace(0,len_epoch-1,stop_idx-start_idx)),
+                                           idx=start_idx,
+                                           group="cell"))
         cursor += len_epoch
-        f = interpolate.interp1d(range(len_epoch), sub_C, axis=0)
-        C_datachunk_l.append(DataChunk(data=f(np.linspace(0,len_epoch-1,stop_idx-start_idx)),
-                                       idx=start_idx,
-                                       group="cell"))
-        f = interpolate.interp1d(range(len_epoch), sub_S, axis=0)
-        S_datachunk_l.append(DataChunk(data=f(np.linspace(0,len_epoch-1,stop_idx-start_idx)),
-                                       idx=start_idx,
-                                       group="cell"))
-    return (C_datachunk_l, S_datachunk_l)
+
+    return tuple(res_l)
 
 # Cell
 def img_2d_fit(shape, param_d, f):
