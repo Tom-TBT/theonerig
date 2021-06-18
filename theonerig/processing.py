@@ -307,7 +307,7 @@ def process_sta_batch_large(stim_inten, spike_counts, Hw=30, Fw=2, return_pval=F
     stim_inten = stim_inten.reshape((len_stim,-1))
     print("Computing the STA part by part:")
     for i, batch_pos in enumerate(range(0, n_spatial_dim, bs)):
-        print(str(round(100*batch_pos/n_spatial_dim,2))+"%      ", end="\r", flush=True)
+        print(str(round(100*batch_pos/n_spatial_dim,2))+"%      ", end="\n", flush=True)
         #Computing STA on partial portions of the screen sequentially
         stim_part = stim_inten_norm(stim_inten[:, batch_pos:batch_pos+bs]).T
         sub_sta = staEst_fromBins(stim_part, spike_counts, Hw, Fw=Fw)

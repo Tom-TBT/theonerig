@@ -623,7 +623,8 @@ def import_record(path):
         for j, key_contig in enumerate(h5_f.keys()):
             ref_contig = h5_f[key_contig]
             stream_d   = {}
-            for i, key_dstream in enumerate(ref_contig.keys()):
+            keys = sorted(h5_f.keys(), key=int)
+            for j, key_contig in enumerate(keys):
                 ref_dstream = ref_contig[key_dstream]
                 dchunk_l = []
                 for key_dc in ref_dstream.keys():
