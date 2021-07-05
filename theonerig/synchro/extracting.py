@@ -264,5 +264,8 @@ def stack_len_extraction(stack_info_dir):
     for fn in fn_list:
         with open(fn) as f:
             line = f.readline()
-            l_epochs.append(int(re.findall(ptrn_nFrame, line)[0]))
+            l_epochs.append(re.findall(ptrn_nFrame, line))
+    # Remove empty entries from .txt files in the tree not containing ptrn_nFrame
+    # Take first entry only if there are multiple, convert to int
+    l_epochs = [int(number[0]) for number in l_epochs if number]
     return l_epochs
