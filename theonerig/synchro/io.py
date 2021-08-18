@@ -1029,8 +1029,6 @@ class RHDFile(DataFile):
         count = 0
         for s in data_slice:
             t_slice = len(s)
-            if s[0]>= 9004740:
-                break
             tmp_chunk[count:count + t_slice] = self.data[s] #Putting all data in channel 1, then masking
             count += t_slice
         for i in range(self.nb_channels_dig_in):
