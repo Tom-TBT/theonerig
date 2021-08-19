@@ -1,0 +1,5 @@
+* <2021-08-19 Thu>
+** unpack_stim_npy
+   - 175 : cursor+n_frame is casted to np.float64 if n_frame is a np.uint64; this breaks indexing
+   - for Tom's stimuli the marker contains np.uint32 values, which doesn't cause the same error for some reason
+     + converting the n_frames to int fixes the problem
