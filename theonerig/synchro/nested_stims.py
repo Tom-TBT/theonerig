@@ -16,6 +16,7 @@ from ..plotting import *
 
 import numpy as np
 import glob, os, datetime
+import ast
 
 def get_stim_ids(log, record_time, lastmodif_time):
     """Obtain the correct name of the stimulus, based on the name that appears in the QDSpy log
@@ -322,6 +323,7 @@ from ..plotting import *
 
 import numpy as np
 import glob, os, datetime
+
 def master_loop(log, retain_template, tom_stim_dir, sync_dir, calcium_dir, stim_list_dir, stim_dict_dir):
 #     sync_dir = os.path.join(working_dir, "sync/Session01")
     epoch_counter = 0
@@ -390,7 +392,7 @@ def master_loop(log, retain_template, tom_stim_dir, sync_dir, calcium_dir, stim_
 #                 set_trace()
             reM = append_to_reM(epoch_counter, reM, retain_template, stim_list_dir, stim_ids, record_time,
                                 photo_data, stim_code_dict, frame_tp, ref_timepoints,
-                               ref_signals)
+                               ref_signals, tom_stim_dir)
             # 7) Add treadmill data to record Master
             reM = append_tread_movement(reM, epoch_counter, treadmill_data, ref_timepoints)
 

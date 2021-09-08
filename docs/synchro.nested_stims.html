@@ -61,21 +61,6 @@ nb_path: "14_synchro.nested_stims.ipynb"
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>The autoreload extension is already loaded. To reload it, use:
-  %reload_ext autoreload
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
     {% endraw %}
 
@@ -101,7 +86,7 @@ need different handling</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_stim_ids" class="doc_header"><code>get_stim_ids</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/nested_stims.py#L20" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_stim_ids</code>(<strong><code>log</code></strong>, <strong><code>record_time</code></strong>, <strong><code>lastmodif_time</code></strong>)</p>
+<h4 id="get_stim_ids" class="doc_header"><code>get_stim_ids</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/nested_stims.py#L21" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_stim_ids</code>(<strong><code>log</code></strong>, <strong><code>record_time</code></strong>, <strong><code>lastmodif_time</code></strong>)</p>
 </blockquote>
 <p>Obtain the correct name of the stimulus, based on the name that appears in the QDSpy log</p>
 <p>This is needed if no central database of compiled stimuli is used, but instead stimuli are compiled in QDSpy
@@ -172,7 +157,7 @@ Input:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_synced_file_precompile" class="doc_header"><code>get_synced_file_precompile</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/nested_stims.py#L94" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_synced_file_precompile</code>(<strong><code>stim_list_dir</code></strong>, <strong><code>stim_id</code></strong>)</p>
+<h4 id="get_synced_file_precompile" class="doc_header"><code>get_synced_file_precompile</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/nested_stims.py#L95" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_synced_file_precompile</code>(<strong><code>stim_list_dir</code></strong>, <strong><code>stim_id</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -196,7 +181,7 @@ Input:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_stim_dict" class="doc_header"><code>get_stim_dict</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/nested_stims.py#L104" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_stim_dict</code>(<strong><code>stim_dict_path</code></strong>, <strong><code>stim_filename</code></strong>)</p>
+<h4 id="get_stim_dict" class="doc_header"><code>get_stim_dict</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/nested_stims.py#L105" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_stim_dict</code>(<strong><code>stim_dict_path</code></strong>, <strong><code>stim_filename</code></strong>)</p>
 </blockquote>
 <p>Get the correct dictionary file that decodes the ints that encode the stimulus sequence.
 Applicable to nested stimuli, whose <em>intensity</em>.npy file contains only a list of integers.</p>
@@ -264,7 +249,7 @@ Input:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="find_stim_onsets" class="doc_header"><code>find_stim_onsets</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/nested_stims.py#L151" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>find_stim_onsets</code>(<strong><code>frame_signals</code></strong>)</p>
+<h4 id="find_stim_onsets" class="doc_header"><code>find_stim_onsets</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/nested_stims.py#L152" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>find_stim_onsets</code>(<strong><code>frame_signals</code></strong>)</p>
 </blockquote>
 <p>Get the frame timepoints during which the stimuli started and ended.
 Crop out the last two ones that are currently just an offset marker.</p>
@@ -298,7 +283,7 @@ Crop out the last two ones that are currently just an offset marker.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="append_tread_movement" class="doc_header"><code>append_tread_movement</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/nested_stims.py#L171" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>append_tread_movement</code>(<strong><code>reM</code></strong>, <strong><code>epoch_counter</code></strong>, <strong><code>treadmill_data</code></strong>, <strong><code>ref_timepoints</code></strong>)</p>
+<h4 id="append_tread_movement" class="doc_header"><code>append_tread_movement</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/nested_stims.py#L172" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>append_tread_movement</code>(<strong><code>reM</code></strong>, <strong><code>epoch_counter</code></strong>, <strong><code>treadmill_data</code></strong>, <strong><code>ref_timepoints</code></strong>)</p>
 </blockquote>
 <p>Append treadmill data to the record Master</p>
 
@@ -340,7 +325,7 @@ Crop out the last two ones that are currently just an offset marker.</p>
 
 <div class="output_subarea output_text output_error">
 <pre>
-<span class="ansi-cyan-fg">  File </span><span class="ansi-green-fg">&#34;&lt;ipython-input-8-e7cbb7229119&gt;&#34;</span><span class="ansi-cyan-fg">, line </span><span class="ansi-green-fg">2</span>
+<span class="ansi-cyan-fg">  File </span><span class="ansi-green-fg">&#34;&lt;ipython-input-5-e7cbb7229119&gt;&#34;</span><span class="ansi-cyan-fg">, line </span><span class="ansi-green-fg">2</span>
 <span class="ansi-red-fg">    Always make sure that the alignment is correct using ```find_starting_position.ipynb```</span>
            ^
 <span class="ansi-red-fg">SyntaxError</span><span class="ansi-red-fg">:</span> invalid syntax
@@ -365,7 +350,7 @@ Crop out the last two ones that are currently just an offset marker.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="append_to_reM" class="doc_header"><code>append_to_reM</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/nested_stims.py#L193" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>append_to_reM</code>(<strong><code>epoch_counter</code></strong>, <strong><code>reM</code></strong>, <strong><code>retain_template</code></strong>, <strong><code>stim_list_dir</code></strong>, <strong><code>stim_ids</code></strong>, <strong><code>record_time</code></strong>, <strong><code>photo_data</code></strong>, <strong><code>stim_code_dict</code></strong>, <strong><code>frame_tp</code></strong>, <strong><code>ref_timepoints</code></strong>, <strong><code>ref_signals</code></strong>, <strong><code>tom_stim_dir</code></strong>)</p>
+<h4 id="append_to_reM" class="doc_header"><code>append_to_reM</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/nested_stims.py#L194" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>append_to_reM</code>(<strong><code>epoch_counter</code></strong>, <strong><code>reM</code></strong>, <strong><code>retain_template</code></strong>, <strong><code>stim_list_dir</code></strong>, <strong><code>stim_ids</code></strong>, <strong><code>record_time</code></strong>, <strong><code>photo_data</code></strong>, <strong><code>stim_code_dict</code></strong>, <strong><code>frame_tp</code></strong>, <strong><code>ref_timepoints</code></strong>, <strong><code>ref_signals</code></strong>, <strong><code>tom_stim_dir</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -396,7 +381,7 @@ Crop out the last two ones that are currently just an offset marker.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="master_loop" class="doc_header"><code>master_loop</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/nested_stims.py#L325" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>master_loop</code>(<strong><code>log</code></strong>, <strong><code>retain_template</code></strong>, <strong><code>tom_stim_dir</code></strong>, <strong><code>sync_dir</code></strong>, <strong><code>calcium_dir</code></strong>, <strong><code>stim_list_dir</code></strong>, <strong><code>stim_dict_dir</code></strong>)</p>
+<h4 id="master_loop" class="doc_header"><code>master_loop</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/nested_stims.py#L327" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>master_loop</code>(<strong><code>log</code></strong>, <strong><code>retain_template</code></strong>, <strong><code>tom_stim_dir</code></strong>, <strong><code>sync_dir</code></strong>, <strong><code>calcium_dir</code></strong>, <strong><code>stim_list_dir</code></strong>, <strong><code>stim_dict_dir</code></strong>)</p>
 </blockquote>
 
 </div>
