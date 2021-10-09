@@ -67,7 +67,6 @@ def get_synced_file(stim_list_dir, stim_id):
         stim_delta = stim_present - stim_load if stim_present > stim_load else datetime.timedelta.max
         stims["stim_name"].append(stim_list)
         stims["stim_delta"].append(stim_delta)
-    set_trace()
     # Obtain the index of the compiletime closest to the stimulus display time
     closest_stim_idx = stims["stim_delta"].index(min(stims["stim_delta"]))
     stim_fn = stims["stim_name"][closest_stim_idx]
