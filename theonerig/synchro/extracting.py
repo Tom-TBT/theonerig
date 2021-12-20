@@ -211,6 +211,7 @@ def unpack_stim_npy(npy_dir, md5_hash):
 
     cursor = 0
     for i, n_frame in enumerate(marker[:,0]):
+        n_frame = int(n_frame) # ensures correct type for indexing below
         unpack_inten[cursor:cursor+n_frame] = inten[i]
         unpack_marker[cursor:cursor+n_frame] = marker[i, 1]
         if shader is not None:
@@ -264,8 +265,5 @@ def stack_len_extraction(stack_info_dir):
     for fn in fn_list:
         with open(fn) as f:
             line = f.readline()
-            l_epochs.append(re.findall(ptrn_nFrame, line))
-    # Remove empty entries from .txt files in the tree not containing ptrn_nFrame
-    # Take first entry only if there are multiple, convert to int
-    l_epochs = [int(number[0]) for number in l_epochs if number]
+            l_epochs.append(int(re.findall(ptrn_nFrame, line)[0]))
     return l_epochs
