@@ -4,7 +4,7 @@ __all__ = ['atoi', 'natural_keys', 'filter_per_extension', 'print_and_log', 'pri
            'logger', 'DataFile', 'read_header', 'get_bytes_per_data_block', 'read_qstring', 'RHDFile', 'H5File',
            'RawBinaryFile', 'NumpyFile', 'load_all_data', 'load_all_data_adc', 'load_all_data_dig_in',
            'load_all_data_both', 'export_adc_raw', 'export_dig_in_raw', 'export_raw', 'export_both_raw', 'load_adc_raw',
-           'load_sync_raw']
+           'load_digin_raw', 'load_sync_raw']
 
 # Cell
 import numpy as np
@@ -850,8 +850,9 @@ class RHDFile(DataFile):
 
         header = {}
 
-        self.file  = open(self.file_name, 'rb')
+        self.file   = open(self.file_name, 'rb')
         full_header = read_header(self.file)
+        self.header = full_header
         header['nb_channels']   = full_header['num_amplifier_channels']
         header['sampling_rate'] = full_header['sample_rate']
 
@@ -862,18 +863,19 @@ class RHDFile(DataFile):
         self.nb_channels_adc    = full_header['num_board_adc_channels']
         self.nb_channels_dig_in = full_header['num_board_dig_in_channels']
         header['data_offset']   = self.file.tell()
-        data_present         = False
-        filesize             = os.path.getsize(self.file_name)
-        self.bytes_per_block = get_bytes_per_data_block(full_header)
-        self.block_offset    = self.SAMPLES_PER_RECORD * 4
-        self.block_size      = 2 * self.SAMPLES_PER_RECORD * header['nb_channels']
+
+        data_present          = False
+        filesize              = os.path.getsize(self.file_name)
+        self.bytes_per_block  = get_bytes_per_data_block(full_header)
+        self.block_offset     = self.SAMPLES_PER_RECORD * 4
+        self.block_size       = 2 * self.SAMPLES_PER_RECORD * header['nb_channels']
         self.block_offset_adc = (self.block_offset + self.block_size +
                                  (self.SAMPLES_PER_RECORD/4) * full_header['num_aux_input_channels'] * 2 +
                                  2 * full_header['num_supply_voltage_channels'])
-        self.block_size_adc  = 2 * self.SAMPLES_PER_RECORD * self.nb_channels_adc
+        self.block_size_adc      = 2 * self.SAMPLES_PER_RECORD * self.nb_channels_adc
         self.block_offset_dig_in = self.block_offset_adc + self.block_size_adc
-        self.block_size_dig_in   = 2 * self.SAMPLES_PER_RECORD * self.nb_channels_dig_in
-        bytes_remaining      = filesize - self.file.tell()
+        self.block_size_dig_in   = 2 * self.SAMPLES_PER_RECORD
+        bytes_remaining          = filesize - self.file.tell()
 
         self.bytes_per_block_div     = self.bytes_per_block / 2
         self.block_offset_div        = self.block_offset / 2
@@ -950,15 +952,15 @@ class RHDFile(DataFile):
 
         if x_beg == x_end:
             g_offset = x_beg * self.bytes_per_block_div + self.block_offset_div_dig_in
-            data_slice = np.arange(g_offset + r_beg * self.nb_channels_dig_in, g_offset + r_end * self.nb_channels_dig_in, dtype=np.int64)
+            data_slice = np.arange(g_offset + r_beg, g_offset + r_end, dtype=np.int64)
             yield data_slice
         else:
             for count, nb_blocks in enumerate(np.arange(x_beg, x_end + 1, dtype=np.int64)):
                 g_offset = nb_blocks * self.bytes_per_block_div + self.block_offset_div_dig_in
                 if count == 0:
-                    data_slice = np.arange(g_offset + r_beg * self.nb_channels_dig_in, g_offset + self.block_size_div_dig_in, dtype=np.int64)
+                    data_slice = np.arange(g_offset + r_beg, g_offset + self.block_size_div_dig_in, dtype=np.int64)
                 elif (count == (x_end - x_beg)):
-                    data_slice = np.arange(g_offset, g_offset + r_end * self.nb_channels_dig_in, dtype=np.int64)
+                    data_slice = np.arange(g_offset, g_offset + r_end, dtype=np.int64)
                 else:
                     data_slice = np.arange(g_offset, g_offset + self.block_size_div_dig_in, dtype=np.int64)
                 yield data_slice
@@ -1019,17 +1021,21 @@ class RHDFile(DataFile):
         t_start, t_stop = self._get_t_start_t_stop(idx, chunk_size, padding)
         local_shape     = t_stop - t_start
 
-        local_chunk = np.zeros((self.nb_channels_dig_in, local_shape), dtype=self.data_dtype)
+        tmp_chunk   = np.zeros((local_shape,), dtype=np.uint64)
+        local_chunk = np.zeros((self.nb_channels_dig_in, local_shape), dtype=np.uint8)
         data_slice  = self._get_slice_dig_in_(t_start, t_stop)
 
         self._open()
         count = 0
-
         for s in data_slice:
-            t_slice = len(s)//self.nb_channels_dig_in
-            local_chunk[:, count:count + t_slice] = self.data[s].reshape(self.nb_channels_dig_in, len(s)//self.nb_channels_dig_in)
+            t_slice = len(s)
+            tmp_chunk[count:count + t_slice] = self.data[s] #Putting all data in channel 1, then masking
             count += t_slice
-
+        for i in range(self.nb_channels_dig_in):
+            chann_bitmask  = 1 << self.header['board_dig_in_channels'][i]['native_order']
+            local_chunk[i] = np.not_equal(np.bitwise_and(tmp_chunk,
+                                                         chann_bitmask),
+                                          0)
         local_chunk = local_chunk.T
         self._close()
 
@@ -1037,7 +1043,7 @@ class RHDFile(DataFile):
             if not np.all(nodes == np.arange(self.nb_channels_dig_in)):
                 local_chunk = np.take(local_chunk, nodes, axis=1)
 
-        return self._scale_data_to_float32(local_chunk)
+        return local_chunk
 
     def read_chunk_both(self, idx, chunk_size, padding=(0, 0), nodes=None):
 
@@ -1413,8 +1419,8 @@ def load_all_data_dig_in(datafile:DataFile, channel_idx=0):
     else:
         chunk_size =  datafile.duration
     n_chunks, _ = datafile.analyze(chunk_size)
-    data = np.zeros(datafile.duration)
-    print("Loading the data... "+str(round(0,2))+"%    ",end='\n',flush=True)
+    data = np.zeros(datafile.duration, dtype=float)
+    print("Loading the data... "+str(round(0,2))+"%    ",end='\r',flush=True)
     for idx in range(n_chunks):
         data_tmp, t_offset = datafile.get_data_dig_in(idx, chunk_size)
         if data_tmp.ndim == 2:
@@ -1475,10 +1481,10 @@ def export_dig_in_raw(datafile:DataFile, output_fn="", channel_idx=0):
     else:
         raw_fn = os.path.split(datafile.file_name)[0]+"/"+output_fn
     param_d = {'sampling_rate': datafile.sampling_rate,
-               'data_dtype': 'uint16',
-               'gain': 0.195,
+               'data_dtype': 'uint8',
+               'gain': 1,
                'nb_channels': 1,
-               'dtype_offset': 32768}
+               'dtype_offset': 127}
     raw_file = RawBinaryFile(raw_fn, param_d, is_empty=True)
     raw_file.allocate(datafile.shape[0])
     raw_file.set_data(0, data)
@@ -1521,13 +1527,23 @@ def export_both_raw(datafile:DataFile):
     raw_file.close()
 
 
-def load_adc_raw(filepath, sampling_rate):
+def load_adc_raw(filepath, sampling_rate=30000):
     """Loads adc raw data, in the format exported by `export_adc_raw`"""
     param_d = {'sampling_rate': sampling_rate,
                'data_dtype': 'uint16',
                'gain': 0.195,
                'nb_channels': 1,
                'dtype_offset': 32768}
+    raw_file = RawBinaryFile(filepath, param_d)
+    return load_all_data_adc(raw_file)
+
+def load_digin_raw(filepath, sampling_rate=30000):
+    """Loads adc raw data, in the format exported by `export_adc_raw`"""
+    param_d = {'sampling_rate': sampling_rate,
+               'data_dtype': 'uint8',
+               'gain': 1,
+               'nb_channels': 1,
+               'dtype_offset': 127}
     raw_file = RawBinaryFile(filepath, param_d)
     return load_all_data_adc(raw_file)
 

@@ -652,7 +652,10 @@ def get_inception_generator(imageset_folder, len_set=25, width=500, height=281):
         - Function to obtain inception loop images from their index.
     """
     imageset_l = []
-    for i, fn in enumerate(glob.glob(os.path.join(imageset_folder,"*.jpg"))): #Images accepted have the dimension (375,500)
+    paths = glob.glob(os.path.join(imageset_folder,"*.jpg"))
+    paths_sorted = sorted(paths, key=lambda i: int(os.path.splitext(os.path.basename(i))[0].split("_")[-1]))
+
+    for fn in paths_sorted: #Images accepted have the dimension (375,500)
         image = np.array(Image.open(fn))
         imageset_l.append(image)
 
