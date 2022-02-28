@@ -386,7 +386,7 @@ this extra layer can slow down the code.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="H5File" class="doc_header"><code>class</code> <code>H5File</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1104" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>H5File</code>(<strong><code>file_name</code></strong>, <strong><code>params</code></strong>, <strong><code>is_empty</code></strong>=<em><code>False</code></em>, <strong><code>stream_mode</code></strong>=<em><code>None</code></em>) :: <a href="/theonerig/synchro.io.html#DataFile"><code>DataFile</code></a></p>
+<h2 id="H5File" class="doc_header"><code>class</code> <code>H5File</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1110" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>H5File</code>(<strong><code>file_name</code></strong>, <strong><code>params</code></strong>, <strong><code>is_empty</code></strong>=<em><code>False</code></em>, <strong><code>stream_mode</code></strong>=<em><code>None</code></em>) :: <a href="/theonerig/synchro.io.html#DataFile"><code>DataFile</code></a></p>
 </blockquote>
 <p>A generic class that will represent how the program interacts with the data. Such an abstraction
 layer should allow people to write their own wrappers, for several file formats, with or without
@@ -421,7 +421,7 @@ this extra layer can slow down the code.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="RawBinaryFile" class="doc_header"><code>class</code> <code>RawBinaryFile</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1223" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>RawBinaryFile</code>(<strong><code>file_name</code></strong>, <strong><code>params</code></strong>, <strong><code>is_empty</code></strong>=<em><code>False</code></em>, <strong><code>stream_mode</code></strong>=<em><code>None</code></em>) :: <a href="/theonerig/synchro.io.html#DataFile"><code>DataFile</code></a></p>
+<h2 id="RawBinaryFile" class="doc_header"><code>class</code> <code>RawBinaryFile</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1229" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>RawBinaryFile</code>(<strong><code>file_name</code></strong>, <strong><code>params</code></strong>, <strong><code>is_empty</code></strong>=<em><code>False</code></em>, <strong><code>stream_mode</code></strong>=<em><code>None</code></em>) :: <a href="/theonerig/synchro.io.html#DataFile"><code>DataFile</code></a></p>
 </blockquote>
 <p>A generic class that will represent how the program interacts with the data. Such an abstraction
 layer should allow people to write their own wrappers, for several file formats, with or without
@@ -456,7 +456,7 @@ this extra layer can slow down the code.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="NumpyFile" class="doc_header"><code>class</code> <code>NumpyFile</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1294" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NumpyFile</code>(<strong><code>file_name</code></strong>, <strong><code>params</code></strong>, <strong><code>is_empty</code></strong>=<em><code>False</code></em>, <strong><code>stream_mode</code></strong>=<em><code>None</code></em>) :: <a href="/theonerig/synchro.io.html#RawBinaryFile"><code>RawBinaryFile</code></a></p>
+<h2 id="NumpyFile" class="doc_header"><code>class</code> <code>NumpyFile</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1300" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>NumpyFile</code>(<strong><code>file_name</code></strong>, <strong><code>params</code></strong>, <strong><code>is_empty</code></strong>=<em><code>False</code></em>, <strong><code>stream_mode</code></strong>=<em><code>None</code></em>) :: <a href="/theonerig/synchro.io.html#RawBinaryFile"><code>RawBinaryFile</code></a></p>
 </blockquote>
 <p>A generic class that will represent how the program interacts with the data. Such an abstraction
 layer should allow people to write their own wrappers, for several file formats, with or without
@@ -491,7 +491,7 @@ this extra layer can slow down the code.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="load_all_data" class="doc_header"><code>load_all_data</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1367" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>load_all_data</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io.html#DataFile"><code>DataFile</code></a>)</p>
+<h4 id="load_all_data" class="doc_header"><code>load_all_data</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1373" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>load_all_data</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io.html#DataFile"><code>DataFile</code></a>)</p>
 </blockquote>
 <p>Read all the data contained by a file. For rhd and hdf5, correspond to the ephy channels. To read the ADC
 data, see <a href="/theonerig/synchro.io.html#load_all_data_adc"><code>load_all_data_adc</code></a></p>
@@ -517,7 +517,7 @@ data, see <a href="/theonerig/synchro.io.html#load_all_data_adc"><code>load_all_
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="load_all_data_adc" class="doc_header"><code>load_all_data_adc</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1386" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>load_all_data_adc</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io.html#DataFile"><code>DataFile</code></a>, <strong><code>channel_idx</code></strong>=<em><code>0</code></em>)</p>
+<h4 id="load_all_data_adc" class="doc_header"><code>load_all_data_adc</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1392" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>load_all_data_adc</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io.html#DataFile"><code>DataFile</code></a>, <strong><code>channel_idx</code></strong>=<em><code>0</code></em>)</p>
 </blockquote>
 <p>Read all the data contained by a file. For rhd and hdf5, correspond to the adc channels. To read the ephy
 data, see <a href="/theonerig/synchro.io.html#load_all_data"><code>load_all_data</code></a></p>
@@ -543,7 +543,7 @@ data, see <a href="/theonerig/synchro.io.html#load_all_data"><code>load_all_data
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="load_all_data_dig_in" class="doc_header"><code>load_all_data_dig_in</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1407" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>load_all_data_dig_in</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io.html#DataFile"><code>DataFile</code></a>, <strong><code>channel_idx</code></strong>=<em><code>0</code></em>)</p>
+<h4 id="load_all_data_dig_in" class="doc_header"><code>load_all_data_dig_in</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1413" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>load_all_data_dig_in</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io.html#DataFile"><code>DataFile</code></a>, <strong><code>channel_idx</code></strong>=<em><code>0</code></em>)</p>
 </blockquote>
 <p>Read all the data contained by a file. For rhd and hdf5, correspond to the adc channels. To read the ephy
 data, see <a href="/theonerig/synchro.io.html#load_all_data"><code>load_all_data</code></a></p>
@@ -569,7 +569,7 @@ data, see <a href="/theonerig/synchro.io.html#load_all_data"><code>load_all_data
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="load_all_data_both" class="doc_header"><code>load_all_data_both</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1428" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>load_all_data_both</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io.html#DataFile"><code>DataFile</code></a>)</p>
+<h4 id="load_all_data_both" class="doc_header"><code>load_all_data_both</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1434" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>load_all_data_both</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io.html#DataFile"><code>DataFile</code></a>)</p>
 </blockquote>
 <p>Read all the data contained by a file. For rhd and hdf5, correspond to the adc channels. To read the ephy
 data, see <a href="/theonerig/synchro.io.html#load_all_data"><code>load_all_data</code></a></p>
@@ -595,7 +595,7 @@ data, see <a href="/theonerig/synchro.io.html#load_all_data"><code>load_all_data
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="export_adc_raw" class="doc_header"><code>export_adc_raw</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1451" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>export_adc_raw</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io.html#DataFile"><code>DataFile</code></a>, <strong><code>output_fn</code></strong>=<em><code>''</code></em>, <strong><code>channel_idx</code></strong>=<em><code>0</code></em>)</p>
+<h4 id="export_adc_raw" class="doc_header"><code>export_adc_raw</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1457" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>export_adc_raw</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io.html#DataFile"><code>DataFile</code></a>, <strong><code>output_fn</code></strong>=<em><code>''</code></em>, <strong><code>channel_idx</code></strong>=<em><code>0</code></em>)</p>
 </blockquote>
 <p>Exports a datafile adc channel to a single raw binary file. Useful to reduce disk usage after that
 spike sorting is done.</p>
@@ -621,7 +621,7 @@ spike sorting is done.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="export_dig_in_raw" class="doc_header"><code>export_dig_in_raw</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1469" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>export_dig_in_raw</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io.html#DataFile"><code>DataFile</code></a>, <strong><code>output_fn</code></strong>=<em><code>''</code></em>, <strong><code>channel_idx</code></strong>=<em><code>0</code></em>)</p>
+<h4 id="export_dig_in_raw" class="doc_header"><code>export_dig_in_raw</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1475" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>export_dig_in_raw</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io.html#DataFile"><code>DataFile</code></a>, <strong><code>output_fn</code></strong>=<em><code>''</code></em>, <strong><code>channel_idx</code></strong>=<em><code>0</code></em>)</p>
 </blockquote>
 <p>Exports a datafile adc channel to a single raw binary file. Useful to reduce disk usage after that
 spike sorting is done.</p>
@@ -647,7 +647,7 @@ spike sorting is done.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="export_raw" class="doc_header"><code>export_raw</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1487" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>export_raw</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io.html#DataFile"><code>DataFile</code></a>, <strong><code>output_fn</code></strong>=<em><code>''</code></em>)</p>
+<h4 id="export_raw" class="doc_header"><code>export_raw</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1493" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>export_raw</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io.html#DataFile"><code>DataFile</code></a>, <strong><code>output_fn</code></strong>=<em><code>''</code></em>)</p>
 </blockquote>
 <p>Exports a datafile adc channel to a single raw binary file. Useful to reduce disk usage after that
 spike sorting is done.</p>
@@ -673,7 +673,7 @@ spike sorting is done.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="export_both_raw" class="doc_header"><code>export_both_raw</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1501" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>export_both_raw</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io.html#DataFile"><code>DataFile</code></a>)</p>
+<h4 id="export_both_raw" class="doc_header"><code>export_both_raw</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1507" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>export_both_raw</code>(<strong><code>datafile</code></strong>:<a href="/theonerig/synchro.io.html#DataFile"><code>DataFile</code></a>)</p>
 </blockquote>
 <p>Exports a both raw data, adc and ephy.</p>
 
@@ -698,7 +698,7 @@ spike sorting is done.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="load_adc_raw" class="doc_header"><code>load_adc_raw</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1524" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>load_adc_raw</code>(<strong><code>filepath</code></strong>, <strong><code>sampling_rate</code></strong>)</p>
+<h4 id="load_adc_raw" class="doc_header"><code>load_adc_raw</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1530" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>load_adc_raw</code>(<strong><code>filepath</code></strong>, <strong><code>sampling_rate</code></strong>=<em><code>30000</code></em>)</p>
 </blockquote>
 <p>Loads adc raw data, in the format exported by <a href="/theonerig/synchro.io.html#export_adc_raw"><code>export_adc_raw</code></a></p>
 
@@ -723,7 +723,32 @@ spike sorting is done.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="load_sync_raw" class="doc_header"><code>load_sync_raw</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1534" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>load_sync_raw</code>(<strong><code>filepath</code></strong>, <strong><code>sampling_rate</code></strong>=<em><code>10000</code></em>)</p>
+<h4 id="load_digin_raw" class="doc_header"><code>load_digin_raw</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1540" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>load_digin_raw</code>(<strong><code>filepath</code></strong>, <strong><code>sampling_rate</code></strong>=<em><code>30000</code></em>)</p>
+</blockquote>
+<p>Loads adc raw data, in the format exported by <a href="/theonerig/synchro.io.html#export_adc_raw"><code>export_adc_raw</code></a></p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="load_sync_raw" class="doc_header"><code>load_sync_raw</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/synchro/io.py#L1550" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>load_sync_raw</code>(<strong><code>filepath</code></strong>, <strong><code>sampling_rate</code></strong>=<em><code>10000</code></em>)</p>
 </blockquote>
 <p>Loads the sync files made by labview for Asari Lab 2P setup</p>
 

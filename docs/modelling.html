@@ -77,7 +77,7 @@ nb_path: "03_modelling.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="sigmoid" class="doc_header"><code>sigmoid</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L17" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>sigmoid</code>(<strong><code>x</code></strong>, <strong><code>sigma</code></strong>, <strong><code>amp</code></strong>, <strong><code>x0</code></strong>, <strong><code>y0</code></strong>)</p>
+<h4 id="sigmoid" class="doc_header"><code>sigmoid</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L18" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>sigmoid</code>(<strong><code>x</code></strong>, <strong><code>sigma</code></strong>, <strong><code>amp</code></strong>, <strong><code>x0</code></strong>, <strong><code>y0</code></strong>)</p>
 </blockquote>
 <p>Sigmoid function
 params:</p>
@@ -158,7 +158,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="gaussian" class="doc_header"><code>gaussian</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L30" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>gaussian</code>(<strong><code>x</code></strong>, <strong><code>sigma</code></strong>, <strong><code>amp</code></strong>, <strong><code>x0</code></strong>, <strong><code>y0</code></strong>)</p>
+<h4 id="gaussian" class="doc_header"><code>gaussian</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L31" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>gaussian</code>(<strong><code>x</code></strong>, <strong><code>sigma</code></strong>, <strong><code>amp</code></strong>, <strong><code>x0</code></strong>, <strong><code>y0</code></strong>)</p>
 </blockquote>
 <p>Gaussian function
 params:</p>
@@ -239,9 +239,44 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="sum_of_gaussian" class="doc_header"><code>sum_of_gaussian</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L42" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>sum_of_gaussian</code>(<strong><code>t</code></strong>, <strong><code>sigma_1</code></strong>, <strong><code>amp_1</code></strong>, <strong><code>x0_1</code></strong>, <strong><code>sigma_2</code></strong>, <strong><code>amp_2</code></strong>, <strong><code>x0_2</code></strong>, <strong><code>y0</code></strong>)</p>
+<h4 id="sum_of_gaussian" class="doc_header"><code>sum_of_gaussian</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L43" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>sum_of_gaussian</code>(<strong><code>t</code></strong>, <strong><code>sigma_1</code></strong>, <strong><code>amp_1</code></strong>, <strong><code>x0_1</code></strong>, <strong><code>sigma_2</code></strong>, <strong><code>amp_2</code></strong>, <strong><code>x0_2</code></strong>, <strong><code>y0</code></strong>)</p>
 </blockquote>
 <p>Sum of gaussian, using <a href="/theonerig/modelling.html#gaussian"><code>gaussian</code></a>
+params:</p>
+
+<pre><code>- t: 1D numpy array at which to evaluate the points
+- sigma_1: width of the 1st gaussian
+- amp_1: amplitude of the 1st gaussian
+- x0_1: shift in x of the 1st gaussian
+- sigma_2: width of the 2nd gaussian
+- amp_2: amplitude of the 2nd gaussian
+- x0_2: shift in x of the 2nd gaussian
+- y0: shift in y of the gaussian (shared for the two gaussians)</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="diff_of_gaussian" class="doc_header"><code>diff_of_gaussian</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L59" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>diff_of_gaussian</code>(<strong><code>t</code></strong>, <strong><code>sigma_1</code></strong>, <strong><code>amp_1</code></strong>, <strong><code>x0_1</code></strong>, <strong><code>sigma_2</code></strong>, <strong><code>amp_2</code></strong>, <strong><code>x0_2</code></strong>, <strong><code>y0</code></strong>)</p>
+</blockquote>
+<p>Difference of gaussian, using <a href="/theonerig/modelling.html#gaussian"><code>gaussian</code></a>
 params:</p>
 
 <pre><code>- t: 1D numpy array at which to evaluate the points
@@ -323,7 +358,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="gaussian_2D" class="doc_header"><code>gaussian_2D</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L60" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>gaussian_2D</code>(<strong><code>xz</code></strong>, <strong><code>sigma_x</code></strong>, <strong><code>sigma_z</code></strong>, <strong><code>amp</code></strong>, <strong><code>theta</code></strong>, <strong><code>x0</code></strong>, <strong><code>z0</code></strong>, <strong><code>y0</code></strong>)</p>
+<h4 id="gaussian_2D" class="doc_header"><code>gaussian_2D</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L77" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>gaussian_2D</code>(<strong><code>xz</code></strong>, <strong><code>sigma_x</code></strong>, <strong><code>sigma_z</code></strong>, <strong><code>amp</code></strong>, <strong><code>theta</code></strong>, <strong><code>x0</code></strong>, <strong><code>z0</code></strong>, <strong><code>y0</code></strong>)</p>
 </blockquote>
 <p>Two dimensional Gaussian function
 params:</p>
@@ -411,7 +446,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="sum_of_2D_gaussian" class="doc_header"><code>sum_of_2D_gaussian</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L81" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>sum_of_2D_gaussian</code>(<strong><code>xz</code></strong>, <strong><code>sigma_x_1</code></strong>, <strong><code>sigma_z_1</code></strong>, <strong><code>amp_1</code></strong>, <strong><code>theta_1</code></strong>, <strong><code>x0_1</code></strong>, <strong><code>z0_1</code></strong>, <strong><code>sigma_x_2</code></strong>, <strong><code>sigma_z_2</code></strong>, <strong><code>amp_2</code></strong>, <strong><code>theta_2</code></strong>, <strong><code>x0_2</code></strong>, <strong><code>z0_2</code></strong>, <strong><code>y0</code></strong>)</p>
+<h4 id="sum_of_2D_gaussian" class="doc_header"><code>sum_of_2D_gaussian</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L98" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>sum_of_2D_gaussian</code>(<strong><code>xz</code></strong>, <strong><code>sigma_x_1</code></strong>, <strong><code>sigma_z_1</code></strong>, <strong><code>amp_1</code></strong>, <strong><code>theta_1</code></strong>, <strong><code>x0_1</code></strong>, <strong><code>z0_1</code></strong>, <strong><code>sigma_x_2</code></strong>, <strong><code>sigma_z_2</code></strong>, <strong><code>amp_2</code></strong>, <strong><code>theta_2</code></strong>, <strong><code>x0_2</code></strong>, <strong><code>z0_2</code></strong>, <strong><code>y0</code></strong>)</p>
 </blockquote>
 <p>Sum of two 2D Gaussian function. For the params, see <a href="/theonerig/modelling.html#gaussian_2D"><code>gaussian_2D</code></a>.
 However, both share the y0 parameter.</p>
@@ -486,7 +521,7 @@ However, both share the y0 parameter.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="exponential_decay" class="doc_header"><code>exponential_decay</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L89" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>exponential_decay</code>(<strong><code>x</code></strong>, <strong><code>tau</code></strong>, <strong><code>baseline</code></strong>, <strong><code>amplitude</code></strong>)</p>
+<h4 id="exponential_decay" class="doc_header"><code>exponential_decay</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L106" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>exponential_decay</code>(<strong><code>x</code></strong>, <strong><code>tau</code></strong>, <strong><code>baseline</code></strong>, <strong><code>amplitude</code></strong>)</p>
 </blockquote>
 <p>Exponential decay function
 params:</p>
@@ -524,7 +559,7 @@ params:</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">exponential_decay</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;tau:1 baseline:0 amp:1&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">exponential_decay</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;tau:2 baseline:0 amp:1&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">exponential_decay</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;tau:1 baseline:0.5 amp:1&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">exponential_decay</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;tau:1 baseline:0.5 amp:1&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">exponential_decay</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;tau:1 baseline:0 amp:2&quot;</span><span class="p">)</span>
 
 <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
@@ -566,7 +601,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="sin_exponent" class="doc_header"><code>sin_exponent</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L100" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>sin_exponent</code>(<strong><code>x</code></strong>, <strong><code>amp</code></strong>, <strong><code>phi</code></strong>, <strong><code>freq</code></strong>, <strong><code>exp</code></strong>)</p>
+<h4 id="sin_exponent" class="doc_header"><code>sin_exponent</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L117" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>sin_exponent</code>(<strong><code>x</code></strong>, <strong><code>amp</code></strong>, <strong><code>phi</code></strong>, <strong><code>freq</code></strong>, <strong><code>exp</code></strong>)</p>
 </blockquote>
 <p>Sine raised to an exponent power. To the power 2, the sine is going between 0 and 1
 while its period is halfed. Subsequent round powers have the effect of narowing the peaks
@@ -653,7 +688,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="sinexp_sigm" class="doc_header"><code>sinexp_sigm</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L117" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>sinexp_sigm</code>(<strong><code>x</code></strong>, <strong><code>sigma</code></strong>, <strong><code>x0</code></strong>, <strong><code>y0</code></strong>, <strong><code>amp</code></strong>, <strong><code>phi</code></strong>, <strong><code>freq</code></strong>, <strong><code>exp</code></strong>)</p>
+<h4 id="sinexp_sigm" class="doc_header"><code>sinexp_sigm</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L134" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>sinexp_sigm</code>(<strong><code>x</code></strong>, <strong><code>sigma</code></strong>, <strong><code>x0</code></strong>, <strong><code>y0</code></strong>, <strong><code>amp</code></strong>, <strong><code>phi</code></strong>, <strong><code>freq</code></strong>, <strong><code>exp</code></strong>)</p>
 </blockquote>
 <p>A sine exponent weighted by a sigmoid. For parameters, see <a href="/theonerig/modelling.html#sigmoid"><code>sigmoid</code></a> and <a href="/theonerig/modelling.html#sin_exponent"><code>sin_exponent</code></a>.
 However the amp and y0 (baseline) parameters are shared between the two sub-functions</p>
@@ -731,7 +766,7 @@ However the amp and y0 (baseline) parameters are shared between the two sub-func
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fit_sigmoid" class="doc_header"><code>fit_sigmoid</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L123" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_sigmoid</code>(<strong><code>nonlin</code></strong>, <strong><code>t</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="fit_sigmoid" class="doc_header"><code>fit_sigmoid</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L140" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_sigmoid</code>(<strong><code>nonlin</code></strong>, <strong><code>t</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Fit a sigmoid to a 1D input. Used to fit the nonlinearities of the cells responses.
 Also, the data must be increasing (from left to right).
@@ -767,7 +802,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fit_spatial_sta" class="doc_header"><code>fit_spatial_sta</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L148" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_spatial_sta</code>(<strong><code>sta</code></strong>)</p>
+<h4 id="fit_spatial_sta" class="doc_header"><code>fit_spatial_sta</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L165" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_spatial_sta</code>(<strong><code>sta</code></strong>)</p>
 </blockquote>
 <p>Fit a sum of 2D gaussian to a 2D matrix. Used to fit the STA obtained from checkerboard like stimulus.
 params:</p>
@@ -808,7 +843,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fit_temporal_sta" class="doc_header"><code>fit_temporal_sta</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L208" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_temporal_sta</code>(<strong><code>sta</code></strong>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>)</p>
+<h4 id="fit_temporal_sta" class="doc_header"><code>fit_temporal_sta</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L225" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_temporal_sta</code>(<strong><code>sta</code></strong>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>)</p>
 </blockquote>
 <p>Fit a sum of gaussian to a 1D input. Used to fit the STA obtained from fullfield flicker like stimulus.
 params:</p>
@@ -818,7 +853,7 @@ params:</p>
 </code></pre>
 <p>return:</p>
 
-<pre><code>- A dictionary containing the parameters of the fit for a [`sum_of_gaussian`](/theonerig/modelling.html#sum_of_gaussian). The parameter with _1 suffix
+<pre><code>- A dictionary containing the parameters of the fit for a [`diff_of_gaussian`](/theonerig/modelling.html#diff_of_gaussian). The parameter with _1 suffix
 correspond to the closest gaussian to the zero timepoint.
 - A quality index of the fit (explained variance of the model)</code></pre>
 
@@ -850,7 +885,7 @@ correspond to the closest gaussian to the zero timepoint.
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fit_chirp_am" class="doc_header"><code>fit_chirp_am</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L249" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_chirp_am</code>(<strong><code>cell_mean</code></strong>, <strong><code>start</code></strong>=<em><code>420</code></em>, <strong><code>stop</code></strong>=<em><code>960</code></em>, <strong><code>freq</code></strong>=<em><code>1.5</code></em>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>)</p>
+<h4 id="fit_chirp_am" class="doc_header"><code>fit_chirp_am</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L271" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_chirp_am</code>(<strong><code>cell_mean</code></strong>, <strong><code>start</code></strong>=<em><code>420</code></em>, <strong><code>stop</code></strong>=<em><code>960</code></em>, <strong><code>freq</code></strong>=<em><code>1.5</code></em>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>)</p>
 </blockquote>
 <p>Fit a sinexp_sigm to the mean response of a cell to chirp_am stimulus.
 params:</p>
@@ -887,7 +922,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fit_chirp_freq_epoch" class="doc_header"><code>fit_chirp_freq_epoch</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L300" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_chirp_freq_epoch</code>(<strong><code>cell_mean</code></strong>, <strong><code>start</code></strong>=<em><code>360</code></em>, <strong><code>freqs</code></strong>=<em><code>[1.875, 3.75, 7.5, 15, 30]</code></em>, <strong><code>durations</code></strong>=<em><code>[2, 2, 2, 1, 1]</code></em>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>)</p>
+<h4 id="fit_chirp_freq_epoch" class="doc_header"><code>fit_chirp_freq_epoch</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L322" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_chirp_freq_epoch</code>(<strong><code>cell_mean</code></strong>, <strong><code>start</code></strong>=<em><code>360</code></em>, <strong><code>freqs</code></strong>=<em><code>[1.875, 3.75, 7.5, 15, 30]</code></em>, <strong><code>durations</code></strong>=<em><code>[2, 2, 2, 1, 1]</code></em>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>)</p>
 </blockquote>
 <p>Fit multiple sinexp_sigm to the mean response of a cell to chirp_freq_epoch stimulus.
 Each epoch is fitted independantly by a <a href="/theonerig/modelling.html#sin_exponent"><code>sin_exponent</code></a>
@@ -933,7 +968,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="fit_transiency" class="doc_header"><code>fit_transiency</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L358" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_transiency</code>(<strong><code>pref_response</code></strong>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>)</p>
+<h4 id="fit_transiency" class="doc_header"><code>fit_transiency</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L380" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>fit_transiency</code>(<strong><code>pref_response</code></strong>, <strong><code>frame_rate</code></strong>=<em><code>60</code></em>)</p>
 </blockquote>
 <p>Fit an exponential decay to a 1D input. Used to fit the response of cells to their preferred
 sustained stimulus.
@@ -975,7 +1010,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="repetition_quality_index" class="doc_header"><code>repetition_quality_index</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L388" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>repetition_quality_index</code>(<strong><code>cell_response</code></strong>)</p>
+<h4 id="repetition_quality_index" class="doc_header"><code>repetition_quality_index</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L410" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>repetition_quality_index</code>(<strong><code>cell_response</code></strong>)</p>
 </blockquote>
 <p>Return a quality index of cell response to a repeated stimulus.
 params:</p>
@@ -1003,7 +1038,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="onoff_transient_index" class="doc_header"><code>onoff_transient_index</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L397" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>onoff_transient_index</code>(<strong><code>cell_response</code></strong>, <strong><code>start_on</code></strong>=<em><code>120</code></em>, <strong><code>stop_on</code></strong>=<em><code>240</code></em>, <strong><code>start_off</code></strong>=<em><code>240</code></em>, <strong><code>stop_off</code></strong>=<em><code>360</code></em>)</p>
+<h4 id="onoff_transient_index" class="doc_header"><code>onoff_transient_index</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/modelling.py#L419" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>onoff_transient_index</code>(<strong><code>cell_response</code></strong>, <strong><code>start_on</code></strong>=<em><code>120</code></em>, <strong><code>stop_on</code></strong>=<em><code>240</code></em>, <strong><code>start_off</code></strong>=<em><code>240</code></em>, <strong><code>stop_off</code></strong>=<em><code>360</code></em>)</p>
 </blockquote>
 <p>Return both on-off and transient indexes of cell response. Transiency index is not always
 ideal to describe the cells response. Consider fitting an exponential decay with <a href="/theonerig/modelling.html#fit_transiency"><code>fit_transiency</code></a>.
