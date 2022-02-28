@@ -12,8 +12,6 @@ So far there is no easy install, just clone the folder form github and within th
 `pip install packaging`<br>
 `pip install -e .`<br>
 
-Later we will put it on pip so you can install it with `pip install theonerig`
-
 ## How to use
 
 Some example data are located in the "files" folder. We are gonna use data from the subfolder "vivo_2p", acquired by the Asari Lab @ EMBL Rome.<br><br>The main idea behind this library is to use a main timeserie to synchronize other data streams from various source. Once done, it allows easy slicing of the data and apply to it any processing.
