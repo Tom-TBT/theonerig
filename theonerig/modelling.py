@@ -412,7 +412,7 @@ def repetition_quality_index(cell_response):
     params:
         - cell_response: response of a cell of shape (n_rep, time)"""
     tmp1 = np.var(np.mean(cell_response, axis=0)) #VAR(MEAN(C)repeat)time
-    tmp2 = np.mean(np.var(cell_response, axis=1)) #MEAN(VAR(C)time)repeat
+    tmp2 = np.mean(np.var(cell_response, axis=0)) #MEAN(VAR(C)time)repeat
     quality = tmp1/tmp2
     return quality
 
