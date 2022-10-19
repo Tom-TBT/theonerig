@@ -5,7 +5,14 @@
 
 ## Install
 
-So far there is no easy install, just clone the folder form github and within the folder install it with pip. We also recommend you to create an environment with conda:
+We have now added theonerig to the python package index (PyPi). To simply get a working version just do
+```
+conda create -n theonerig
+conda activate theonerig
+pip install theonerig
+```
+
+So far the way to install was to just clone the folder form github and within the folder install it with pip. This will still give you the version with the most recent changes. We also recommend you to create an environment with conda:
 
 `conda create -n tor python=3.6`<br>
 `activate tor` for windows or `source activate tor` for linux/mac<br>
