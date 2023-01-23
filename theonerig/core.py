@@ -600,8 +600,12 @@ def export_record(path, record_master):
                 for datachunk in dc_list:
                     print("......",str(datachunk.idx)+"->"+str(datachunk.idx+len(datachunk)))
                     dset = stream_ref.create_dataset(str(datachunk.idx), data=np.array(datachunk), compression="gzip", compression_opts=4)
+                    ndarray_ref = stream_ref.create_group("__ndarray_"+str(datachunk.idx))
                     for attr_k, attr_v in datachunk.attrs.items():
-                        dset.attrs[attr_k] = json.dumps(attr_v)
+                        if isinstance(attr_v, (np.ndarray,)):
+                            ndarray_ref.create_dataset(attr_k, data=attr_v, compression="gzip", compression_opts=4)
+                        else:
+                            dset.attrs[attr_k] = json.dumps(attr_v)
                     dset.attrs["__fill"] = datachunk.fill
                     dset.attrs["__group"] = datachunk.group
     print()
@@ -627,7 +631,8 @@ def import_record(path):
                 ref_dstream = ref_contig[key_dstream]
                 dchunk_l = []
                 for key_dc in ref_dstream.keys():
-
+                    if key_dc.startswith("__ndarray_"): #skipping array attributes for later
+                        continue
                     data = ref_dstream[key_dc]
                     idx  = int(key_dc)
                     attrs = {}
@@ -638,6 +643,10 @@ def import_record(path):
                             fill = v
                         elif k == "__group":
                             group = v
+                    if "__ndarray_"+str(idx) in ref_dstream.keys():
+                        # if condition for backward support
+                        for k,v in ref_dstream["__ndarray_"+str(idx)].items():
+                            attrs[k] = v[:]
                     dchunk = DataChunk(data=data[:], idx=idx, group=group)
                     dchunk.attrs = attrs
                     dchunk_l.append(dchunk)
