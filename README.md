@@ -7,12 +7,10 @@
 
 So far there is no easy install, just clone the folder form github and within the folder install it with pip. We also recommend you to create an environment with conda:
 
-`conda create -n tor` python=3.6<br>
+`conda create -n tor python=3.6`<br>
 `activate tor` for windows or `source activate tor` for linux/mac<br>
 `pip install packaging`<br>
 `pip install -e .`<br>
-
-Later we will put it on pip so you can install it with `pip install theonerig`
 
 ## How to use
 
