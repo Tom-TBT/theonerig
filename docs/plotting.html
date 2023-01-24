@@ -536,7 +536,43 @@ The response is plotted with seaborn's lineplot.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_spike_template_MEA" class="doc_header"><code>plot_spike_template_MEA</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L531" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_spike_template_MEA</code>(<strong><code>cluster_composition</code></strong>, <strong><code>templates</code></strong>, <strong><code>channel_positions</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_spike_template_kilo" class="doc_header"><code>plot_spike_template_kilo</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L531" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_spike_template_kilo</code>(<strong><code>cluster_composition</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>shanks_idx</code></strong>, <strong><code>multiplication_factor_spike_template</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Plot the spike template obtained with phy for a silicone probe.</p>
+<p>params:</p>
+
+<pre><code>- cluster_composition: List of phy format clusters corresponding to that cell
+- phy_dict: Phy result dictionnary
+- shanks_idx: Idx of shanks for the channels obtained with `utils.get_shank_channels`
+- ax: The axis for the plot. If None, a new plot is created
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The axis of the plot</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="plot_spike_template_MEA" class="doc_header"><code>plot_spike_template_MEA</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L606" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_spike_template_MEA</code>(<strong><code>cluster_composition</code></strong>, <strong><code>templates</code></strong>, <strong><code>channel_positions</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot the spike template obtained with phy for a micro electrode array.</p>
 <p>params:</p>
@@ -572,7 +608,7 @@ The response is plotted with seaborn's lineplot.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_autocorrelogram" class="doc_header"><code>plot_autocorrelogram</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L568" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_autocorrelogram</code>(<strong><code>cluster</code></strong>, <strong><code>spike_times</code></strong>, <strong><code>spike_clusters</code></strong>, <strong><code>bin_ms</code></strong>=<em><code>0.001</code></em>, <strong><code>sampling_rate</code></strong>=<em><code>30000</code></em>, <strong><code>tails</code></strong>=<em><code>30</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_autocorrelogram" class="doc_header"><code>plot_autocorrelogram</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L643" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_autocorrelogram</code>(<strong><code>cluster</code></strong>, <strong><code>spike_times</code></strong>, <strong><code>spike_clusters</code></strong>, <strong><code>bin_ms</code></strong>=<em><code>0.001</code></em>, <strong><code>sampling_rate</code></strong>=<em><code>30000</code></em>, <strong><code>tails</code></strong>=<em><code>30</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot the cell's response autocorrelogram</p>
 <p>params:</p>
@@ -611,7 +647,7 @@ The response is plotted with seaborn's lineplot.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_spike_amplitudes" class="doc_header"><code>plot_spike_amplitudes</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L600" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_spike_amplitudes</code>(<strong><code>cluster</code></strong>, <strong><code>spike_templates</code></strong>, <strong><code>spike_clusters</code></strong>, <strong><code>spike_times</code></strong>, <strong><code>amplitudes</code></strong>, <strong><code>n_max_dots</code></strong>=<em><code>5000</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_spike_amplitudes" class="doc_header"><code>plot_spike_amplitudes</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L675" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_spike_amplitudes</code>(<strong><code>cluster</code></strong>, <strong><code>spike_templates</code></strong>, <strong><code>spike_clusters</code></strong>, <strong><code>spike_times</code></strong>, <strong><code>amplitudes</code></strong>, <strong><code>n_max_dots</code></strong>=<em><code>5000</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot a subset of all spikes amplitudes of a cell.</p>
 <p>params:</p>
@@ -650,7 +686,46 @@ The response is plotted with seaborn's lineplot.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_calcium_trace" class="doc_header"><code>plot_calcium_trace</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L638" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_calcium_trace</code>(<strong><code>cell_trace</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_spike_amplitudes_kilo" class="doc_header"><code>plot_spike_amplitudes_kilo</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L713" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_spike_amplitudes_kilo</code>(<strong><code>reM</code></strong>, <strong><code>cluster</code></strong>, <strong><code>spike_templates</code></strong>, <strong><code>spike_clusters</code></strong>, <strong><code>spike_times</code></strong>, <strong><code>amplitudes</code></strong>, <strong><code>n_max_dots</code></strong>=<em><code>10000</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+</blockquote>
+<p>Plot a subset of all spikes amplitudes of a cell.</p>
+<p>params:</p>
+
+<pre><code>- cluster: Cluster id of the cell
+- spike_templates: Original templates id in phy format
+- spike_times: Times of all spikes in phy format
+- spike_clusters: cluster associated to the spikes in phy format
+- amplitudes: Spike amplitudes in phy format
+- n_max_dots: Max limit for the number of spikes to not overload the plot
+- ax: The axis for the plot. If None, a new plot is created
+
+</code></pre>
+<p>return:</p>
+
+<pre><code>- The axis of the plot</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="plot_calcium_trace" class="doc_header"><code>plot_calcium_trace</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L790" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_calcium_trace</code>(<strong><code>cell_trace</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot the calcium trace of a cell.</p>
 <p>params:</p>
@@ -684,7 +759,7 @@ The response is plotted with seaborn's lineplot.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_stim_epochs_to_ephy" class="doc_header"><code>plot_stim_epochs_to_ephy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L658" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_stim_epochs_to_ephy</code>(<strong><code>reM</code></strong>, <strong><code>y_pos</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_stim_epochs_to_ephy" class="doc_header"><code>plot_stim_epochs_to_ephy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L810" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_stim_epochs_to_ephy</code>(<strong><code>reM</code></strong>, <strong><code>y_pos</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Add the stimulus epochs to a spike response of a cell.</p>
 <p>params:</p>
@@ -719,7 +794,7 @@ The response is plotted with seaborn's lineplot.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_stim_epochs_to_calcium" class="doc_header"><code>plot_stim_epochs_to_calcium</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L693" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_stim_epochs_to_calcium</code>(<strong><code>reM</code></strong>, <strong><code>y_pos</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_stim_epochs_to_calcium" class="doc_header"><code>plot_stim_epochs_to_calcium</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L845" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_stim_epochs_to_calcium</code>(<strong><code>reM</code></strong>, <strong><code>y_pos</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Add the stimulus epochs to a calcium response of a cell.</p>
 <p>params:</p>
@@ -754,7 +829,7 @@ The response is plotted with seaborn's lineplot.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_cell_spatial" class="doc_header"><code>plot_cell_spatial</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L727" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_cell_spatial</code>(<strong><code>cell_spatial</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_cell_spatial" class="doc_header"><code>plot_cell_spatial</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L879" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_cell_spatial</code>(<strong><code>cell_spatial</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot the cell spatial mask obtained with CaImAn.</p>
 <p>params:</p>
@@ -795,7 +870,7 @@ The response is plotted with seaborn's lineplot.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_stim_recap_table" class="doc_header"><code>plot_stim_recap_table</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L748" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_stim_recap_table</code>(<strong><code>df</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_stim_recap_table" class="doc_header"><code>plot_stim_recap_table</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L900" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_stim_recap_table</code>(<strong><code>df</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot the recap table obtained with <code>utils.stim_recap_df</code></p>
 <p>params:</p>
@@ -829,7 +904,7 @@ The response is plotted with seaborn's lineplot.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_composed_A_masks" class="doc_header"><code>plot_composed_A_masks</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L777" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_composed_A_masks</code>(<strong><code>A_matrix</code></strong>, <strong><code>shape</code></strong>=<em><code>None</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_composed_A_masks" class="doc_header"><code>plot_composed_A_masks</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L929" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_composed_A_masks</code>(<strong><code>A_matrix</code></strong>, <strong><code>shape</code></strong>=<em><code>None</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot in a single image the spatial mask of all cell of a record, obtained with CaImAn.</p>
 <p>params:</p>
@@ -864,7 +939,7 @@ The response is plotted with seaborn's lineplot.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_sta_positions" class="doc_header"><code>plot_sta_positions</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L820" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_sta_positions</code>(<strong><code>stas</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_sta_positions" class="doc_header"><code>plot_sta_positions</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L972" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_sta_positions</code>(<strong><code>stas</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot in a single image all 2D STAs of a single record. The STA are fitted with a gaussian,
 and plotted as ellipses.</p>
@@ -906,7 +981,7 @@ and plotted as ellipses.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_2d_sta" class="doc_header"><code>plot_2d_sta</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L856" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_2d_sta</code>(<strong><code>sta</code></strong>, <strong><code>gs</code></strong>=<em><code>None</code></em>, <strong><code>pval</code></strong>=<em><code>None</code></em>, <strong><code>title</code></strong>=<em><code>'Checkerboard'</code></em>)</p>
+<h4 id="plot_2d_sta" class="doc_header"><code>plot_2d_sta</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1008" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_2d_sta</code>(<strong><code>sta</code></strong>, <strong><code>gs</code></strong>=<em><code>None</code></em>, <strong><code>pval</code></strong>=<em><code>None</code></em>, <strong><code>title</code></strong>=<em><code>'Checkerboard'</code></em>)</p>
 </blockquote>
 <p>Plot a single 2D STA or an iterable of 2D STAs</p>
 <p>params:</p>
@@ -986,7 +1061,7 @@ and plotted as ellipses.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_dome_flat" class="doc_header"><code>plot_dome_flat</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L905" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_dome_flat</code>(<strong><code>sph_pos</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>, <strong>**<code>scatter_args</code></strong>)</p>
+<h4 id="plot_dome_flat" class="doc_header"><code>plot_dome_flat</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1057" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_dome_flat</code>(<strong><code>sph_pos</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>, <strong>**<code>scatter_args</code></strong>)</p>
 </blockquote>
 <p>Plot the dome LED as flat.</p>
 <p>params:</p>
@@ -1021,7 +1096,7 @@ and plotted as ellipses.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_dome_checker" class="doc_header"><code>plot_dome_checker</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L929" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_dome_checker</code>(<strong><code>sta</code></strong>, <strong><code>s</code></strong>=<em><code>20</code></em>, <strong><code>gs</code></strong>=<em><code>None</code></em>, <strong><code>pval</code></strong>=<em><code>None</code></em>, <strong><code>title</code></strong>=<em><code>'Checkerboard'</code></em>, <strong><code>led_position</code></strong>=<em><code>'default'</code></em>)</p>
+<h4 id="plot_dome_checker" class="doc_header"><code>plot_dome_checker</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1081" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_dome_checker</code>(<strong><code>sta</code></strong>, <strong><code>s</code></strong>=<em><code>20</code></em>, <strong><code>gs</code></strong>=<em><code>None</code></em>, <strong><code>pval</code></strong>=<em><code>None</code></em>, <strong><code>title</code></strong>=<em><code>'Checkerboard'</code></em>, <strong><code>led_position</code></strong>=<em><code>'default'</code></em>)</p>
 </blockquote>
 <p>Plot a single 2D STA or an iterable of 2D STAs for the LED dome</p>
 <p>params:</p>
@@ -1066,7 +1141,7 @@ and plotted as ellipses.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_omitted_response" class="doc_header"><code>plot_omitted_response</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L973" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_omitted_response</code>(<strong><code>response_d_ON</code></strong>, <strong><code>response_d_OFF</code></strong>, <strong><code>cell_idx</code></strong>, <strong><code>n_fr_cycle</code></strong>=<em><code>8</code></em>, <strong><code>gs</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_omitted_response" class="doc_header"><code>plot_omitted_response</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1125" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_omitted_response</code>(<strong><code>response_d_ON</code></strong>, <strong><code>response_d_OFF</code></strong>, <strong><code>cell_idx</code></strong>, <strong><code>n_fr_cycle</code></strong>=<em><code>8</code></em>, <strong><code>gs</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plotting of the averaged response to omitted stimuli (ON &amp; OFF).</p>
 <p>params:</p>
@@ -1110,7 +1185,7 @@ and plotted as ellipses.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_sta_pixelcorr" class="doc_header"><code>plot_sta_pixelcorr</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1022" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_sta_pixelcorr</code>(<strong><code>sta</code></strong>, <strong><code>stim_name</code></strong>=<em><code>None</code></em>, <strong><code>ax_corr</code></strong>=<em><code>None</code></em>, <strong><code>ax_hist</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_sta_pixelcorr" class="doc_header"><code>plot_sta_pixelcorr</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1174" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_sta_pixelcorr</code>(<strong><code>sta</code></strong>, <strong><code>stim_name</code></strong>=<em><code>None</code></em>, <strong><code>ax_corr</code></strong>=<em><code>None</code></em>, <strong><code>ax_hist</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot the correlation matrix between the sta's pixels, and their value distribution with a histogram.</p>
 <p>return:</p>
@@ -1138,7 +1213,7 @@ and plotted as ellipses.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_svd" class="doc_header"><code>plot_svd</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1056" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_svd</code>(<strong><code>sta</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_svd" class="doc_header"><code>plot_svd</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1208" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_svd</code>(<strong><code>sta</code></strong>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot a histogram of the singular value decomposition of an STA.
 params:</p>
@@ -1171,7 +1246,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_nonlin" class="doc_header"><code>plot_nonlin</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1075" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_nonlin</code>(<strong><code>nonlinearity</code></strong>, <strong><code>bins</code></strong>, <strong><code>label</code></strong>=<em><code>None</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_nonlin" class="doc_header"><code>plot_nonlin</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1227" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_nonlin</code>(<strong><code>nonlinearity</code></strong>, <strong><code>bins</code></strong>, <strong><code>label</code></strong>=<em><code>None</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Plot a nonlinearity with the bins that were used (in L2 norm)
 params:</p>
@@ -1214,7 +1289,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_crosscorr_spikes_behav" class="doc_header"><code>plot_crosscorr_spikes_behav</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1094" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_crosscorr_spikes_behav</code>(<strong><code>behav</code></strong>, <strong><code>corr_behav_lag</code></strong>, <strong><code>p_value_peak</code></strong>, <strong><code>offset_peak</code></strong>, <strong><code>null_dist_behav</code></strong>, <strong><code>fps</code></strong>=<em><code>60</code></em>, <strong><code>seconds</code></strong>=<em><code>30</code></em>, <strong><code>color_line</code></strong>=<em><code>'black'</code></em>, <strong><code>title</code></strong>=<em><code>'visual stim'</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="plot_crosscorr_spikes_behav" class="doc_header"><code>plot_crosscorr_spikes_behav</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1246" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_crosscorr_spikes_behav</code>(<strong><code>behav</code></strong>, <strong><code>corr_behav_lag</code></strong>, <strong><code>p_value_peak</code></strong>, <strong><code>offset_peak</code></strong>, <strong><code>null_dist_behav</code></strong>, <strong><code>fps</code></strong>=<em><code>60</code></em>, <strong><code>seconds</code></strong>=<em><code>30</code></em>, <strong><code>color_line</code></strong>=<em><code>'black'</code></em>, <strong><code>title</code></strong>=<em><code>'visual stim'</code></em>, <strong><code>ax</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Cross-correlation with lag plotting helper function.</p>
 <p>params:</p>
@@ -1263,7 +1338,7 @@ params:</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="configure_pyplot_recap" class="doc_header"><code>configure_pyplot_recap</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1131" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_pyplot_recap</code>(<strong><code>small_size</code></strong>=<em><code>14</code></em>, <strong><code>medium_size</code></strong>=<em><code>18</code></em>, <strong><code>bigger_size</code></strong>=<em><code>24</code></em>)</p>
+<h4 id="configure_pyplot_recap" class="doc_header"><code>configure_pyplot_recap</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1283" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>configure_pyplot_recap</code>(<strong><code>small_size</code></strong>=<em><code>14</code></em>, <strong><code>medium_size</code></strong>=<em><code>18</code></em>, <strong><code>bigger_size</code></strong>=<em><code>24</code></em>)</p>
 </blockquote>
 <p>Set the fontsize and other style of matplotlib and seaborn for the recap plots.
 Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
@@ -1296,7 +1371,7 @@ Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_vivo_ephy" class="doc_header"><code>plot_recap_vivo_ephy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1155" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>water</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
+<h4 id="plot_recap_vivo_ephy" class="doc_header"><code>plot_recap_vivo_ephy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1307" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>water</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
 </blockquote>
 <p>Plot the recap pdf of in vivo electrophy records.</p>
 <p>params:</p>
@@ -1344,7 +1419,55 @@ Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_vivo_calcium" class="doc_header"><code>plot_recap_vivo_calcium</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1292" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_calcium</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>A_matrix</code></strong>, <strong><code>cell_traces</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_indexes</code></strong>=<em><code>None</code></em>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>water</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
+<h4 id="plot_recap_vivo_ephy_kilo" class="doc_header"><code>plot_recap_vivo_ephy_kilo</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1444" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy_kilo</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>water</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
+</blockquote>
+<p>Plot the recap pdf of in vivo electrophy records for spike sorting run with Kilosort2.</p>
+<p>params:</p>
+
+<pre><code>- title_dict: A dictionnary containing the str info for the title: keys(condition, date, record_name, record_id)
+- reM: The record master object of the record
+- phy_dict: A dictionnary containing the results from phy (see utils.phy_results_dict())
+- cluster_ids: A list of the cluster id used by phy, to plot. Usually the cells classified as good.
+- df_stim: Stimulus dataframe recap of their syncronisation obtained with `utils.stim_recap_df`
+- cell_db_ids: A list of the database ids of the cells corresponding to cluster_ids.
+- checkerboard: A matrix of STA of cells to the checkerboard stimulus of shape (n_cell, 16, height, width)
+- fullfield_fl: A matrix of STA of cells to the fullfield_flicker stimulus of shape (n_cell, 16)
+- fl_bars: A matrix of STA of cells to the flickering_bars stimulus of shape (n_cell, 16, height, width)
+- chirp_am: A tuple of the chirp_am obtained from a pipe, where [0] is the stimulus and [1] the cells response
+- chirp_fm: Same as chirp_am but for a chirp_fm stimulus
+- moving_gratings: The dict of response obtained from `utils.group_direction_response`
+- water: A matrix of STA of cells to the water stimulus of shape (n_cell, 16, height, width)
+- export_path: The path for a pdf file to be exported. If None, the plot is displayed.</code></pre>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="plot_recap_vivo_calcium" class="doc_header"><code>plot_recap_vivo_calcium</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1582" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_calcium</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>A_matrix</code></strong>, <strong><code>cell_traces</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_indexes</code></strong>=<em><code>None</code></em>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>water</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
 </blockquote>
 <p>Plot the recap pdf of in vivo calcium records.</p>
 <p>params:</p>
@@ -1392,7 +1515,7 @@ Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_vitro_ephy" class="doc_header"><code>plot_recap_vitro_ephy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1441" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vitro_ephy</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
+<h4 id="plot_recap_vitro_ephy" class="doc_header"><code>plot_recap_vitro_ephy</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1731" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vitro_ephy</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
 </blockquote>
 <p>Plot the recap pdf of in vitro electrophy records.</p>
 <p>params:</p>
@@ -1439,7 +1562,7 @@ Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_vivo_ephy_dome" class="doc_header"><code>plot_recap_vivo_ephy_dome</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1570" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy_dome</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl_100Hz</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl_200Hz</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>wave</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
+<h4 id="plot_recap_vivo_ephy_dome" class="doc_header"><code>plot_recap_vivo_ephy_dome</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1860" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy_dome</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl_100Hz</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl_200Hz</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>wave</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot.pdf'</code></em>)</p>
 </blockquote>
 <p>Plot the recap pdf of in vivo electrophy records with the LED dome as stimuluation device.</p>
 <p>params:</p>
@@ -1485,7 +1608,7 @@ Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_vivo_ephy_corr_behav" class="doc_header"><code>plot_recap_vivo_ephy_corr_behav</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1691" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy_corr_behav</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>behavs</code></strong>, <strong><code>conversion_factor_treadmill</code></strong>=<em><code>6.25</code></em>, <strong><code>removeslowdrifts</code></strong>=<em><code>True</code></em>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>water</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot_corr_behav.pdf'</code></em>)</p>
+<h4 id="plot_recap_vivo_ephy_corr_behav" class="doc_header"><code>plot_recap_vivo_ephy_corr_behav</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1981" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_vivo_ephy_corr_behav</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>behavs</code></strong>, <strong><code>conversion_factor_treadmill</code></strong>=<em><code>6.25</code></em>, <strong><code>removeslowdrifts</code></strong>=<em><code>True</code></em>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>fl_bars</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>moving_gratings</code></strong>=<em><code>None</code></em>, <strong><code>water</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./recap_plot_corr_behav.pdf'</code></em>)</p>
 </blockquote>
 <p>Plot the recap pdf of in vivo electrophy records.</p>
 <p>params:</p>
@@ -1538,7 +1661,7 @@ Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_wholeField" class="doc_header"><code>plot_recap_wholeField</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L1901" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_wholeField</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>nonlin_fff</code></strong>=<em><code>None</code></em>, <strong><code>nonlin_chk</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>water</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./wholefield_recap_plot.pdf'</code></em>)</p>
+<h4 id="plot_recap_wholeField" class="doc_header"><code>plot_recap_wholeField</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L2191" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_wholeField</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>df_stim</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>nonlin_fff</code></strong>=<em><code>None</code></em>, <strong><code>nonlin_chk</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>water</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./wholefield_recap_plot.pdf'</code></em>)</p>
 </blockquote>
 <p>Plot the recap pdf of cells for wholefieldness evaluation</p>
 <p>params:</p>
@@ -1564,7 +1687,7 @@ Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_wholeField_dome" class="doc_header"><code>plot_recap_wholeField_dome</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L2031" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_wholeField_dome</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>nonlin_fff</code></strong>=<em><code>None</code></em>, <strong><code>nonlin_chk</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>water</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./wholefield_recap_plot.pdf'</code></em>)</p>
+<h4 id="plot_recap_wholeField_dome" class="doc_header"><code>plot_recap_wholeField_dome</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L2321" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_wholeField_dome</code>(<strong><code>title_dict</code></strong>, <strong><code>reM</code></strong>, <strong><code>phy_dict</code></strong>, <strong><code>cluster_ids</code></strong>, <strong><code>cell_db_ids</code></strong>=<em><code>None</code></em>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>fullfield_fl</code></strong>=<em><code>None</code></em>, <strong><code>chirp_am</code></strong>=<em><code>None</code></em>, <strong><code>nonlin_fff</code></strong>=<em><code>None</code></em>, <strong><code>nonlin_chk</code></strong>=<em><code>None</code></em>, <strong><code>chirp_fm</code></strong>=<em><code>None</code></em>, <strong><code>water</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./wholefield_recap_plot.pdf'</code></em>)</p>
 </blockquote>
 <p>Plot the recap pdf of cells for wholefieldness evaluation (with LED dome)</p>
 <p>params:</p>
@@ -1597,7 +1720,7 @@ Call sns.set() and plt.rcdefaults() to restore defaults parameters.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="plot_recap_wholeField_vitroHiroki" class="doc_header"><code>plot_recap_wholeField_vitroHiroki</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L2154" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_wholeField_vitroHiroki</code>(<strong><code>title_dict</code></strong>, <strong><code>cells_idxs</code></strong>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>nonlin_chk</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./wholefield_recap_plot.pdf'</code></em>)</p>
+<h4 id="plot_recap_wholeField_vitroHiroki" class="doc_header"><code>plot_recap_wholeField_vitroHiroki</code><a href="https://github.com/Tom-TBT/theonerig/tree/master/theonerig/plotting.py#L2444" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>plot_recap_wholeField_vitroHiroki</code>(<strong><code>title_dict</code></strong>, <strong><code>cells_idxs</code></strong>, <strong><code>checkerboard</code></strong>=<em><code>None</code></em>, <strong><code>nonlin_chk</code></strong>=<em><code>None</code></em>, <strong><code>export_path</code></strong>=<em><code>'./wholefield_recap_plot.pdf'</code></em>)</p>
 </blockquote>
 <p>Plot the recap pdf of vitroHirokiChecker cells for wholefieldness evaluation</p>
 <p>params:</p>

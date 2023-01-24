@@ -2,14 +2,14 @@
 
 __all__ = ['DEFAULT_COLORS', 'plot_2d_fit', 'plot_tSTA_fit', 'plot_chirpam_fit', 'plot_chirp_freq_epoch_fit',
            'plot_transient_fit', 'plot_nonlinearity_fit', 'plot_ds_wheel', 'plot_ds_wave_wheel', 'plot_fl_bars',
-           'plot_t_sta', 'plot_chirp', 'plot_spike_template', 'plot_spike_template_MEA', 'plot_autocorrelogram',
-           'plot_spike_amplitudes', 'plot_calcium_trace', 'plot_stim_epochs_to_ephy', 'plot_stim_epochs_to_calcium',
-           'plot_cell_spatial', 'plot_stim_recap_table', 'plot_composed_A_masks', 'plot_sta_positions', 'plot_2d_sta',
-           'plot_dome_flat', 'plot_dome_checker', 'plot_omitted_response', 'plot_sta_pixelcorr', 'plot_svd',
-           'plot_nonlin', 'plot_crosscorr_spikes_behav', 'configure_pyplot_recap', 'plot_recap_vivo_ephy',
-           'plot_recap_vivo_calcium', 'plot_recap_vitro_ephy', 'plot_recap_vivo_ephy_dome',
-           'plot_recap_vivo_ephy_corr_behav', 'plot_recap_wholeField', 'plot_recap_wholeField_dome',
-           'plot_recap_wholeField_vitroHiroki']
+           'plot_t_sta', 'plot_chirp', 'plot_spike_template', 'plot_spike_template_kilo', 'plot_spike_template_MEA',
+           'plot_autocorrelogram', 'plot_spike_amplitudes', 'plot_spike_amplitudes_kilo', 'plot_calcium_trace',
+           'plot_stim_epochs_to_ephy', 'plot_stim_epochs_to_calcium', 'plot_cell_spatial', 'plot_stim_recap_table',
+           'plot_composed_A_masks', 'plot_sta_positions', 'plot_2d_sta', 'plot_dome_flat', 'plot_dome_checker',
+           'plot_omitted_response', 'plot_sta_pixelcorr', 'plot_svd', 'plot_nonlin', 'plot_crosscorr_spikes_behav',
+           'configure_pyplot_recap', 'plot_recap_vivo_ephy', 'plot_recap_vivo_ephy_kilo', 'plot_recap_vivo_calcium',
+           'plot_recap_vitro_ephy', 'plot_recap_vivo_ephy_dome', 'plot_recap_vivo_ephy_corr_behav',
+           'plot_recap_wholeField', 'plot_recap_wholeField_dome', 'plot_recap_wholeField_vitroHiroki']
 
 # Cell
 import matplotlib.pyplot as plt
@@ -528,6 +528,81 @@ def plot_spike_template(cluster_composition, phy_dict, shanks_idx, ax=None):
         ax.set_title("Shank "+str(template_shank+1))
         ax.set_xticks([])
 
+def plot_spike_template_kilo(cluster_composition, phy_dict, shanks_idx, multiplication_factor_spike_template, ax=None):
+    """
+    Plot the spike template obtained with phy for a silicone probe.
+
+    params:
+        - cluster_composition: List of phy format clusters corresponding to that cell
+        - phy_dict: Phy result dictionnary
+        - shanks_idx: Idx of shanks for the channels obtained with `utils.get_shank_channels`
+        - ax: The axis for the plot. If None, a new plot is created
+
+    return:
+        - The axis of the plot
+
+    """
+    if ax is None:
+        fig, ax = plt.subplots()
+
+    templates         = phy_dict["templates"]
+    channel_map       = phy_dict["channel_map"]
+    channel_positions = phy_dict["channel_positions"]
+    new_phy_version   = "template_ind" in phy_dict.keys()
+    if new_phy_version:
+        template_ind = phy_dict["template_ind"]
+    template_idx = cluster_composition[0]
+    n_points     = 30
+    mask_trace   = np.arange(templates.shape[1]//2-10,
+                             templates.shape[1]//2+(n_points-10))
+
+    if new_phy_version:
+        template_shank    = np.where(shanks_idx==template_ind[cluster_composition[0]][0])[0][0]
+        shank_templates   = templates
+        selected_channels = shanks_idx[template_shank]
+        selected_channels = selected_channels[selected_channels!=-1]
+
+        min_x = np.min(channel_positions[selected_channels][:,0])-5
+        max_x = np.max(channel_positions[selected_channels][:,0])+n_points+5
+        min_y = np.min(channel_positions[selected_channels][:,1])-abs(np.min(shank_templates))-5
+        max_y = np.max(channel_positions[selected_channels][:,1])+abs(np.max(shank_templates))+5
+        for j, templ in enumerate(cluster_composition):
+            color = DEFAULT_COLORS[j%len(DEFAULT_COLORS)]
+            for i, chann_idx in enumerate(template_ind[templ]):
+                if chann_idx==-1:
+                    break
+                pos = channel_positions[chann_idx]
+                ax.plot(np.arange(n_points)+pos[0], shank_templates[templ,mask_trace,i]*4+pos[1], c=color)
+                if j==0:
+                    name_chann = str(channel_map[chann_idx])
+                    ax.text(pos[0]-3, pos[1]-2, name_chann)
+        ax.set_ylim(min_y, max_y)
+        ax.set_xlim(min_x, max_x)
+        ax.set_title("Shank "+str(template_shank+1))
+        ax.set_xticks([])
+
+    else:
+        tmp            = np.abs( templates[template_idx]) == np.max(np.abs(templates[template_idx]) )
+        template_pos   = np.where(tmp)[1][0]
+        template_shank = np.where(shanks_idx==template_pos)[0][0]
+        selected_channels = shanks_idx[template_shank]
+        selected_channels = selected_channels[selected_channels!=-1] #Removing the disabled channels
+        shank_templates   = templates[:,:,selected_channels]
+
+        selected_map = channel_map[selected_channels]
+        min_x = np.min(channel_positions[selected_channels][:,0])
+        for j, templ in enumerate(cluster_composition):
+            color = DEFAULT_COLORS[j%len(DEFAULT_COLORS)]
+            for i, pos in enumerate(channel_positions[selected_channels]):
+                ax.plot(np.arange(n_points)+pos[0]-min_x, shank_templates[templ,mask_trace,i]*multiplication_factor_spike_template +pos[1], color = "black")
+                if j==0:
+                    name_chann = str(selected_map[i])
+                    ax.text(pos[0]+20-min_x, pos[1]-15, name_chann, color="black", fontdict={"size":10})
+        ax.set_title("Shank "+str(template_shank+1))
+        ax.set_ylim(-50,170)
+        ax.set_xlim(-5,75)
+        ax.set_xticks([])
+
 def plot_spike_template_MEA(cluster_composition, templates, channel_positions, ax=None):
     """
     Plot the spike template obtained with phy for a micro electrode array.
@@ -632,6 +707,83 @@ def plot_spike_amplitudes(cluster, spike_templates, spike_clusters, spike_times,
     ax.set_xticks([])
     ax.set_title("Spike amplitudes - n°spike: "+str(total_spikes))
     ax.set_ylim(0,2)
+
+    return ax
+
+def plot_spike_amplitudes_kilo(reM, cluster, spike_templates, spike_clusters, spike_times, amplitudes, n_max_dots=10000, ax=None):
+    """
+    Plot a subset of all spikes amplitudes of a cell.
+
+    params:
+        - cluster: Cluster id of the cell
+        - spike_templates: Original templates id in phy format
+        - spike_times: Times of all spikes in phy format
+        - spike_clusters: cluster associated to the spikes in phy format
+        - amplitudes: Spike amplitudes in phy format
+        - n_max_dots: Max limit for the number of spikes to not overload the plot
+        - ax: The axis for the plot. If None, a new plot is created
+
+    return:
+        - The axis of the plot
+
+    """
+    if ax is None:
+        fig, ax = plt.subplots()
+
+    mask_cluster = spike_clusters==cluster
+    clusters = np.unique(spike_templates[mask_cluster])
+    points_per_cluster = n_max_dots//len(clusters)
+    total_spikes = np.sum(mask_cluster)
+    for templ in clusters:
+        mask_template    = spike_templates==templ
+        n_spike_template = np.sum(mask_template)
+        proportion       = n_spike_template/total_spikes
+        n_sp_to_plot     = int(n_max_dots*proportion)
+        mask_selected_spikes = np.linspace(0, n_spike_template, n_sp_to_plot, dtype=int, endpoint=False)
+        ydata = amplitudes[mask_template][mask_selected_spikes]
+        ax.scatter(spike_times[mask_template][mask_selected_spikes], ydata, s=1, color="black")
+
+    #ax.set_xticks([])
+    ax.set_title("Spike amplitudes - n°spike: "+str(total_spikes))
+    ypbot = np.percentile(ydata, 1)
+    yptop = np.percentile(ydata, 99)
+    ypad = 0.2*(yptop - ypbot)
+    ymin = ypbot - ypad
+    ymax = yptop + ypad
+    ax.set_ylim(ymin,ymax)
+
+
+    # plot_stim_epochs
+    seq = reM._sequences[0]
+    stim_names = seq.get_names_group("stim")
+    stim_names_to_print = stim_names[:]
+    for i in range (len(stim_names)):
+        if stim_names[i] == "checkerboard":
+            stim_names_to_print[i] = "Checkerboard"
+        if stim_names[i] == "chirp_freq_epoch":
+            stim_names_to_print[i] = "FM"
+        if stim_names[i] == "chirp_am":
+            stim_names_to_print[i] = "AM"
+        if stim_names[i] == "ommited_stimulus":
+            stim_names_to_print[i] = "OSR"
+        if stim_names[i] == "moving_gratings":
+            stim_names_to_print[i] = "Gratings"
+        if stim_names[i] == "fullfield_flicker":
+            stim_names_to_print[i] = "FFF"
+    idx_l = []
+    for stim_name in stim_names:
+        dc = seq._data_dict[stim_name][0]
+        idx_l.append(dc.idx)
+    idx_l = np.array(idx_l)
+    order_stim = np.argsort(idx_l)
+    for stim_idx in order_stim:
+        stim_name = stim_names[stim_idx]
+        text = stim_names_to_print[stim_idx]
+        dc = seq._data_dict[stim_name][0]
+        len_dc = seq["main_tp"][dc.idx+len(dc)]-seq["main_tp"][dc.idx]
+        start_dc = seq["main_tp"][dc.idx]
+        ax.barh(ymin, len_dc, left=start_dc, height=(ymax-ymin)/6, color = "gray")
+        ax.text(start_dc+ 5000, ymin+(ymax-ymin)/32, text, fontdict={"size":10}, color = "white", weight = "bold")
 
     return ax
 
@@ -1232,6 +1384,144 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
             plot_spike_amplitudes(cluster, phy_dict["spike_templates"], phy_dict["spike_clusters"],
                                   phy_dict["spike_times"], phy_dict["amplitudes"], ax=sp_amp_ax)
             plot_stim_epochs_to_ephy(reM, y_pos=0.2, ax=sp_amp_ax)
+
+            #Checkerboard STA
+            if checkerboard is not None:
+                pval_checker = checkerboard[1][reM_cell_idx]
+                pval_checker = np.min(pval_checker[pval_checker!=0])
+                inner_grid = gridspec.GridSpecFromSubplotSpec(4, 4,
+                            subplot_spec=gs[5:12,0:12], wspace=.09, hspace=.13)
+                plot_2d_sta(checkerboard[0][reM_cell_idx], pval=pval_checker, gs=inner_grid, title="Checkerboard")
+            #Water STA
+            elif water is not None:
+                pval_water = water[1][reM_cell_idx]
+                pval_water = np.min(pval_water[pval_water!=0])
+                inner_grid = gridspec.GridSpecFromSubplotSpec(4, 4,
+                            subplot_spec=gs[5:12,0:12], wspace=.09, hspace=.13)
+                plot_2d_sta(water[0][reM_cell_idx], pval=pval_water, gs=inner_grid, title="Water")
+
+            #Fullfield flickering STA
+            if fullfield_fl is not None:
+                pval_fffl = fullfield_fl[1][reM_cell_idx]
+                pval_fffl = np.min(pval_fffl[pval_fffl!=0])
+                sp_amp_ax = fig.add_subplot(gs[5:12,13:])
+                plot_t_sta(fullfield_fl[0][reM_cell_idx], pval=pval_fffl, ax=sp_amp_ax)
+
+            #Chirp_FM
+            if chirp_fm is not None:
+                chirpfm_ax = fig.add_subplot(gs[13:16,:])
+                plot_chirp(chirp_fm[0], chirp_fm[1][:,reM_cell_idx], smooth=False, ax=chirpfm_ax)
+                chirpfm_ax.set_title("Chirp FM")
+
+            #Chirp_AM
+            if chirp_am is not None:
+                chirpam_ax = fig.add_subplot(gs[17:20,:])
+                plot_chirp(chirp_am[0], chirp_am[1][:,reM_cell_idx], smooth=False, ax=chirpam_ax)
+                chirpam_ax.set_title("Chirp AM")
+
+            #Flickering bars
+            if fl_bars is not None:
+                pval_bars = fl_bars[1][reM_cell_idx]
+                pval_bars = np.min(pval_bars[pval_bars!=0])
+                fl_bars_ax = fig.add_subplot(gs[21:,:12])
+                plot_fl_bars(fl_bars[0][reM_cell_idx], pval=pval_bars, ax=fl_bars_ax)
+
+            #Moving gratings
+            if moving_gratings is not None:
+                ds_ax = fig.add_subplot(gs[21:,13:], projection="polar")
+                plot_ds_wheel(moving_gratings, cell_idx=reM_cell_idx, ax=ds_ax)
+
+            pp.savefig()
+            plt.close()
+
+            print("Cell cluster n°",cluster,"done")
+
+    sns.set()
+    plt.rcdefaults()
+    print()
+
+# Cell
+def plot_recap_vivo_ephy_kilo(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_db_ids=None,
+                         checkerboard=None, fullfield_fl=None, fl_bars=None, chirp_am=None,
+                         chirp_fm=None, moving_gratings=None, water=None, export_path="./recap_plot.pdf"):
+    """
+    Plot the recap pdf of in vivo electrophy records for spike sorting run with Kilosort2.
+
+    params:
+        - title_dict: A dictionnary containing the str info for the title: keys(condition, date, record_name, record_id)
+        - reM: The record master object of the record
+        - phy_dict: A dictionnary containing the results from phy (see utils.phy_results_dict())
+        - cluster_ids: A list of the cluster id used by phy, to plot. Usually the cells classified as good.
+        - df_stim: Stimulus dataframe recap of their syncronisation obtained with `utils.stim_recap_df`
+        - cell_db_ids: A list of the database ids of the cells corresponding to cluster_ids.
+        - checkerboard: A matrix of STA of cells to the checkerboard stimulus of shape (n_cell, 16, height, width)
+        - fullfield_fl: A matrix of STA of cells to the fullfield_flicker stimulus of shape (n_cell, 16)
+        - fl_bars: A matrix of STA of cells to the flickering_bars stimulus of shape (n_cell, 16, height, width)
+        - chirp_am: A tuple of the chirp_am obtained from a pipe, where [0] is the stimulus and [1] the cells response
+        - chirp_fm: Same as chirp_am but for a chirp_fm stimulus
+        - moving_gratings: The dict of response obtained from `utils.group_direction_response`
+        - water: A matrix of STA of cells to the water stimulus of shape (n_cell, 16, height, width)
+        - export_path: The path for a pdf file to be exported. If None, the plot is displayed.
+    """
+    print("Generating the recap plot")
+    configure_pyplot_recap()
+
+    shanks_idx = get_shank_channels(phy_dict["channel_positions"])
+    cond = title_dict["condition"]
+    date = title_dict["date"]
+    record_name = title_dict["record_name"]
+    record_id = title_dict["record_id"]
+
+    if cell_db_ids is None:
+        cell_db_ids = [-1]*len(cluster_ids)
+
+    with PdfPages(export_path) as pp:
+
+        #Plotting Cover
+        fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
+        gs  = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
+        ax_rem  = fig.add_subplot(gs[:10,2:-1])
+        reM.plot(ax=ax_rem)
+
+        ax_stim_recap  = fig.add_subplot(gs[11:16,:])
+        plot_stim_recap_table(df_stim, ax=ax_stim_recap)
+        suptitle = " - ".join([str(record_id),cond, date, record_name,])
+        plt.suptitle(suptitle)
+
+
+
+        pp.savefig()
+        plt.close()
+
+        cell_idx_cast = str
+        if type(list(reM["S_matrix"][0].attrs["cell_map"].keys())[0]) is int:
+            cell_idx_cast = int
+        for cluster, cell_id in zip(cluster_ids, cell_db_ids):
+            reM_cell_idx = reM["S_matrix"][0].attrs["cell_map"][cell_idx_cast(cluster)]#np.where(cluster==cluster_ids)[0][0]
+
+            fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
+            suptitle = " - ".join([str(record_id), "Cluster n°"+str(cluster), cond, date, record_name])
+            plt.suptitle(suptitle)
+
+            mask_cluster        = phy_dict["spike_clusters"]==cluster
+            cluster_composition = np.unique(phy_dict["spike_templates"][mask_cluster])
+
+            gs = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
+
+            #Template on electrodes
+            cell_loc_ax = fig.add_subplot(gs[0:4,0:2])
+            plot_spike_template_kilo(cluster_composition, phy_dict, shanks_idx, multiplication_factor_spike_template=50, ax=cell_loc_ax)
+
+            #Autocorrelogram
+            autocorr_ax = fig.add_subplot(gs[0:4,3:7])
+            plot_autocorrelogram(cluster, phy_dict["spike_times"], phy_dict["spike_clusters"],
+                                 bin_ms=.001, sampling_rate=30000, tails=30, ax=autocorr_ax)
+
+            #Spike amplitude across time
+            sp_amp_ax = fig.add_subplot(gs[0:4,8:])
+            plot_spike_amplitudes_kilo(reM, cluster, phy_dict["spike_templates"], phy_dict["spike_clusters"],
+                                  phy_dict["spike_times"], phy_dict["amplitudes"], ax=sp_amp_ax)
+            #plot_stim_epochs_to_ephy(reM, y_pos=0.2, ax=sp_amp_ax)
 
             #Checkerboard STA
             if checkerboard is not None:
