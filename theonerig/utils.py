@@ -829,17 +829,14 @@ def stim_recap_df(reM):
 
         return param_d
 
-    df = pd.DataFrame(columns=["stimulus", "hash", "n frames", "n repeats",
-                               "frequency", "n ON", "n OFF", "speeds", "spatial frequencies",
-                              "total shift", "total drop"])
-    cursor = 0
+    series = []
     for seq in reM._sequences:
         for k, dc_l in seq:
             dc = dc_l[0]
             if dc.group == "stim":
-                serie = pd.Series(data=parse_stim(dc), name=cursor)
-                df = df.append(serie, ignore_index=False)
-                cursor+=1
-
+                series.append(parse_stim(dc))
+    df = pd.DataFrame.from_records(series, columns=["stimulus", "hash", "n frames", "n repeats",
+                               "frequency", "n ON", "n OFF", "speeds", "spatial frequencies",
+                              "total shift", "total drop"])
     df = df.fillna("")
     return df

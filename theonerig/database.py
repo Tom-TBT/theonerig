@@ -4,7 +4,7 @@ __all__ = ['get_db_engine', 'prompt_credentials', 'get_record_essentials', 'get_
            'stim_param_to_dict']
 
 # Cell
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy import Table, Column, Integer, String, MetaData, select
 
 import pandas as pd
@@ -28,7 +28,7 @@ def get_db_engine(username, password, ip_adress, model_name, rdbms="mysql"):
     """
     engine = create_engine("%s://%s:%s@%s/%s" % (rdbms, username, password, ip_adress, model_name),echo = False)
     test_query = "SELECT * FROM Project"
-    pd.read_sql_query(test_query, engine)
+    df_test = pd.DataFrame(engine.connect().execute(text(test_query)))
     return engine
 
 def prompt_credentials(user=None, db_adress=None):
@@ -65,23 +65,23 @@ def get_record_essentials(engine, record_id):
     q_select_record = "SELECT * FROM Record WHERE id = %d" % record_id
     q_select_cell = "SELECT * FROM Cell WHERE record_id = %d" % record_id
 
-    df_record = pd.read_sql_query(q_select_record, engine)
-    df_cell = pd.read_sql_query(q_select_cell, engine)
+    df_record = pd.DataFrame(engine.connect().execute(text(q_select_record)))
+    df_cell = pd.DataFrame(engine.connect().execute(text(q_select_cell)))
 
     experiment_id = df_record["experiment_id"][0]
     q_select_experiment = "SELECT * FROM Experiment WHERE id = %d" % experiment_id
-    df_experiment = pd.read_sql_query(q_select_experiment, engine)
+    df_experiment = pd.DataFrame(engine.connect().execute(text(q_select_experiment)))
 
     mouse_id = df_experiment["mouse_id"][0]
     q_select_mouse = "SELECT * FROM Mouse WHERE id = %d" % mouse_id
-    df_mouse = pd.read_sql_query(q_select_mouse, engine)
+    df_mouse = pd.DataFrame(engine.connect().execute(text(q_select_mouse)))
 
     tool_id = df_record["tool_id"][0]
     q_select_tool = "SELECT * FROM Tool WHERE id = %d" % tool_id
-    df_tool = pd.read_sql_query(q_select_tool, engine)
+    df_tool = pd.DataFrame(engine.connect().execute(text(q_select_tool)))
 
     q_select_map = "SELECT * FROM Map WHERE tool_id = %d" % tool_id
-    df_map =  pd.read_sql_query(q_select_map, engine)
+    df_map = pd.DataFrame(engine.connect().execute(text(q_select_map)))
 
     res_dict = {"record": df_record, "cell": df_cell,
                 "experiment": df_experiment, "mouse": df_mouse,
@@ -115,7 +115,7 @@ def get_stim_params(engine, stim_hashes):
                 LEFT JOIN Compiled ON stimulus_id=Stimulus.id WHERE hash IN """+str_hashes+""") AS Stim
                 LEFT JOIN Compiled_Parameter ON compiled_id = comp_id
                 LEFT JOIN Parameter ON parameter_id = Parameter.id"""
-    df_params = pd.read_sql_query(query, engine)
+    df_params = pd.DataFrame(engine.connect().execute(text(query)))
     return df_params
 
 # Cell
@@ -131,7 +131,7 @@ def get_table(engine, table_name):
         - Pandas Dataframe of the whole table
     """
     query = """SELECT * FROM """+str(table_name)
-    df_table = pd.read_sql_query(query, engine)
+    df_table = pd.DataFrame(engine.connect().execute(text(query)))
     return df_table
 
 # Cell

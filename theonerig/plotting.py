@@ -436,14 +436,16 @@ def plot_chirp(stim_inten, spike_bins, smooth=True, n_repeats=None, frame_rate=6
     trace = spike_bins.reshape(n_repeats,-1)
     len_    = trace.shape[1]
 
-    df = pd.DataFrame(columns=["timepoint","repeat","signal"])
+#     df = pd.DataFrame(columns=["timepoint","repeat","signal"])
+    df_l = []
     for i, repeat_am in enumerate(trace):
         if smooth:
             repeat_am = np.convolve([.333]*3, repeat_am, mode="same")
         repeat_df = pd.DataFrame(list(zip(np.linspace(0,len_/frame_rate,len_),
                                           [str(i)]*len_,
                                           repeat_am)), columns=["timepoint","repeat","signal"])
-        df = df.append(repeat_df, ignore_index=True)
+        df_l.append(repeat_df)
+    df = pd.concat(df_l, ignore_index=True)
     g = sns.lineplot(x="timepoint", y="signal", data=df, ax=ax, n_boot=100) #Small n_boot to speed_up plotting
                                                                             # (default n_boot=10000)
 
