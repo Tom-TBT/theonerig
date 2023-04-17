@@ -43,6 +43,9 @@ entries:
       title: leddome
       url: leddome.html
     - output: web,pdf
+      title: Title
+      url: synchro.nested_stims.html
+    - output: web,pdf
       title: Test data loaders
       url: testdata.html
     output: web

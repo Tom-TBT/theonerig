@@ -624,9 +624,11 @@ def import_record(path):
         fr_time_key = list(filter(reg.search, h5_f.attrs.keys()))
         if len(fr_time_key)==1:
             frame_rate = round(1/h5_f.attrs[fr_time_key[0]])
-        for j, key_contig in enumerate(h5_f.keys()):
+        keys = sorted(h5_f.keys(), key=int)
+        for j, key_contig in enumerate(keys):
             ref_contig = h5_f[key_contig]
             stream_d   = {}
+            keys = sorted(h5_f.keys(), key=int)
             for i, key_dstream in enumerate(ref_contig.keys()):
                 ref_dstream = ref_contig[key_dstream]
                 dchunk_l = []

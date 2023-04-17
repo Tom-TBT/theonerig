@@ -100,7 +100,7 @@ for data_dict in pipe:
     (10200, 15, 20) (10200, 2) (10200, 5)
     (8680, 15, 20) (8680, 2) (8680, 5)
     (18000, 15, 20) (18000, 2) (18000, 5)
-    
+
 
 Note here the checkerboard. We possess actual data for only one chunk, but because default values are set for each dataset, the pipe is able to return a dataset for each part of the record. This allows to easily workaround records with missing data without crashing.
 

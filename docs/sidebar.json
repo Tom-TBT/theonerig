@@ -12,6 +12,7 @@
     "synchro.extracting": "synchro.extracting.html",
     "synchro.processing": "synchro.processing.html",
     "leddome": "leddome.html",
+    "Title": "synchro.nested_stims.html",
     "Test data loaders": "testdata.html"
   }
 }

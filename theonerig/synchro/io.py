@@ -1380,12 +1380,12 @@ def load_all_data(datafile:DataFile):
         chunk_size =  datafile.duration
     n_chunks, _ = datafile.analyze(chunk_size)
     data = np.zeros((datafile.duration, datafile._shape[1]))
-    print("Loading the data... "+str(round(0,2))+"%    ",end='\r',flush=True)
+    print("Loading the data... "+str(round(0,2))+"%    ",end='\n',flush=True)
     for idx in range(n_chunks):
         data_tmp, t_offset = datafile.get_data(idx, chunk_size)
         data[t_offset:t_offset+len(data_tmp)] = data_tmp
-        print("Loading the data... "+str(round(100*(idx+1)/n_chunks,2))+"%    ",end='\r',flush=True)
-    print("Loading the data... "+str(round(100,2))+"%    ",end='\r',flush=True)
+        print("Loading the data... "+str(round(100*(idx+1)/n_chunks,2))+"%    ",end='\n',flush=True)
+    print("Loading the data... "+str(round(100,2))+"%    ",end='\n',flush=True)
     datafile.close()
     return data
 
@@ -1399,14 +1399,14 @@ def load_all_data_adc(datafile:DataFile, channel_idx=0):
         chunk_size =  datafile.duration
     n_chunks, _ = datafile.analyze(chunk_size)
     data = np.zeros(datafile.duration)
-    print("Loading the data... "+str(round(0,2))+"%    ",end='\r',flush=True)
+    print("Loading the data... "+str(round(0,2))+"%    ",end='\n',flush=True)
     for idx in range(n_chunks):
         data_tmp, t_offset = datafile.get_data_adc(idx, chunk_size)
         if data_tmp.ndim == 2:
             data_tmp = data_tmp[:,channel_idx]
         data[t_offset:t_offset+len(data_tmp)] = data_tmp
-        print("Loading the data... "+str(round(100*(idx+1)/n_chunks,2))+"%    ",end='\r',flush=True)
-    print("Loading the data... "+str(round(100,2))+"%    ",end='\r',flush=True)
+        print("Loading the data... "+str(round(100*(idx+1)/n_chunks,2))+"%    ",end='\n',flush=True)
+    print("Loading the data... "+str(round(100,2))+"%    ",end='\n',flush=True)
     datafile.close()
     return data
 
@@ -1426,8 +1426,8 @@ def load_all_data_dig_in(datafile:DataFile, channel_idx=0):
         if data_tmp.ndim == 2:
             data_tmp = data_tmp[:,channel_idx]
         data[t_offset:t_offset+len(data_tmp)] = data_tmp
-        print("Loading the data... "+str(round(100*(idx+1)/n_chunks,2))+"%    ",end='\r',flush=True)
-    print("Loading the data... "+str(round(100,2))+"%    ",end='\r',flush=True)
+        print("Loading the data... "+str(round(100*(idx+1)/n_chunks,2))+"%    ",end='\n',flush=True)
+    print("Loading the data... "+str(round(100,2))+"%    ",end='\n',flush=True)
     datafile.close()
     return data
 
@@ -1442,15 +1442,15 @@ def load_all_data_both(datafile:DataFile):
     n_chunks, _ = datafile.analyze(chunk_size)
     data_adc = np.zeros(datafile.duration)
     data     = np.zeros((datafile.duration, datafile._shape[1]))
-    print("Loading the data... "+str(round(0,2))+"%    ",end='\r',flush=True)
+    print("Loading the data... "+str(round(0,2))+"%    ",end='\n',flush=True)
     for idx in range(n_chunks):
         data_tmp, data_tmp_adc, t_offset = datafile.get_data_both(idx, chunk_size)
         data[t_offset:t_offset+len(data_tmp)] = data_tmp
         if data_tmp_adc.ndim == 2:
             data_tmp_adc = data_tmp_adc[:,0]
         data_adc[t_offset:t_offset+len(data_tmp)] = data_tmp_adc
-        print("Loading the data... "+str(round(100*(idx+1)/n_chunks,2))+"%    ",end='\r',flush=True)
-    print("Loading the data... "+str(round(100,2))+"%    ",end='\r',flush=True)
+        print("Loading the data... "+str(round(100*(idx+1)/n_chunks,2))+"%    ",end='\n',flush=True)
+    print("Loading the data... "+str(round(100,2))+"%    ",end='\n',flush=True)
     datafile.close()
     return data, data_adc
 

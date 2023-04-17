@@ -1308,7 +1308,8 @@ def configure_pyplot_recap(small_size=14, medium_size=18, bigger_size=24):
 # Cell
 def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_db_ids=None,
                          checkerboard=None, fullfield_fl=None, fl_bars=None, chirp_am=None,
-                         chirp_fm=None, moving_gratings=None, water=None, export_path="./recap_plot.pdf"):
+                         chirp_fm=None, moving_gratings=None, water=None, export_path="./recap_plot.pdf",
+                        show_time=True):
     """
     Plot the recap pdf of in vivo electrophy records.
 
@@ -1346,7 +1347,7 @@ def plot_recap_vivo_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_d
         fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
         gs  = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
         ax_rem  = fig.add_subplot(gs[:10,2:-1])
-        reM.plot(ax=ax_rem)
+        reM.plot(ax=ax_rem, show_time=show_time)
 
         ax_stim_recap  = fig.add_subplot(gs[11:16,:])
         plot_stim_recap_table(df_stim, ax=ax_stim_recap)
@@ -1583,7 +1584,8 @@ def plot_recap_vivo_ephy_kilo(title_dict, reM, phy_dict, cluster_ids, df_stim, c
 # Cell
 def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, df_stim, cell_indexes=None, cell_db_ids=None,
                          checkerboard=None, fullfield_fl=None, fl_bars=None, chirp_am=None,
-                         chirp_fm=None, moving_gratings=None, water=None, export_path="./recap_plot.pdf"):
+                         chirp_fm=None, moving_gratings=None, water=None, export_path="./recap_plot.pdf",
+                         show_time=True):
     """
     Plot the recap pdf of in vivo calcium records.
 
@@ -1622,7 +1624,7 @@ def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, df_stim, cel
         fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
         gs  = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
         ax_rem  = fig.add_subplot(gs[:10,2:-1])
-        reM.plot(ax=ax_rem)
+        reM.plot(ax=ax_rem, show_time=show_time)
 
         ax_stim_recap  = fig.add_subplot(gs[11:16,:])
         plot_stim_recap_table(df_stim, ax=ax_stim_recap)
@@ -1732,7 +1734,8 @@ def plot_recap_vivo_calcium(title_dict, reM, A_matrix, cell_traces, df_stim, cel
 # Cell
 def plot_recap_vitro_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_db_ids=None,
                          checkerboard=None, fullfield_fl=None, fl_bars=None, chirp_am=None,
-                         chirp_fm=None, moving_gratings=None, export_path="./recap_plot.pdf"):
+                         chirp_fm=None, moving_gratings=None, export_path="./recap_plot.pdf",
+                         show_time=True):
     """
     Plot the recap pdf of in vitro electrophy records.
 
@@ -1769,7 +1772,7 @@ def plot_recap_vitro_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_
         fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
         gs  = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
         ax_rem  = fig.add_subplot(gs[:10,2:-1])
-        reM.plot(ax=ax_rem)
+        reM.plot(ax=ax_rem, show_time=show_time)
 
         ax_stim_recap  = fig.add_subplot(gs[11:16,:])
         plot_stim_recap_table(df_stim)
@@ -1861,7 +1864,8 @@ def plot_recap_vitro_ephy(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_
 # Cell
 def plot_recap_vivo_ephy_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_ids=None,
                          checkerboard=None, fullfield_fl_100Hz=None, fullfield_fl_200Hz=None,
-                         chirp_fm=None, wave=None, export_path="./recap_plot.pdf"):
+                         chirp_fm=None, wave=None, export_path="./recap_plot.pdf",
+                         show_time=True):
     """
     Plot the recap pdf of in vivo electrophy records with the LED dome as stimuluation device.
 
@@ -1898,7 +1902,7 @@ def plot_recap_vivo_ephy_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_id
         fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
         gs  = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
         ax_rem  = fig.add_subplot(gs[:10,2:-1])
-        reM.plot(ax=ax_rem)
+        reM.plot(ax=ax_rem, show_time=show_time)
 
         suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id)])
         plt.suptitle(suptitle)
@@ -1982,7 +1986,8 @@ def plot_recap_vivo_ephy_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_id
 # Cell
 def plot_recap_vivo_ephy_corr_behav(title_dict, reM, phy_dict, cluster_ids, df_stim, behavs, conversion_factor_treadmill=6.25, removeslowdrifts=True, cell_db_ids=None,
                          checkerboard=None, fullfield_fl=None, fl_bars=None, chirp_am=None,
-                         chirp_fm=None, moving_gratings=None, water=None, export_path="./recap_plot_corr_behav.pdf"):
+                         chirp_fm=None, moving_gratings=None, water=None, export_path="./recap_plot_corr_behav.pdf",
+                         show_time=True):
     """
     Plot the recap pdf of in vivo electrophy records.
 
@@ -2025,7 +2030,7 @@ def plot_recap_vivo_ephy_corr_behav(title_dict, reM, phy_dict, cluster_ids, df_s
         fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
         gs  = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
         ax_rem  = fig.add_subplot(gs[:10,2:-1])
-        reM.plot(ax=ax_rem)
+        reM.plot(ax=ax_rem, show_time=show_time)
 
         ax_stim_recap  = fig.add_subplot(gs[11:16,:])
         plot_stim_recap_table(df_stim, ax=ax_stim_recap)
@@ -2192,7 +2197,8 @@ def plot_recap_vivo_ephy_corr_behav(title_dict, reM, phy_dict, cluster_ids, df_s
 # Cell
 def plot_recap_wholeField(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_db_ids=None,
                          checkerboard=None, fullfield_fl=None, chirp_am=None, nonlin_fff=None, nonlin_chk=None,
-                         chirp_fm=None, water=None, export_path="./wholefield_recap_plot.pdf"):
+                         chirp_fm=None, water=None, export_path="./wholefield_recap_plot.pdf",
+                         show_time=True):
     """
     Plot the recap pdf of cells for wholefieldness evaluation
 
@@ -2216,7 +2222,7 @@ def plot_recap_wholeField(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_
         fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
         gs  = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
         ax_rem  = fig.add_subplot(gs[:10,2:-1])
-        reM.plot(ax=ax_rem)
+        reM.plot(ax=ax_rem, show_time=show_time)
 
         ax_stim_recap  = fig.add_subplot(gs[11:16,:])
         plot_stim_recap_table(df_stim, ax=ax_stim_recap)
@@ -2322,7 +2328,8 @@ def plot_recap_wholeField(title_dict, reM, phy_dict, cluster_ids, df_stim, cell_
 
 def plot_recap_wholeField_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_ids=None,
                          checkerboard=None, fullfield_fl=None, chirp_am=None, nonlin_fff=None, nonlin_chk=None,
-                         chirp_fm=None, water=None, export_path="./wholefield_recap_plot.pdf"):
+                         chirp_fm=None, water=None, export_path="./wholefield_recap_plot.pdf",
+                         show_time=True):
     """
     Plot the recap pdf of cells for wholefieldness evaluation (with LED dome)
 
@@ -2347,7 +2354,7 @@ def plot_recap_wholeField_dome(title_dict, reM, phy_dict, cluster_ids, cell_db_i
         fig = plt.figure(figsize=(8.267717*2,11.69291*2)) #A4 values in inches *2
         gs  = gridspec.GridSpec(28, 20, left=0.05, right=.95, top=.92, bottom=.05, wspace=0.00, hspace=0.00)
         ax_rem  = fig.add_subplot(gs[:10,2:-1])
-        reM.plot(ax=ax_rem)
+        reM.plot(ax=ax_rem, show_time=show_time)
 
         suptitle = " - ".join([cond, date, record_name+" n°"+str(record_id)])
         plt.suptitle(suptitle)
