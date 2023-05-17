@@ -1,24 +1,63 @@
----
-layout: none
-search: exclude
----
-
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  {% for post in site.posts %}
-  {% unless post.search == "exclude" %}
   <url>
-    <loc>{{site.url}}{{post.url}}</loc>
+    <loc>https://Tom-TBT.github.io/theonerig/CONTRIBUTING.html</loc>
+    <lastmod>2023-05-17T14:34:32.766Z</lastmod>
   </url>
-  {% endunless %}
-  {% endfor %}
-
-
-  {% for page in site.pages %}
-  {% unless page.search == "exclude" %}
   <url>
-    <loc>{{site.url}}{{ page.url}}</loc>
+    <loc>https://Tom-TBT.github.io/theonerig/00_core.html</loc>
+    <lastmod>2023-05-17T14:34:33.602Z</lastmod>
   </url>
-  {% endunless %}
-  {% endfor %}
+  <url>
+    <loc>https://Tom-TBT.github.io/theonerig/01_utils.html</loc>
+    <lastmod>2023-05-17T14:34:34.230Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Tom-TBT.github.io/theonerig/02_processing.html</loc>
+    <lastmod>2023-05-17T14:34:34.870Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Tom-TBT.github.io/theonerig/03_modelling.html</loc>
+    <lastmod>2023-05-17T14:34:35.470Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Tom-TBT.github.io/theonerig/04_plotting.html</loc>
+    <lastmod>2023-05-17T14:34:36.878Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Tom-TBT.github.io/theonerig/05_database.html</loc>
+    <lastmod>2023-05-17T14:34:37.194Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Tom-TBT.github.io/theonerig/06_eyetrack.html</loc>
+    <lastmod>2023-05-17T14:34:37.506Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Tom-TBT.github.io/theonerig/10_synchro.io.html</loc>
+    <lastmod>2023-05-17T14:34:38.298Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Tom-TBT.github.io/theonerig/11_synchro.extracting.html</loc>
+    <lastmod>2023-05-17T14:34:38.706Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Tom-TBT.github.io/theonerig/12_synchro.processing.html</loc>
+    <lastmod>2023-05-17T14:34:39.262Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Tom-TBT.github.io/theonerig/13_leddome.html</loc>
+    <lastmod>2023-05-17T14:34:39.682Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Tom-TBT.github.io/theonerig/14_synchro.nested_stims.html</loc>
+    <lastmod>2023-05-17T14:34:40.114Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Tom-TBT.github.io/theonerig/99_testdata.html</loc>
+    <lastmod>2023-05-17T14:34:40.398Z</lastmod>
+  </url>
+  <url>
+    <loc>https://Tom-TBT.github.io/theonerig/index.html</loc>
+    <lastmod>2023-05-17T14:34:40.746Z</lastmod>
+  </url>
 </urlset>
